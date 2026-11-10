@@ -1,0 +1,28 @@
+[workspace]
+resolver = "3"
+members = ["apps/*", "crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.94"
+license = "MIT"
+publish = false
+repository = "https://github.com/muidea/magicDataHub"
+
+[workspace.dependencies]
+modorch = { version = "=0.0.3", git = "https://github.com/muidea/modorch-rs", rev = "336ba20196044e1b81fb2ca297a18b5e258a5800" }
+# Local source until the verified Facades are committed. No release SHA is implied.
+modorch-mqtt = { version = "=0.1.0-alpha.1", path = "../modorch-mqtt/crates/modorch-mqtt", features = ["toml"] }
+modorch-fedengine = { version = "=0.1.0", path = "../modorch-fedengine/crates/modorch-fedengine" }
+datahub-config = { path = "crates/datahub-config", version = "=0.1.0" }
+datahub-app = { path = "crates/datahub-app", version = "=0.1.0" }
+datahub-mqtt = { path = "crates/datahub-mqtt", version = "=0.1.0" }
+datahub-fedengine = { path = "crates/datahub-fedengine", version = "=0.1.0" }
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "io-util", "signal", "time", "sync"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+thiserror = "2"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "fmt"] }

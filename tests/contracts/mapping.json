@@ -1,0 +1,15 @@
+{
+  "MDH-COMP-001": {"local": ["registered_plan_has_no_io_and_combined_facades_share_ready_application", "unselected_business_libraries_create_no_files_listeners_or_components"]},
+  "MDH-COMP-002": {"local": ["registered_plan_has_no_io_and_combined_facades_share_ready_application"], "remote": ["MDH-REMOTE-datahub-server"]},
+  "MDH-COMP-003": {"remote": ["MDH-REMOTE-datahub-server"]},
+  "MDH-COMP-004": {"remote": ["MDH-REMOTE-datahub-server"]},
+  "MDH-COMP-005": {"remote": ["MDH-REMOTE-fedengine-server", "MDH-REMOTE-datahub-server"]},
+  "MDH-COMP-006": {"local": ["combined_task_and_blocking_saturation_reject_without_starving_status_or_drain"], "remote": ["combined_remote_clients_enforce_object_grants_and_shared_admission"]},
+  "MDH-COMP-007": {"local": ["occupied_database_listener_compensates_mqtt_and_preserves_reopenable_state", "late_activation_failure_compensates_two_already_live_ingresses", "observation_failure_preserves_cause_and_drains_started_libraries"]},
+  "MDH-COMP-008": {"remote": ["MDH-REMOTE-datahub-server"]},
+  "MDH-COMP-009": {"local": ["runner_retains_same_application_during_incomplete_http_drain", "combined_failfast_drains_both_libraries_and_old_clients_stay_invalid"], "remote": ["MDH-REMOTE-fedengine-server", "MDH-REMOTE-datahub-server"]},
+  "MDH-COMP-010": {"local": ["two_applications_keep_files_hubs_and_capabilities_separate"]},
+  "MDH-COMP-011": {"local": ["MDH-IDENTITY-001"]},
+  "MDH-COMP-012": {"remote": ["combined_remote_clients_enforce_object_grants_and_shared_admission"]},
+  "MDH-IMAGES-001": {"images": ["MDH-IMAGES-001"]}
+}

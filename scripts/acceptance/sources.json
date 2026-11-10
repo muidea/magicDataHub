@@ -1,0 +1,19 @@
+{
+  "postgres_image": "postgres@sha256:bb377b7239d2774ac8cc76f481596ce96c5a6b5e9d141f6d0a0ee371a6e7c0f2",
+  "mysql_image": "mysql@sha256:4bc6bc963e6d8443453676cae56536f4b8156d78bae03c0145cbe47c2aad73bb",
+  "duckdb_version": "v2.0.0",
+  "extensions": {
+    "postgres": {
+      "path": "v2.0.0/linux_amd64/postgres_scanner.duckdb_extension",
+      "sha256": "39e661c5cfb678c9472f5acd88235f84f3ef4126e7444c7c8a01214d9b291601",
+      "version": "c0f5a3c0c4",
+      "remote_version": "17.7"
+    },
+    "mysql": {
+      "path": "v2.0.0/linux_amd64/mysql_scanner.duckdb_extension",
+      "sha256": "6055f1a59dc527df795afccbf59279500d1ddc239608dd310c3eba0e98d1a11c",
+      "version": "f7fc0d4271",
+      "remote_version": "5.7.44"
+    }
+  }
+}

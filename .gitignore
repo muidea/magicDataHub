@@ -1,0 +1,28 @@
+# Build outputs and downloaded native/extension files.
+/target/
+/data/
+
+# Instance state and local credentials; preserve these files on disk.
+/var/
+/secrets/
+.env
+.env.*
+!.env.example
+!.env.sample
+/config/**/*.local.toml
+/*.duckdb
+/*.duckdb.wal
+
+# Disposable validation output and local Python environments.
+/validation/
+/docs/validation/
+/.venv/
+*.log
+__pycache__/
+*.py[cod]
+
+# Editor and operating-system temporary files.
+*.swp
+*.swo
+*~
+.DS_Store

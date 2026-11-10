@@ -1,0 +1,30 @@
+# Local Linux host-network profile; each database service owns a separate volume.
+name: magicdatahub
+x-runtime: &runtime
+  network_mode: host
+  user: "65532:65532"
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
+  restart: "no"
+  stop_signal: SIGTERM
+
+services:
+  mqtt-server:
+    <<: *runtime
+    image: ${MDH_IMAGE_PREFIX:?set MDH_IMAGE_PREFIX}/mqtt-server:${MDH_IMAGE_PROFILE:-dev}
+  fedengine-server:
+    <<: *runtime
+    image: ${MDH_IMAGE_PREFIX:?set MDH_IMAGE_PREFIX}/fedengine-server:${MDH_IMAGE_PROFILE:-dev}
+    environment: [FEDENGINE_PASSWORD]
+    volumes: [fedengine-state:/opt/magicdatahub/var]
+  datahub-server:
+    <<: *runtime
+    image: ${MDH_IMAGE_PREFIX:?set MDH_IMAGE_PREFIX}/datahub-server:${MDH_IMAGE_PROFILE:-dev}
+    environment: [FEDENGINE_PASSWORD]
+    volumes: [datahub-state:/opt/magicdatahub/var]
+
+volumes:
+  fedengine-state:
+  datahub-state:

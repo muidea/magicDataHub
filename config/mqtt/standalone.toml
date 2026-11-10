@@ -1,0 +1,8 @@
+[mqtt.core]
+enabled = true
+listener = "127.0.0.1:1883"
+max_connections = 64
+max_sessions = 128
+
+[mqtt.security]
+anonymous_access = true

@@ -1,0 +1,9 @@
+[application]
+name = "magicdatahub-fedengine"
+
+# Host runtime has bounded development defaults; see docs/configuration.md.
+[runtime]
+shutdown_timeout_ms = 30000
+
+[fedengine]
+config_file = "fedengine/standalone.toml"

@@ -1,0 +1,150 @@
+{
+  "lock_sha256": "c2c2cbb51ebc12dd01b3810ea73d24cda32d7fd66925c7fbc40c9fc093b8e497",
+  "packages": {
+    "modorch": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "43ef053debbbc34997c9199b49f928109212c00f4d23d6648682c859f597577e",
+      "features": [
+        "default",
+        "eventhub",
+        "runtime",
+        "scheduler"
+      ]
+    },
+    "modorch-core": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "0a7b5ad7b93c2ae5143f6a0c7f28eea7000118ec176c71e3600029e9d811d4eb",
+      "features": []
+    },
+    "modorch-eventhub": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "9aad9ca171149707fddb24a661387a12212ca96d125023bcf32073a03a2c6deb",
+      "features": []
+    },
+    "modorch-fedengine": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "5a69444b4defece7d216679d6e2f43bb3a518d7a4ed6faf17784d58bd8984ca3",
+      "features": []
+    },
+    "modorch-fedengine-catalog": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "e87d1dc98f5a5590acccb140ffb5d0906fc6a1a4d848015cdf97c6dab67ff20a",
+      "features": []
+    },
+    "modorch-fedengine-contract": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "f26199084f8ca8db45ee06dd40bce278f909a26a51bf0732da97ab6d3f96017e",
+      "features": []
+    },
+    "modorch-fedengine-core": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "ba8d8e5ac36bb24562de37c42b823d6384b90dacef7fca4a74e61b24c3d9d215",
+      "features": []
+    },
+    "modorch-fedengine-datasource": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "53bfcee2add2f5475cf3d5a892921ae4d02af38a18209e06d401bd1d4508c27c",
+      "features": []
+    },
+    "modorch-fedengine-ddl": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "9b9db970fc93eca2674725362001e2d1994acaaf4ab52a0a05e7ff433d6820ac",
+      "features": []
+    },
+    "modorch-fedengine-duckdb": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "1fc89e3a95817857f40a2e17495c12ac0cb73481fe1cd4c8bb52c1f1d5f4edab",
+      "features": []
+    },
+    "modorch-fedengine-management": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "d122bfbcb29d39aeb0c64c7c7634b3e9e3188a00c62b5ad5539f3eda3f4f1643",
+      "features": []
+    },
+    "modorch-fedengine-pg-compat": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "20facacb426b00f0b4432000b8567c4410cb481f21e7f4bc3f70d7a94536457c",
+      "features": []
+    },
+    "modorch-fedengine-pgwire": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "929006fa396050ca0fac66ee351bc0c6708692bc2c632678d2353a8c10b8ae91",
+      "features": []
+    },
+    "modorch-fedengine-policy": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "7ef132c6b7d166b01b4ba1099697700d629a17444872cfdafa161db8d6ce7dd1",
+      "features": []
+    },
+    "modorch-fedengine-query": {
+      "version": "0.1.0",
+      "source": null,
+      "sha256": "2c0abc41f383e3aa64ca236685a38e5ffd7a6f295149b80bf3b49cee64427a94",
+      "features": []
+    },
+    "modorch-mqtt": {
+      "version": "0.1.0-alpha.1",
+      "source": null,
+      "sha256": "40fc6a998e9a60f2a0e614b8a2d871955827236da21d961d81f0bc05ebd24328",
+      "features": [
+        "default",
+        "toml"
+      ]
+    },
+    "modorch-mqtt-api": {
+      "version": "0.1.0-alpha.1",
+      "source": null,
+      "sha256": "60685b0f9bb5adda05cb2b5d7218d33d62d14d97109a8705869a547bd4dc645a",
+      "features": []
+    },
+    "modorch-mqtt-core": {
+      "version": "0.1.0-alpha.1",
+      "source": null,
+      "sha256": "f9db44d8e3f8277c7d3b98ee31f8d1cbb44635ae09cbe58912b1dfedcf865f39",
+      "features": [
+        "default"
+      ]
+    },
+    "modorch-observe": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "cd31cbc87dbcc83f700c54221b4a057636ff68e69d67c4dc457f3315e4e14789",
+      "features": [
+        "default",
+        "runtime"
+      ]
+    },
+    "modorch-registry": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "a055ccd59ef93bec7c860c9f2f0ad146ee2a4a538c9ad2385f078251428e65b2",
+      "features": []
+    },
+    "modorch-runtime": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "e19dfa43dc785d39357ed716a167fb5259b37bd9e7f45ced86000f89feefdea1",
+      "features": []
+    },
+    "modorch-scheduler": {
+      "version": "0.0.3",
+      "source": "git+https://github.com/muidea/modorch-rs?rev=336ba20196044e1b81fb2ca297a18b5e258a5800#336ba20196044e1b81fb2ca297a18b5e258a5800",
+      "sha256": "8701136aa7079a865dc911dd8f11d13a601d0d7a73b6299e082fad169578e82c",
+      "features": []
+    }
+  }
+}
