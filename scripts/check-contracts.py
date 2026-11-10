@@ -9,11 +9,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def verify(scope, output, mapping):
-    expected_ids = {f'MDH-COMP-{number:03d}' for number in range(1, 13)} | {'MDH-IMAGES-001'}
+    expected_ids = {f'MDH-COMP-{number:03d}' for number in range(1, 13)} | {'MDH-IMAGES-001', 'MDH-WORKFLOW-001'}
     if set(mapping) != expected_ids or any(not record for record in mapping.values()):
         raise ValueError('contract mapping is incomplete')
     for record in mapping.values():
-        if set(record) - {'local', 'remote', 'images'} or any(
+        if set(record) - {'local', 'remote', 'images', 'workflow'} or any(
                 not isinstance(names, list) or not names or
                 any(not isinstance(name, str) or not re.fullmatch(r'[\w:-]+', name) for name in names)
                 for names in record.values()):
@@ -35,7 +35,7 @@ def verify(scope, output, mapping):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--scope', choices=['local', 'remote', 'images'], required=True)
+    parser.add_argument('--scope', choices=['local', 'remote', 'images', 'workflow'], required=True)
     parser.add_argument('--results', type=Path, required=True, help='output of a successfully exited runner')
     args = parser.parse_args()
     mapping = json.loads((ROOT / 'tests/contracts/mapping.json').read_text())

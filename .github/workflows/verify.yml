@@ -49,6 +49,7 @@ jobs:
                   compile(path.read_bytes(), str(path), 'exec')
           PY
           python3 -B -m unittest discover -s tests -p test_contract_evidence.py -v
+          python3 -B -m unittest discover -s tests -p test_source_organization.py -v
       - name: Validate Compose definition
         env:
           MDH_IMAGE_PREFIX: mdh-source-check
@@ -123,6 +124,20 @@ jobs:
         working-directory: magicDataHub
         run: |
           ./scripts/check-federation.sh --bin-dir "$CARGO_TARGET_DIR/debug" --extensions-dir "$RUNNER_TEMP/mdh-extensions" --duckdb-library-dir "$CARGO_TARGET_DIR/duckdb-download/x86_64-unknown-linux-gnu/v2.0.0" > "$RUNNER_TEMP/mdh-evidence/remote.log" 2>&1
+      - name: Management lifecycle and real JDBC on both formal hosts
+        working-directory: magicDataHub
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, os, pathlib, subprocess, urllib.request
+          lock = json.loads(pathlib.Path('../modorch-fedengine/tests/fixtures/metadata/clients.json').read_text())
+          name = 'postgresql-' + lock['jdbc_version'] + '.jar'
+          jar = pathlib.Path(os.environ['RUNNER_TEMP']) / 'mdh-jdbc.jar'
+          with urllib.request.urlopen('https://repo.maven.apache.org/maven2/org/postgresql/postgresql/' + lock['jdbc_version'] + '/' + name, timeout=60) as response:
+              jar.write_bytes(response.read())
+          assert hashlib.sha256(jar.read_bytes()).hexdigest() == lock['artifacts'][name]
+          subprocess.run(['docker', 'pull', lock['jdk_image']], check=True)
+          PY
+          ./scripts/check-workflow.sh --bin-dir "$CARGO_TARGET_DIR/debug" --extensions-dir "$RUNNER_TEMP/mdh-extensions" --duckdb-library-dir "$CARGO_TARGET_DIR/duckdb-download/x86_64-unknown-linux-gnu/v2.0.0" --jdbc-jar "$RUNNER_TEMP/mdh-jdbc.jar" > "$RUNNER_TEMP/mdh-evidence/workflow.log" 2>&1
       - name: Clean input artifact images and real container protocols
         working-directory: magicDataHub
         run: |

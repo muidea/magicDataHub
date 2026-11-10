@@ -40,3 +40,12 @@ class ContractEvidence(unittest.TestCase):
         self.mapping['MDH-COMP-012']['remote'] = []
         with self.assertRaises(ValueError):
             contracts.verify('remote', self.output, self.mapping)
+
+    def test_workflow_requires_both_hosts_and_actual_jdbc(self):
+        names = self.mapping['MDH-WORKFLOW-001']['workflow']
+        output = '\n'.join(f'test {name} ... ok' for name in names)
+        self.assertEqual(contracts.verify('workflow', output, self.mapping), ['MDH-WORKFLOW-001'])
+        for missing in names:
+            with self.subTest(missing=missing):
+                with self.assertRaises(ValueError):
+                    contracts.verify('workflow', output.replace(f'test {missing} ... ok', ''), self.mapping)

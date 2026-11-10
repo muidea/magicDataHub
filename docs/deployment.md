@@ -16,6 +16,10 @@ python3 scripts/prepare-extensions.py --dest /absolute/path/to/prepared-extensio
 ./scripts/check-federation.sh --bin-dir "$CARGO_TARGET_DIR/debug" \
   --extensions-dir /absolute/path/to/prepared-extensions \
   --duckdb-library-dir "$DUCKDB_LIBRARY_DIR"
+./scripts/check-workflow.sh --bin-dir "$CARGO_TARGET_DIR/debug" \
+  --extensions-dir /absolute/path/to/prepared-extensions \
+  --duckdb-library-dir "$DUCKDB_LIBRARY_DIR" \
+  --jdbc-jar /absolute/path/to/postgresql-42.7.8.jar
 python3 scripts/build-images.py --tag-prefix mdh-local \
   --extensions-dir /absolute/path/to/prepared-extensions \
   --duckdb-library-dir "$DUCKDB_LIBRARY_DIR"
@@ -23,11 +27,22 @@ python3 scripts/build-images.py --tag-prefix mdh-local \
 python3 scripts/verify-compose.py --tag-prefix mdh-local
 ```
 
-`prepare-extensions.py` 下载前有大小边界，展开后比对固定 SHA256，缓存也重新校验。`build-images.py --require-clean` 在任一宿主/业务仓库未提交时拒绝构建，不自行提交或推送。`--profile release` 可选择优化构建；构建、容量和长时结果须按实际revision与profile单独验收。镜像构建不包含 push。
+`prepare-extensions.py` 下载前有大小边界，展开后比对固定 SHA256，缓存也重新校验。`check-workflow.sh` 验证完整管理生命周期与真实 JDBC，驱动校验和及 JDK 镜像固定要求见[验证入口](validation.md#整体管理流程与-jdbc)。`build-images.py --require-clean` 在任一宿主/业务仓库未提交时拒绝构建，不自行提交或推送。`--profile release` 可选择优化构建；构建、容量和长时结果须按实际revision与profile单独验收。镜像构建不包含 push。
 
 远端验收只创建随机名称、回环随机端口的一次性 PG17.7/MySQL5.7.44 容器，不读取用户业务 DSN。镜像专项用只读配置、独立临时数据卷运行真实协议、CAS、CRUD/JOIN/DDL、Portal/取消、阻塞原生 I/O 与 StopIncomplete，并重开原卷核对状态。Compose 专项使用六个默认开发端口；被占用时明确失败，不停止原有实例。用后只清理测试自身资源。
 
 ## 三个独立实例
+
+真实源接入使用业务库的实例发现和 `organization` 登记流程，按产品、规范化实例身份及原生数据库精确名称分组。同一原生库的多个来源合并到一个自动虚拟库，不同端口或不同原生库分开；PG 保留原 Schema，MySQL 在独立虚拟库中保留源 database 同名 Schema。不要把所有来源集中到测试汇总库，也不要用来源别名替换 Schema 名。具体接口见业务库的管理 API 文档。
+
+可用 `scripts/verify-source-organization.py` 对照本地部署计划核对 HTTP、PGWire 目录与实际读取。计划文件不提交，`sources` 每项包含 `id/kind/host/port/database/schema/virtual_database`，`account_databases` 列出保留的账号默认库；凭据仍通过 SecretRef 和环境变量传入。登记失败目标单列为 inactive，组织检查通过不代表全部来源已激活。
+
+```sh
+python3 scripts/verify-source-organization.py --plan /absolute/path/to/native-organization.json \
+  --management 15433 --pgwire 15432
+python3 scripts/verify-source-organization.py --plan /absolute/path/to/native-organization.json \
+  --management 25433 --pgwire 25432
+```
 
 ```sh
 export MDH_IMAGE_PREFIX=mdh-local
@@ -70,6 +85,6 @@ FailFast 运行故障返回非零；外部进程管理器可在进程实际退�
 
 ## CI 与真实版本固定
 
-[CI](../.github/workflows/verify.yml)在push/PR自动执行不依赖外部checkout的源码格式、Python语法、证据门禁与Compose配置检查。完整三服务联合与镜像验收由手动触发，要求两项无默认值的实际40位提交SHA，分别checkout `muidea/modorch-mqtt`、`muidea/modorch-fedengine`，逐一核对HEAD/clean后执行依赖身份、本地/一次性远端、镜像与Compose运行门禁，日志只存CI artifact。读取私有仓库时需要该CI具备对应仓库读取权限。自动源码检查通过不等于联合验收通过。
+[CI](../.github/workflows/verify.yml)在push/PR自动执行不依赖外部checkout的源码格式、Python语法、证据门禁与Compose配置检查。完整三服务联合与镜像验收由手动触发，要求两项无默认值的实际40位提交SHA，分别checkout `muidea/modorch-mqtt`、`muidea/modorch-fedengine`，逐一核对HEAD/clean后执行依赖身份、本地/一次性远端、完整管理流程与固定驱动/JDK 的 JDBC、镜像与Compose运行门禁，日志只存CI artifact。读取私有仓库时需要该CI具备对应仓库读取权限。自动源码检查通过不等于联合验收通过。
 
 首次源码提交可记录当前本地开发基线；正式Git集成须先使两个业务库包含当前接口的源码形成真实提交，再把宿主依赖改为这些实际 Git revision、更新锁和指纹，并在干净 checkout 执行所有门禁。工作流文件存在不代表远端执行通过，不能使用未包含接口的旧 HEAD 代替。手动工作流的同级 checkout 是过渡验证入口，不表示 Cargo 的 path 已切成正式 Git source。签名、镜像 registry 发布、release profile 与生产容量证据仍独立记录。

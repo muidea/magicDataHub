@@ -27,7 +27,7 @@
     "modorch-fedengine": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "5a69444b4defece7d216679d6e2f43bb3a518d7a4ed6faf17784d58bd8984ca3",
+      "sha256": "5945b34c1cdec4fd08657b86082b33b25f5cbe7b7d75d795e24e2be3adcfb9c7",
       "features": []
     },
     "modorch-fedengine-catalog": {
@@ -45,7 +45,7 @@
     "modorch-fedengine-core": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "ba8d8e5ac36bb24562de37c42b823d6384b90dacef7fca4a74e61b24c3d9d215",
+      "sha256": "4664ad840c4f6cc71ef5e9ab4a020bd65c07d63b0e3dfa3991815c879c1aacad",
       "features": []
     },
     "modorch-fedengine-datasource": {
@@ -69,7 +69,7 @@
     "modorch-fedengine-management": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "d122bfbcb29d39aeb0c64c7c7634b3e9e3188a00c62b5ad5539f3eda3f4f1643",
+      "sha256": "ec217a671310fff4d2368a2602bbcc0c9d602015c06103d7bcf58773b9f1b39c",
       "features": []
     },
     "modorch-fedengine-pg-compat": {

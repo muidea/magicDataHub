@@ -162,6 +162,10 @@ class Client:
         assert self.backend_key is not None
         with socket.create_connection(self.address, timeout=5) as stream:
             stream.sendall(struct.pack('!II', 16, 80877102) + self.backend_key)
+            # CancelRequest has no reply; server EOF confirms it was handled.
+            # Do not let an in-flight cancel race a subsequent query on the
+            # original connection after the canceled query reaches ReadyForQuery.
+            assert stream.recv(1) == b'', 'unexpected CancelRequest response'
 
     def close(self):
         if self.stream.fileno() != -1:

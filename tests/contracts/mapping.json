@@ -11,5 +11,6 @@
   "MDH-COMP-010": {"local": ["two_applications_keep_files_hubs_and_capabilities_separate"]},
   "MDH-COMP-011": {"local": ["MDH-IDENTITY-001"]},
   "MDH-COMP-012": {"remote": ["combined_remote_clients_enforce_object_grants_and_shared_admission"]},
-  "MDH-IMAGES-001": {"images": ["MDH-IMAGES-001"]}
+  "MDH-IMAGES-001": {"images": ["MDH-IMAGES-001"]},
+  "MDH-WORKFLOW-001": {"workflow": ["MDH-WORKFLOW-fedengine-server", "MDH-WORKFLOW-datahub-server", "MDH-JDBC-fedengine-server", "MDH-JDBC-datahub-server"]}
 }
