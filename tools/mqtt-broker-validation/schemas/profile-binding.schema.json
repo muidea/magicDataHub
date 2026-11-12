@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Target profile evidence binding v1",
+  "type": "object",
+  "required": [
+    "id",
+    "version",
+    "sha256",
+    "family",
+    "mode",
+    "configuration_status",
+    "config_sha256"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "family": {
+      "const": "mqtt311-tcp-anonymous-memory"
+    },
+    "mode": {
+      "enum": [
+        "owned-instance",
+        "live-network-only"
+      ]
+    },
+    "configuration_status": {
+      "enum": [
+        "snapshot-checked",
+        "controlled-reference",
+        "unverified"
+      ]
+    },
+    "config_sha256": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "pattern": "^[0-9a-f]{64}$"
+      }
+    }
+  },
+  "additionalProperties": false
+}

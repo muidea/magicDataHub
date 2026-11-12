@@ -1,0 +1,1577 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Worker request v1; validate against frozen run inputs before side effects",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "manifest": {
+      "type": "string",
+      "pattern": "^/[^\\u0000]+$"
+    },
+    "execution_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "plan_index": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}T[0-9]{6}Z-[0-9a-f]{12}$"
+    },
+    "attempt_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{32}$"
+    },
+    "target": {
+      "type": "string",
+      "pattern": "^(?:tool|reference|mqtt-server|datahub-server|live-[a-zA-Z0-9][a-zA-Z0-9_-]{0,40})$"
+    },
+    "case": {
+      "$schema": "https://json-schema.org/draft/2020-12/schema",
+      "title": "Representative case v1 (not an official obligation)",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "TOOL-CAL-001"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "calibration"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "const": []
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "expected_faults": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "expected_faults"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "connect"
+            },
+            "scenario_version": {
+              "const": "2.0.0"
+            },
+            "required_events": {
+              "const": [
+                "connect-phase"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "scenario_version",
+            "required_events"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "retained"
+            },
+            "required_events": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "scenario_version": {
+              "const": "2.0.0"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "required_events",
+            "scenario_version"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "topics"
+            },
+            "topic_vector_count": {
+              "const": 16
+            },
+            "scenario_version": {
+              "const": "2.0.0"
+            },
+            "required_events": {
+              "const": [
+                "topic-vector-start",
+                "topic-vector-roles",
+                "topic-observation",
+                "topic-vector"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "topic_vector_count",
+            "scenario_version",
+            "required_events"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                },
+                "namespace_control": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport",
+                "namespace_control"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "system_topics"
+            },
+            "topic_vector_count": {
+              "const": 3
+            },
+            "scenario_version": {
+              "const": "2.0.0"
+            },
+            "required_events": {
+              "const": [
+                "topic-vector-start",
+                "topic-vector-roles",
+                "topic-observation",
+                "topic-vector"
+              ]
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "topic_vector_count",
+            "scenario_version",
+            "required_events"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "unique_namespace_or_broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "paho"
+            },
+            "live_safe": {
+              "const": true
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "live_safe"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                },
+                "fault_control": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport",
+                "fault_control"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "qos2_recovery"
+            },
+            "required_events": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "scenario_version": {
+              "const": "3.0.0"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "required_events",
+            "scenario_version"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "upstream"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "upstream": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "pattern": "^[0-9][a-zA-Z0-9_-]*\\.py$"
+                },
+                "parameters": {
+                  "type": "object",
+                  "properties": {
+                    "proto_ver": {
+                      "const": 4
+                    },
+                    "clean_session": {
+                      "type": "boolean"
+                    }
+                  },
+                  "required": [
+                    "proto_ver"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "file",
+                "parameters"
+              ],
+              "additionalProperties": false
+            },
+            "reuse": {
+              "const": "B"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "upstream",
+            "reuse"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "MQTT311-QOS2-FLOW-001"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                },
+                "outbound_window": {
+                  "const": "two concurrent QoS2 publications required; unavailable capability is BLOCKED"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport",
+                "outbound_window"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "qos2_flow"
+            },
+            "required_events": {
+              "const": [
+                "qos2-flow-start",
+                "qos2-flow-roles",
+                "qos2-flow-phase",
+                "application-delivery",
+                "observation"
+              ]
+            },
+            "scenario_version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "required_events",
+            "scenario_version"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "MQTT311-QOS2-FANOUT-001"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "qos2_fanout"
+            },
+            "required_events": {
+              "const": [
+                "qos2-fanout-start",
+                "qos2-fanout-roles",
+                "qos2-fanout-phase",
+                "application-delivery",
+                "qos2-fanout-observation",
+                "qos2-fanout-observation-start"
+              ]
+            },
+            "scenario_version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "required_events",
+            "scenario_version"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "MQTT311-QOS2-DUPLEX-001"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "qos2_duplex"
+            },
+            "required_events": {
+              "const": [
+                "qos2-duplex-branch-start",
+                "qos2-duplex-roles",
+                "qos2-duplex-phase",
+                "application-delivery",
+                "qos2-duplex-observation-start",
+                "qos2-duplex-observation",
+                "qos2-duplex-branch-completed"
+              ]
+            },
+            "scenario_version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "required_events",
+            "scenario_version"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "const": "MQTT311-MIXED-QOS-001"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "runner": {
+              "const": "generic"
+            },
+            "profile": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "protocol": {
+              "const": "mqtt311"
+            },
+            "obligations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+              },
+              "minItems": 0,
+              "uniqueItems": true
+            },
+            "preconditions": {
+              "type": "object",
+              "properties": {
+                "isolation": {
+                  "const": "broker_instance"
+                },
+                "anonymous_access": {
+                  "const": true
+                },
+                "transport": {
+                  "const": "tcp"
+                }
+              },
+              "required": [
+                "isolation",
+                "anonymous_access",
+                "transport"
+              ],
+              "additionalProperties": false
+            },
+            "evidence_types": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "E-EXEC",
+                  "E-NET"
+                ]
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "required_assertions": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "limitations": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            },
+            "entrypoint": {
+              "const": "mixed_qos"
+            },
+            "required_events": {
+              "const": [
+                "mixed-vector-start",
+                "mixed-roles",
+                "mixed-input-completed",
+                "mixed-delivery",
+                "mixed-observation-start",
+                "mixed-observation",
+                "mixed-vector-completed"
+              ]
+            },
+            "scenario_version": {
+              "const": "1.0.0"
+            }
+          },
+          "required": [
+            "id",
+            "name",
+            "runner",
+            "profile",
+            "protocol",
+            "obligations",
+            "preconditions",
+            "evidence_types",
+            "required_assertions",
+            "limitations",
+            "entrypoint",
+            "required_events",
+            "scenario_version"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "trace": {
+      "type": "string",
+      "pattern": "^/[^\\u0000]+$"
+    },
+    "log": {
+      "type": "string",
+      "pattern": "^/[^\\u0000]+$"
+    },
+    "result": {
+      "type": "string",
+      "pattern": "^/[^\\u0000]+$"
+    },
+    "config": {
+      "type": "string",
+      "pattern": "^/[^\\u0000]+$"
+    },
+    "upstream": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^/[^\\u0000]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "endpoint": {
+      "oneOf": [
+        {
+          "type": "array",
+          "prefixItems": [
+            {
+              "const": "127.0.0.1"
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ],
+          "minItems": 2,
+          "maxItems": 2
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "image": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^(?:sha256:[0-9a-f]{64}|[a-zA-Z0-9./_:-]+@sha256:[0-9a-f]{64})$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "image_id": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "resources": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "token": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{32}$"
+            },
+            "name": {
+              "type": "string",
+              "pattern": "^mqtt-validation-[0-9a-f]{20}$"
+            },
+            "volume": {
+              "type": "string",
+              "pattern": "^mqtt-validation-[0-9a-f]{20}-state$"
+            },
+            "directory": {
+              "type": "string",
+              "pattern": "^/[^\\u0000]+$"
+            }
+          },
+          "required": [
+            "token",
+            "name",
+            "volume",
+            "directory"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "profile_binding": {
+      "oneOf": [
+        {
+          "$schema": "https://json-schema.org/draft/2020-12/schema",
+          "title": "Target profile evidence binding v1",
+          "type": "object",
+          "required": [
+            "id",
+            "version",
+            "sha256",
+            "family",
+            "mode",
+            "configuration_status",
+            "config_sha256"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "family": {
+              "const": "mqtt311-tcp-anonymous-memory"
+            },
+            "mode": {
+              "enum": [
+                "owned-instance",
+                "live-network-only"
+              ]
+            },
+            "configuration_status": {
+              "enum": [
+                "snapshot-checked",
+                "controlled-reference",
+                "unverified"
+              ]
+            },
+            "config_sha256": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "profile_file": {
+      "oneOf": [
+        {
+          "type": "string",
+          "pattern": "^/[^\\u0000]+$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "upstream_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "required": [
+    "schema_version",
+    "manifest",
+    "execution_sha256",
+    "plan_index",
+    "run_id",
+    "attempt_id",
+    "target",
+    "case",
+    "trace",
+    "log",
+    "result",
+    "config",
+    "upstream",
+    "endpoint",
+    "image",
+    "image_id",
+    "resources",
+    "profile_binding",
+    "profile_file"
+  ],
+  "additionalProperties": false
+}

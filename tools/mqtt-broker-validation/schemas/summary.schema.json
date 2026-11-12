@@ -1,0 +1,481 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "summary v1",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "claim": {
+      "const": "representative MQTT3.1.1 validation"
+    },
+    "target_profiles": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "version",
+              "sha256",
+              "family",
+              "mode",
+              "configuration_status",
+              "config_sha256"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "family": {
+                "const": "mqtt311-tcp-anonymous-memory"
+              },
+              "mode": {
+                "enum": [
+                  "owned-instance",
+                  "live-network-only"
+                ]
+              },
+              "configuration_status": {
+                "enum": [
+                  "snapshot-checked",
+                  "controlled-reference",
+                  "unverified"
+                ]
+              },
+              "config_sha256": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "additionalProperties": false
+          }
+        ]
+      }
+    },
+    "full_conformance": {
+      "const": "Partial"
+    },
+    "normative_review": {
+      "const": "pending"
+    },
+    "gate_scope": {
+      "const": "selected scenarios on required targets only"
+    },
+    "target_gates": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "PASS",
+          "FAIL",
+          "BLOCKED"
+        ]
+      }
+    },
+    "required_targets": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "exit_code": {
+      "enum": [
+        0,
+        1,
+        3
+      ]
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "PASS": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "FAIL": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "BLOCKED": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ERROR": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "NOT_TESTED": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "PASS",
+        "FAIL",
+        "BLOCKED",
+        "ERROR",
+        "NOT_TESTED"
+      ],
+      "additionalProperties": false
+    },
+    "planned_scenarios": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "inventory_scope": {
+      "const": "representative (not official coverage)"
+    },
+    "results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "schema_version": {
+            "type": "integer",
+            "const": 1
+          },
+          "run_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attempt_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "profile_binding": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "id",
+                  "version",
+                  "sha256",
+                  "family",
+                  "mode",
+                  "configuration_status",
+                  "config_sha256"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "version": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  },
+                  "family": {
+                    "const": "mqtt311-tcp-anonymous-memory"
+                  },
+                  "mode": {
+                    "enum": [
+                      "owned-instance",
+                      "live-network-only"
+                    ]
+                  },
+                  "configuration_status": {
+                    "enum": [
+                      "snapshot-checked",
+                      "controlled-reference",
+                      "unverified"
+                    ]
+                  },
+                  "config_sha256": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "string",
+                      "pattern": "^[0-9a-f]{64}$"
+                    }
+                  }
+                },
+                "additionalProperties": false
+              }
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "BLOCKED",
+              "ERROR",
+              "NOT_TESTED"
+            ]
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "seconds": {
+            "type": "number",
+            "minimum": 0
+          },
+          "evidence": {
+            "type": "string",
+            "pattern": "^[^/\\\\]+\\.jsonl$"
+          },
+          "evidence_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "evidence_bytes": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "process": {
+            "type": "object",
+            "properties": {
+              "returncode": {
+                "type": "integer"
+              },
+              "timed_out": {
+                "type": "boolean"
+              },
+              "interrupted": {
+                "type": "boolean"
+              },
+              "seconds": {
+                "type": "number",
+                "minimum": 0
+              }
+            },
+            "required": [
+              "returncode",
+              "timed_out",
+              "interrupted",
+              "seconds"
+            ],
+            "additionalProperties": false
+          },
+          "parent_cleanup": {
+            "type": "object",
+            "properties": {
+              "complete": {
+                "type": "boolean"
+              },
+              "forced": {
+                "type": "boolean"
+              },
+              "errors": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "resources_found": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "complete",
+              "forced",
+              "errors",
+              "resources_found"
+            ],
+            "additionalProperties": false
+          },
+          "cleanup_incomplete": {
+            "type": "boolean"
+          },
+          "evidence_types": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "classification": {
+            "const": "upstream-difference-needs-review"
+          },
+          "evidence_validated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "target",
+          "case_id",
+          "status",
+          "error",
+          "seconds"
+        ],
+        "additionalProperties": false,
+        "oneOf": [
+          {
+            "properties": {
+              "status": {
+                "const": "PASS"
+              },
+              "evidence_validated": {
+                "const": true
+              },
+              "error": {
+                "type": "null"
+              }
+            },
+            "required": [
+              "schema_version",
+              "run_id",
+              "attempt_id",
+              "target",
+              "case_id",
+              "profile_binding",
+              "status",
+              "error",
+              "seconds",
+              "evidence",
+              "evidence_sha256",
+              "evidence_bytes",
+              "evidence_validated",
+              "evidence_types"
+            ]
+          },
+          {
+            "properties": {
+              "status": {
+                "enum": [
+                  "FAIL",
+                  "BLOCKED",
+                  "ERROR",
+                  "NOT_TESTED"
+                ]
+              },
+              "error": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    "obligations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": {
+            "type": "string",
+            "minLength": 1
+          },
+          "obligation_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "review_status": {
+            "const": "pending"
+          },
+          "execution": {
+            "enum": [
+              "PASS",
+              "INCOMPLETE"
+            ]
+          },
+          "conformance": {
+            "enum": [
+              "INCONCLUSIVE",
+              "NOT_TESTED"
+            ]
+          },
+          "evidence_strength": {
+            "enum": [
+              "TargetedEvidence",
+              "NotRun"
+            ]
+          },
+          "observed_cases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "missing_cases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "required": [
+          "target",
+          "obligation_id",
+          "review_status",
+          "execution",
+          "conformance",
+          "evidence_strength",
+          "observed_cases",
+          "missing_cases",
+          "limitations"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "run_id",
+    "claim",
+    "target_profiles",
+    "full_conformance",
+    "normative_review",
+    "gate_scope",
+    "target_gates",
+    "required_targets",
+    "exit_code",
+    "counts",
+    "planned_scenarios",
+    "inventory_scope",
+    "results",
+    "obligations"
+  ],
+  "additionalProperties": false
+}

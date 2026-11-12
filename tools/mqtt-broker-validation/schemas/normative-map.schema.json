@@ -1,0 +1,637 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Draft selected connection/Retained/QoS2/Topic mappings; not coverage or approval",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 8
+    },
+    "scope": {
+      "const": "representative-selected-paths"
+    },
+    "mapping_status": {
+      "const": "draft"
+    },
+    "normative_review": {
+      "const": "pending"
+    },
+    "independent_approvals": {
+      "const": 0
+    },
+    "runtime_results": {
+      "const": "not-produced-by-mapping"
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "const": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+        },
+        "sha256": {
+          "const": "fc1f493558339850740a57ea19c4b2bdf39db6589edf9a69a984afbec098aa9b"
+        },
+        "encoding": {
+          "const": "cp1252"
+        },
+        "cache_file": {
+          "const": "specifications/mqtt-v3.1.1-os.html"
+        },
+        "sections": {
+          "const": [
+            "2.3.1",
+            "3.1.4",
+            "3.2",
+            "3.12.4",
+            "3.3.1.3",
+            "4.4",
+            "3.8.4",
+            "4.7.2",
+            "4.7.3",
+            "4.3.3"
+          ]
+        }
+      },
+      "required": [
+        "url",
+        "sha256",
+        "encoding",
+        "cache_file",
+        "sections"
+      ],
+      "additionalProperties": false
+    },
+    "paragraphs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_text": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "required": [
+          "id",
+          "source_text",
+          "sha256"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "mappings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "official_id": {
+            "enum": [
+              "MQTT-2.3.1-6",
+              "MQTT-3.1.4-4",
+              "MQTT-3.12.4-1",
+              "MQTT-3.2.0-1",
+              "MQTT-3.2.2-1",
+              "MQTT-3.2.2-2",
+              "MQTT-3.3.1-10",
+              "MQTT-3.3.1-11",
+              "MQTT-3.3.1-12",
+              "MQTT-3.3.1-5",
+              "MQTT-3.3.1-6",
+              "MQTT-3.3.1-8",
+              "MQTT-3.3.1-9",
+              "MQTT-3.8.4-1",
+              "MQTT-3.8.4-2",
+              "MQTT-4.4.0-1",
+              "MQTT-4.7.2-1",
+              "MQTT-4.7.3-4"
+            ]
+          },
+          "paragraph_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "normative_level": {
+            "const": "MUST"
+          },
+          "role": {
+            "const": "server"
+          },
+          "case_id": {
+            "enum": [
+              "MQTT311-CONNECT-001",
+              "MQTT311-RETAIN-DELETE-001",
+              "MQTT311-QOS2-RECOVER-001",
+              "MQTT311-TOPIC-MATCH-001"
+            ]
+          },
+          "scenario_version": {
+            "enum": [
+              "2.0.0",
+              "3.0.0"
+            ]
+          },
+          "required_phases": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "old-replayed",
+                "non-retained-preserved",
+                "delete-delivered",
+                "late-control-delivered",
+                "post-control-empty",
+                "cleanup-completed",
+                "connack-accepted",
+                "pingresp-received",
+                "client-disconnected",
+                "broker-to-client/AwaitPubComp",
+                "broker-to-client/AwaitPubRec",
+                "client-to-broker/AwaitPubComp",
+                "client-to-broker/AwaitPubRec",
+                "vector-0",
+                "vector-1",
+                "vector-2",
+                "vector-3",
+                "vector-4",
+                "vector-5",
+                "vector-6",
+                "vector-7",
+                "vector-8",
+                "vector-9",
+                "vector-10",
+                "vector-11",
+                "vector-12",
+                "vector-13",
+                "vector-14",
+                "vector-15"
+              ]
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "required_assertions": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "review_status": {
+            "const": "pending"
+          },
+          "evidence_claim": {
+            "const": "TargetedEvidenceOnly"
+          },
+          "limitations": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "official_id",
+          "paragraph_id",
+          "normative_level",
+          "role",
+          "case_id",
+          "scenario_version",
+          "required_phases",
+          "required_assertions",
+          "review_status",
+          "evidence_claim",
+          "limitations"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "enum": [
+              "MQTT-GAP-001",
+              "MQTT-GAP-002",
+              "MQTT-GAP-003",
+              "MQTT-GAP-004"
+            ]
+          },
+          "classification": {
+            "const": "validation-gap"
+          },
+          "status": {
+            "const": "implemented-selected-scope"
+          },
+          "case_id": {
+            "enum": [
+              "MQTT311-CONNECT-001",
+              "MQTT311-RETAIN-DELETE-001",
+              "MQTT311-QOS2-RECOVER-001",
+              "MQTT311-TOPIC-MATCH-001"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "id",
+          "classification",
+          "status",
+          "case_id",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "compound_requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "official_id": {
+            "enum": [
+              "MQTT-4.3.3-1",
+              "MQTT-4.3.3-2"
+            ]
+          },
+          "protocol_role": {
+            "enum": [
+              "sender",
+              "receiver"
+            ]
+          },
+          "inventory_scope": {
+            "const": "two-qos2-lists-only"
+          },
+          "source_blocks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "p",
+                    "li",
+                    "ul-start",
+                    "ul-end"
+                  ]
+                },
+                "text": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "kind",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 8,
+            "maxItems": 10
+          },
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "context_paragraphs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "source_text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              },
+              "required": [
+                "source_text",
+                "sha256"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "uniqueItems": true
+          },
+          "atoms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "enum": [
+                    "unused-id",
+                    "new-publish-qos2-dup0",
+                    "publish-unacknowledged",
+                    "pubrel-on-pubrec",
+                    "pubrel-original-id",
+                    "pubrel-unacknowledged",
+                    "no-publish-after-pubrel",
+                    "pubrec-on-publish",
+                    "repeat-pubrec",
+                    "no-duplicate-onward",
+                    "pubcomp-on-pubrel",
+                    "id-reuse-is-new"
+                  ]
+                },
+                "item_index": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "must_ordinal": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "must_offset": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "source_text": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "normative_level": {
+                  "enum": [
+                    "MUST",
+                    "MUST NOT"
+                  ]
+                },
+                "case_id": {
+                  "const": "MQTT311-QOS2-RECOVER-001"
+                },
+                "scenario_version": {
+                  "const": "3.0.0"
+                },
+                "required_branches": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "broker-to-client/AwaitPubComp",
+                      "broker-to-client/AwaitPubRec",
+                      "client-to-broker/AwaitPubComp",
+                      "client-to-broker/AwaitPubRec"
+                    ]
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "oracle": {
+                  "enum": [
+                    "qos2_evidence.branch_proof",
+                    "qos2_evidence.receiver_proof"
+                  ]
+                },
+                "evidence_status": {
+                  "const": "partial-selected-evidence"
+                },
+                "review_status": {
+                  "const": "pending"
+                },
+                "remaining": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "supplemental_evidence": {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "object",
+                        "properties": {
+                          "case_id": {
+                            "const": "MQTT311-QOS2-FLOW-001"
+                          },
+                          "scenario_version": {
+                            "const": "1.0.0"
+                          },
+                          "server_role": {
+                            "enum": [
+                              "sender",
+                              "receiver"
+                            ]
+                          },
+                          "required_phases": {
+                            "const": [
+                              "input-pair-completed",
+                              "outbound-pair-completed",
+                              "health-completed",
+                              "observation-completed"
+                            ]
+                          },
+                          "oracle": {
+                            "const": "qos2_flow_evidence.check_evidence"
+                          },
+                          "evidence_status": {
+                            "const": "partial-selected-evidence"
+                          },
+                          "review_status": {
+                            "const": "pending"
+                          }
+                        },
+                        "required": [
+                          "case_id",
+                          "scenario_version",
+                          "server_role",
+                          "required_phases",
+                          "oracle",
+                          "evidence_status",
+                          "review_status"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "case_id": {
+                            "const": "MQTT311-QOS2-FANOUT-001"
+                          },
+                          "scenario_version": {
+                            "const": "1.0.0"
+                          },
+                          "server_role": {
+                            "const": "receiver"
+                          },
+                          "required_phases": {
+                            "const": [
+                              "original-input-completed",
+                              "original-fanout-completed",
+                              "health-input-completed",
+                              "health-fanout-completed",
+                              "observations-completed"
+                            ]
+                          },
+                          "oracle": {
+                            "const": "qos2_fanout_evidence.check_evidence"
+                          },
+                          "evidence_status": {
+                            "const": "partial-selected-evidence"
+                          },
+                          "review_status": {
+                            "const": "pending"
+                          }
+                        },
+                        "required": [
+                          "case_id",
+                          "scenario_version",
+                          "server_role",
+                          "required_phases",
+                          "oracle",
+                          "evidence_status",
+                          "review_status"
+                        ],
+                        "additionalProperties": false
+                      },
+                      {
+                        "type": "object",
+                        "properties": {
+                          "case_id": {
+                            "const": "MQTT311-QOS2-DUPLEX-001"
+                          },
+                          "scenario_version": {
+                            "const": "1.0.0"
+                          },
+                          "server_role": {
+                            "enum": [
+                              "sender",
+                              "receiver"
+                            ]
+                          },
+                          "required_phases": {
+                            "const": [
+                              "overlap-established",
+                              "first-direction-completed",
+                              "both-directions-completed",
+                              "health-completed",
+                              "observations-completed"
+                            ]
+                          },
+                          "oracle": {
+                            "const": "qos2_duplex_evidence.check_evidence"
+                          },
+                          "evidence_status": {
+                            "const": "partial-selected-evidence"
+                          },
+                          "review_status": {
+                            "const": "pending"
+                          },
+                          "required_branches": {
+                            "const": [
+                              "incoming-first",
+                              "outgoing-first"
+                            ]
+                          }
+                        },
+                        "required": [
+                          "case_id",
+                          "scenario_version",
+                          "server_role",
+                          "required_phases",
+                          "oracle",
+                          "evidence_status",
+                          "review_status",
+                          "required_branches"
+                        ],
+                        "additionalProperties": false
+                      }
+                    ]
+                  },
+                  "minItems": 0,
+                  "maxItems": 3,
+                  "uniqueItems": true
+                }
+              },
+              "required": [
+                "key",
+                "item_index",
+                "must_ordinal",
+                "must_offset",
+                "source_text",
+                "normative_level",
+                "case_id",
+                "scenario_version",
+                "required_branches",
+                "oracle",
+                "evidence_status",
+                "review_status",
+                "remaining",
+                "supplemental_evidence"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 5,
+            "maxItems": 7,
+            "uniqueItems": true
+          },
+          "mapping_status": {
+            "const": "inventory-only"
+          },
+          "normative_review": {
+            "const": "pending"
+          },
+          "independent_approvals": {
+            "const": 0
+          },
+          "runtime_results": {
+            "const": "not-produced-by-inventory"
+          }
+        },
+        "required": [
+          "official_id",
+          "protocol_role",
+          "inventory_scope",
+          "source_blocks",
+          "source_sha256",
+          "context_paragraphs",
+          "atoms",
+          "mapping_status",
+          "normative_review",
+          "independent_approvals",
+          "runtime_results"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "scope",
+    "mapping_status",
+    "normative_review",
+    "independent_approvals",
+    "runtime_results",
+    "source",
+    "paragraphs",
+    "mappings",
+    "gaps",
+    "compound_requirements"
+  ],
+  "additionalProperties": false
+}

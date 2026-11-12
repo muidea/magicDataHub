@@ -114,7 +114,7 @@
     "modorch-mqtt-core": {
       "version": "0.1.0-alpha.1",
       "source": null,
-      "sha256": "f9db44d8e3f8277c7d3b98ee31f8d1cbb44635ae09cbe58912b1dfedcf865f39",
+      "sha256": "41cfef6e0e9c8b8138815d05542552f90b018e65db4872c9bb208e58dc434cb1",
       "features": [
         "default"
       ]

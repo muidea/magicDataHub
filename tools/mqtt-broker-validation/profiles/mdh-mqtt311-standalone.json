@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "id": "mdh-mqtt311-standalone",
+  "version": "1.0.0",
+  "family": "mqtt311-tcp-anonymous-memory",
+  "target": "mqtt-server",
+  "protocol": "mqtt311",
+  "role": "server",
+  "transport": "tcp",
+  "authentication": "anonymous",
+  "storage": "memory",
+  "composition": "mqtt-only",
+  "failure_policy": "FailFast",
+  "configuration_files": [
+    "mqtt-development.toml",
+    "mqtt/standalone.toml"
+  ],
+  "limits": {
+    "max_connections": 64,
+    "max_sessions": 128
+  },
+  "expected_qos": [
+    0,
+    1,
+    2
+  ],
+  "extensions_enabled": [],
+  "excluded_claims": [
+    "complete MQTT conformance",
+    "independent normative approval",
+    "production capacity or SLO",
+    "process restart or crash durability",
+    "MQTT5, TLS, authentication, WebSocket, bridge and optional host extensions"
+  ],
+  "normative_review": "pending"
+}

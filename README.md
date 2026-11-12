@@ -15,6 +15,7 @@ cargo run -p mqtt-server --locked -- --config config/mqtt-development.toml
 - [架构与依赖边界](docs/architecture/multi-application-composition.md)
 - [配置、路径与预算](docs/configuration.md)
 - [验证入口与能力边界](docs/validation.md)
+- [MQTT Broker 黑盒验证工具](tools/mqtt-broker-validation/README.md)
 - [本地镜像、协议探针与停机](docs/deployment.md)
 - [源码提交边界](docs/git-submission.md)
 

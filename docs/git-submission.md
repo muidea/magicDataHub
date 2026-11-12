@@ -10,6 +10,7 @@
 | apps/、crates/ | 三个正式入口、公共配置/runner、两个独立业务适配及测试 |
 | config/ | 匿名回环/内存MQTT及FedEngine开发配置；口令和源连接只保留SecretRef |
 | tests/、scripts/ | 可复用协议/远端/镜像测试、契约映射与证据门禁、资源准备和构建入口 |
+| tools/mqtt-broker-validation/ | 项目内 MQTT 黑盒验证工具、测试、场景目录和依赖锁；不含外部源码、缓存与逐次运行产物 |
 | docker/、.github/workflows/ | 固定运行依赖、Dockerfile、Compose与CI；不包含构建后的镜像 |
 | README.md、AGENTS.md、LICENSE、.gitignore、docs/ | 使用、开发、配置、架构、运行及能力边界 |
 

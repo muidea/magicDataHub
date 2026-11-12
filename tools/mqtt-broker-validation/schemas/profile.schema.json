@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Representative MQTT target profile v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "version",
+    "family",
+    "target",
+    "protocol",
+    "role",
+    "transport",
+    "authentication",
+    "storage",
+    "composition",
+    "failure_policy",
+    "configuration_files",
+    "limits",
+    "expected_qos",
+    "extensions_enabled",
+    "excluded_claims",
+    "normative_review"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]+$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "family": {
+      "const": "mqtt311-tcp-anonymous-memory"
+    },
+    "target": {
+      "enum": [
+        "mqtt-server",
+        "datahub-server",
+        "reference",
+        "external"
+      ]
+    },
+    "protocol": {
+      "const": "mqtt311"
+    },
+    "role": {
+      "const": "server"
+    },
+    "transport": {
+      "const": "tcp"
+    },
+    "authentication": {
+      "const": "anonymous"
+    },
+    "storage": {
+      "enum": [
+        "memory",
+        "unverified"
+      ]
+    },
+    "composition": {
+      "enum": [
+        "mqtt-only",
+        "mqtt-and-fedengine",
+        "reference",
+        "external-unverified"
+      ]
+    },
+    "failure_policy": {
+      "enum": [
+        "FailFast",
+        "unverified"
+      ]
+    },
+    "configuration_files": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "max_connections": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "max_sessions": {
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "expected_qos": {
+      "type": "array",
+      "const": [
+        0,
+        1,
+        2
+      ]
+    },
+    "extensions_enabled": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "excluded_claims": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true,
+      "minItems": 1
+    },
+    "normative_review": {
+      "const": "pending"
+    }
+  },
+  "additionalProperties": false
+}

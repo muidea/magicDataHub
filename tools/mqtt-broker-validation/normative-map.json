@@ -1,0 +1,1245 @@
+{
+  "schema_version": 8,
+  "scope": "representative-selected-paths",
+  "mapping_status": "draft",
+  "normative_review": "pending",
+  "independent_approvals": 0,
+  "runtime_results": "not-produced-by-mapping",
+  "source": {
+    "url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+    "sha256": "fc1f493558339850740a57ea19c4b2bdf39db6589edf9a69a984afbec098aa9b",
+    "encoding": "cp1252",
+    "cache_file": "specifications/mqtt-v3.1.1-os.html",
+    "sections": [
+      "2.3.1",
+      "3.1.4",
+      "3.2",
+      "3.12.4",
+      "3.3.1.3",
+      "4.4",
+      "3.8.4",
+      "4.7.2",
+      "4.7.3",
+      "4.3.3"
+    ]
+  },
+  "paragraphs": [
+    {
+      "id": "RETAIN-P1",
+      "source_text": "If the RETAIN flag is set to 1, in a PUBLISH Packet sent by a Client to a Server, the Server MUST store the Application Message and its QoS, so that it can be delivered to future subscribers whose subscriptions match its topic name [MQTT-3.3.1-5]. When a new subscription is established, the last retained message, if any, on each matching topic name MUST be sent to the subscriber [MQTT-3.3.1-6]. If the Server receives a QoS 0 message with the RETAIN flag set to 1 it MUST discard any message previously retained for that topic. It SHOULD store the new QoS 0 message as the new retained message for that topic, but MAY choose to discard it at any time - if this happens there will be no retained message for that topic [MQTT-3.3.1-7]. See Section 4.1 for more information on storing state.",
+      "sha256": "ea06952842d4107d5afc4c6262dbf7c3705fcc46fd09ff277b41e5c197ae911a"
+    },
+    {
+      "id": "RETAIN-P2",
+      "source_text": "When sending a PUBLISH Packet to a Client the Server MUST set the RETAIN flag to 1 if a message is sent as a result of a new subscription being made by a Client [MQTT-3.3.1-8]. It MUST set the RETAIN flag to 0 when a PUBLISH Packet is sent to a Client because it matches an established subscription regardless of how the flag was set in the message it received [MQTT-3.3.1-9].",
+      "sha256": "3733c614fda4103ee659fc20544e7a368ada24ebedbd7626862451f718eb343e"
+    },
+    {
+      "id": "RETAIN-P3",
+      "source_text": "A PUBLISH Packet with a RETAIN flag set to 1 and a payload containing zero bytes will be processed as normal by the Server and sent to Clients with a subscription matching the topic name. Additionally any existing retained message with the same topic name MUST be removed and any future subscribers for the topic will not receive a retained message [MQTT-3.3.1-10]. “As normal” means that the RETAIN flag is not set in the message received by existing Clients. A zero byte retained message MUST NOT be stored as a retained message on the Server [MQTT-3.3.1-11].",
+      "sha256": "ace738d2f53903f39c14d49841f682a7ab3dbd90683ffa7b305c3c4684121df4"
+    },
+    {
+      "id": "RETAIN-P4",
+      "source_text": "If the RETAIN flag is 0, in a PUBLISH Packet sent by a Client to a Server, the Server MUST NOT store the message and MUST NOT remove or replace any existing retained message [MQTT-3.3.1-12].",
+      "sha256": "d833cfe05fa16af8658a893e92f566650ddd09d14552af96328e6ef1ebbc10d4"
+    },
+    {
+      "id": "CONNECT-P1",
+      "source_text": "3. The Server MUST acknowledge the CONNECT Packet with a CONNACK Packet containing a zero return code [MQTT-3.1.4-4].",
+      "sha256": "dd9cdd93917a799648569d282487794c140c00cf6630c20f3b3a55d183d4cf8c"
+    },
+    {
+      "id": "CONNECT-P2",
+      "source_text": "The CONNACK Packet is the packet sent by the Server in response to a CONNECT Packet received from a Client. The first packet sent from the Server to the Client MUST be a CONNACK Packet [MQTT-3.2.0-1].",
+      "sha256": "f322da62ef7a22c2fa8dc95dadec040e6fb096c4b28070a8191fb9e6de2edf85"
+    },
+    {
+      "id": "CONNECT-P3",
+      "source_text": "Position: bit 0 of the Connect Acknowledge Flags. If the Server accepts a connection with CleanSession set to 1, the Server MUST set Session Present to 0 in the CONNACK packet in addition to setting a zero return code in the CONNACK packet [MQTT-3.2.2-1]. If the Server accepts a connection with CleanSession set to 0, the value set in Session Present depends on whether the Server already has stored Session state for the supplied client ID. If the Server has stored Session state, it MUST set Session Present to 1 in the CONNACK packet [MQTT-3.2.2-2]. If the Server does not have stored Session state, it MUST set Session Present to 0 in the CONNACK packet. This is in addition to setting a zero return code in the CONNACK packet [MQTT-3.2.2-3]. The Session Present flag enables a Client to establish whether the Client and Server have a consistent view about whether there is already stored Session state. Once the initial setup of a Session is complete, a Client with stored Session state will expect the Server to maintain its stored Session state. In the event that the value of Session Present received by the Client from the Server is not as expected, the Client can choose whether to proceed with the Session or to disconnect. The Client can discard the Session state on both Client and Server by disconnecting, connecting with Clean Session set to 1 and then disconnecting again. If a server sends a CONNACK packet containing a non-zero return code it MUST set Session Present to 0 [MQTT-3.2.2-4].",
+      "sha256": "d5ee4cf01b5464a8bcae557aa953a585a67c8cf51729e839543d97097b57c973"
+    },
+    {
+      "id": "CONNECT-P4",
+      "source_text": "The Server MUST send a PINGRESP Packet in response to a PINGREQ Packet [MQTT-3.12.4-1].",
+      "sha256": "c19cf0653c34a914449958fa42b8800c6aaa43f784123e765e6c8b5e2a7cbc16"
+    },
+    {
+      "id": "QOS2-P1",
+      "source_text": "A PUBACK, PUBREC or PUBREL Packet MUST contain the same Packet Identifier as the PUBLISH Packet that was originally sent [MQTT-2.3.1-6]. Similarly SUBACK and UNSUBACK MUST contain the Packet Identifier that was used in the corresponding SUBSCRIBE and UNSUBSCRIBE Packet respectively [MQTT-2.3.1-7].",
+      "sha256": "ee3bf83cf5addd801c86c66e60fb2feb13d3b01bbccb89f359a913589ed8f095"
+    },
+    {
+      "id": "QOS2-P3",
+      "source_text": "When a Client reconnects with CleanSession set to 0, both the Client and Server MUST re-send any unacknowledged PUBLISH Packets (where QoS > 0) and PUBREL Packets using their original Packet Identifiers [MQTT-4.4.0-1]. This is the only circumstance where a Client or Server is REQUIRED to redeliver messages.",
+      "sha256": "a84022993ab7bd9221f0907655c647747ea4ed30da592edd37ce4026036932db"
+    },
+    {
+      "id": "TOPIC-P1",
+      "source_text": "When the Server receives a SUBSCRIBE Packet from a Client, the Server MUST respond with a SUBACK Packet [MQTT-3.8.4-1]. The SUBACK Packet MUST have the same Packet Identifier as the SUBSCRIBE Packet that it is acknowledging [MQTT-3.8.4-2].",
+      "sha256": "71425d307f0d05412062875b4e0b903f66d5bd754ce422b553e22420afdce583"
+    },
+    {
+      "id": "TOPIC-P2",
+      "source_text": "The Server MUST NOT match Topic Filters starting with a wildcard character (# or +) with Topic Names beginning with a $ character [MQTT-4.7.2-1]. The Server SHOULD prevent Clients from using such Topic Names to exchange messages with other Clients. Server implementations MAY use Topic Names that start with a leading $ character for other purposes.",
+      "sha256": "b9f81973c32ec241f5ea5472483979ef7a9459a5a9a21feb2e3dee369cc7c0ad"
+    },
+    {
+      "id": "TOPIC-P3",
+      "source_text": "When it performs subscription matching the Server MUST NOT perform any normalization of Topic Names or Topic Filters, or any modification or substitution of unrecognized characters [MQTT-4.7.3-4]. Each non-wildcarded level in the Topic Filter has to match the corresponding level in the Topic Name character for character for the match to succeed.",
+      "sha256": "d4e8018f34d7b2b6694ec596b3c03e0d915272d4a68e2b8d1c7e088b1f5875bb"
+    }
+  ],
+  "mappings": [
+    {
+      "official_id": "MQTT-3.3.1-5",
+      "paragraph_id": "RETAIN-P1",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "old-replayed",
+        "non-retained-preserved"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.3.1-6",
+      "paragraph_id": "RETAIN-P1",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "old-replayed",
+        "non-retained-preserved"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.3.1-8",
+      "paragraph_id": "RETAIN-P2",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "old-replayed",
+        "non-retained-preserved"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.3.1-9",
+      "paragraph_id": "RETAIN-P2",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "delete-delivered",
+        "late-control-delivered",
+        "post-control-empty"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.3.1-10",
+      "paragraph_id": "RETAIN-P3",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "delete-delivered",
+        "late-control-delivered",
+        "post-control-empty"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.3.1-11",
+      "paragraph_id": "RETAIN-P3",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "late-control-delivered",
+        "post-control-empty"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.3.1-12",
+      "paragraph_id": "RETAIN-P4",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "non-retained-preserved",
+        "post-control-empty"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected QoS1 unique-topic path only; not all QoS, filters, reconnects or persistence combinations.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.1.4-4",
+      "paragraph_id": "CONNECT-P1",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-CONNECT-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "connack-accepted"
+      ],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected anonymous clean-session MQTT3.1.1 normal path with nonempty unique ClientID only; no rejection, duplicate-ID, session reuse or keepalive expiry proof.",
+        "DISCONNECT/local socket close is scenario cleanup evidence, not a claim that all server disconnect or Will obligations are verified.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.2.0-1",
+      "paragraph_id": "CONNECT-P2",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-CONNECT-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "connack-accepted"
+      ],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected anonymous clean-session MQTT3.1.1 normal path with nonempty unique ClientID only; no rejection, duplicate-ID, session reuse or keepalive expiry proof.",
+        "DISCONNECT/local socket close is scenario cleanup evidence, not a claim that all server disconnect or Will obligations are verified.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.2.2-1",
+      "paragraph_id": "CONNECT-P3",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-CONNECT-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "connack-accepted"
+      ],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected anonymous clean-session MQTT3.1.1 normal path with nonempty unique ClientID only; no rejection, duplicate-ID, session reuse or keepalive expiry proof.",
+        "DISCONNECT/local socket close is scenario cleanup evidence, not a claim that all server disconnect or Will obligations are verified.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.12.4-1",
+      "paragraph_id": "CONNECT-P4",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-CONNECT-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "pingresp-received"
+      ],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected anonymous clean-session MQTT3.1.1 normal path with nonempty unique ClientID only; no rejection, duplicate-ID, session reuse or keepalive expiry proof.",
+        "DISCONNECT/local socket close is scenario cleanup evidence, not a claim that all server disconnect or Will obligations are verified.",
+        "Mapping and wire checks do not establish complete obligation sufficiency or independent approval."
+      ]
+    },
+    {
+      "official_id": "MQTT-2.3.1-6",
+      "paragraph_id": "QOS2-P1",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-QOS2-RECOVER-001",
+      "scenario_version": "3.0.0",
+      "required_phases": [
+        "broker-to-client/AwaitPubComp",
+        "broker-to-client/AwaitPubRec",
+        "client-to-broker/AwaitPubComp",
+        "client-to-broker/AwaitPubRec"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Four selected in-memory connection-recovery branches only; not a complete QoS2 obligation inventory or sufficiency review.",
+        "Sender and receiver Packet IDs are connection/direction scoped; broker forwarding is not forced to one ACK boundary.",
+        "The full sender/receiver lists for MQTT-4.3.3-1/-2 and all related cross-section obligations are not imported or approved by this mapping."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.2.2-2",
+      "paragraph_id": "CONNECT-P3",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-QOS2-RECOVER-001",
+      "scenario_version": "3.0.0",
+      "required_phases": [
+        "broker-to-client/AwaitPubComp",
+        "broker-to-client/AwaitPubRec",
+        "client-to-broker/AwaitPubComp",
+        "client-to-broker/AwaitPubRec"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Four selected in-memory connection-recovery branches only; not a complete QoS2 obligation inventory or sufficiency review.",
+        "Sender and receiver Packet IDs are connection/direction scoped; broker forwarding is not forced to one ACK boundary.",
+        "The full sender/receiver lists for MQTT-4.3.3-1/-2 and all related cross-section obligations are not imported or approved by this mapping."
+      ]
+    },
+    {
+      "official_id": "MQTT-4.4.0-1",
+      "paragraph_id": "QOS2-P3",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-QOS2-RECOVER-001",
+      "scenario_version": "3.0.0",
+      "required_phases": [
+        "broker-to-client/AwaitPubComp",
+        "broker-to-client/AwaitPubRec",
+        "client-to-broker/AwaitPubComp",
+        "client-to-broker/AwaitPubRec"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Four selected in-memory connection-recovery branches only; not a complete QoS2 obligation inventory or sufficiency review.",
+        "Sender and receiver Packet IDs are connection/direction scoped; broker forwarding is not forced to one ACK boundary.",
+        "The full sender/receiver lists for MQTT-4.3.3-1/-2 and all related cross-section obligations are not imported or approved by this mapping."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.8.4-1",
+      "paragraph_id": "TOPIC-P1",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-TOPIC-MATCH-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "vector-0",
+        "vector-1",
+        "vector-2",
+        "vector-3",
+        "vector-4",
+        "vector-5",
+        "vector-6",
+        "vector-7",
+        "vector-8",
+        "vector-9",
+        "vector-10",
+        "vector-11",
+        "vector-12",
+        "vector-13",
+        "vector-14",
+        "vector-15"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected sixteen valid-filter QoS1 clean-session probes only; not invalid wildcard syntax, all UTF-8 cases, overlap or full matching sufficiency.",
+        "Positive controls, raw exchanges and bounded windows do not establish universal delivery timing or independent approval.",
+        "The general writable $validation namespace is distinct from the separately BLOCKED-capable $SYS environmental scenario."
+      ]
+    },
+    {
+      "official_id": "MQTT-3.8.4-2",
+      "paragraph_id": "TOPIC-P1",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-TOPIC-MATCH-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "vector-0",
+        "vector-1",
+        "vector-2",
+        "vector-3",
+        "vector-4",
+        "vector-5",
+        "vector-6",
+        "vector-7",
+        "vector-8",
+        "vector-9",
+        "vector-10",
+        "vector-11",
+        "vector-12",
+        "vector-13",
+        "vector-14",
+        "vector-15"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected sixteen valid-filter QoS1 clean-session probes only; not invalid wildcard syntax, all UTF-8 cases, overlap or full matching sufficiency.",
+        "Positive controls, raw exchanges and bounded windows do not establish universal delivery timing or independent approval.",
+        "The general writable $validation namespace is distinct from the separately BLOCKED-capable $SYS environmental scenario."
+      ]
+    },
+    {
+      "official_id": "MQTT-4.7.2-1",
+      "paragraph_id": "TOPIC-P2",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-TOPIC-MATCH-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "vector-6",
+        "vector-7",
+        "vector-8"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected sixteen valid-filter QoS1 clean-session probes only; not invalid wildcard syntax, all UTF-8 cases, overlap or full matching sufficiency.",
+        "Positive controls, raw exchanges and bounded windows do not establish universal delivery timing or independent approval.",
+        "The general writable $validation namespace is distinct from the separately BLOCKED-capable $SYS environmental scenario."
+      ]
+    },
+    {
+      "official_id": "MQTT-4.7.3-4",
+      "paragraph_id": "TOPIC-P3",
+      "normative_level": "MUST",
+      "role": "server",
+      "case_id": "MQTT311-TOPIC-MATCH-001",
+      "scenario_version": "2.0.0",
+      "required_phases": [
+        "vector-0",
+        "vector-9",
+        "vector-10",
+        "vector-13",
+        "vector-14"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "review_status": "pending",
+      "evidence_claim": "TargetedEvidenceOnly",
+      "limitations": [
+        "Selected sixteen valid-filter QoS1 clean-session probes only; not invalid wildcard syntax, all UTF-8 cases, overlap or full matching sufficiency.",
+        "Positive controls, raw exchanges and bounded windows do not establish universal delivery timing or independent approval.",
+        "The general writable $validation namespace is distinct from the separately BLOCKED-capable $SYS environmental scenario."
+      ]
+    }
+  ],
+  "gaps": [
+    {
+      "id": "MQTT-GAP-001",
+      "classification": "validation-gap",
+      "status": "implemented-selected-scope",
+      "case_id": "MQTT311-RETAIN-DELETE-001",
+      "description": "Retained v1 lacked a preserved-value probe for RETAIN=0 and rejected legal QoS1 duplicate deliveries; v2 adds these controls plus phase/byte evidence checks."
+    },
+    {
+      "id": "MQTT-GAP-002",
+      "classification": "validation-gap",
+      "status": "implemented-selected-scope",
+      "case_id": "MQTT311-CONNECT-001",
+      "description": "Connection v1 parent accepted success labels with unrelated bytes and no complete handshake; v2 rebuilds the single-connection CONNECT/CONNACK/PINGREQ/PINGRESP/DISCONNECT sequence and ordered phases."
+    },
+    {
+      "id": "MQTT-GAP-003",
+      "classification": "validation-gap",
+      "status": "implemented-selected-scope",
+      "case_id": "MQTT311-QOS2-RECOVER-001",
+      "description": "QoS2 v1 parent accepted branch/session/delivery labels with unrelated bytes and no captured handshake; v2 reconstructs roles, session flags, ACK cut streams, recovery handshakes and receiver deliveries."
+    },
+    {
+      "id": "MQTT-GAP-004",
+      "classification": "validation-gap",
+      "status": "implemented-selected-scope",
+      "case_id": "MQTT311-TOPIC-MATCH-001",
+      "description": "Topic v1 accepted vector indices and success labels without matching vector content or wire exchanges; v2 binds fixed vectors, role handshakes, candidate health controls, actual publications/ACKs and bounded observations."
+    }
+  ],
+  "compound_requirements": [
+    {
+      "official_id": "MQTT-4.3.3-1",
+      "protocol_role": "sender",
+      "inventory_scope": "two-qos2-lists-only",
+      "source_blocks": [
+        {
+          "kind": "p",
+          "text": "In the QoS 2 delivery protocol, the Sender"
+        },
+        {
+          "kind": "ul-start",
+          "text": ""
+        },
+        {
+          "kind": "li",
+          "text": "MUST assign an unused Packet Identifier when it has a new Application Message to publish."
+        },
+        {
+          "kind": "li",
+          "text": "MUST send a PUBLISH packet containing this Packet Identifier with QoS=2, DUP=0."
+        },
+        {
+          "kind": "li",
+          "text": "MUST treat the PUBLISH packet as “unacknowledged” until it has received the corresponding PUBREC packet from the receiver. See Section 4.4 for a discussion of unacknowledged messages."
+        },
+        {
+          "kind": "li",
+          "text": "MUST send a PUBREL packet when it receives a PUBREC packet from the receiver. This PUBREL packet MUST contain the same Packet Identifier as the original PUBLISH packet."
+        },
+        {
+          "kind": "li",
+          "text": "MUST treat the PUBREL packet as “unacknowledged” until it has received the corresponding PUBCOMP packet from the receiver."
+        },
+        {
+          "kind": "li",
+          "text": "MUST NOT re-send the PUBLISH once it has sent the corresponding PUBREL packet."
+        },
+        {
+          "kind": "ul-end",
+          "text": ""
+        },
+        {
+          "kind": "p",
+          "text": "[MQTT-4.3.3-1]."
+        }
+      ],
+      "source_sha256": "995c5ff5fdc3372d19ff40e31607c39ee7de81b345066086c92fb38f171f9216",
+      "context_paragraphs": [
+        {
+          "source_text": "The Packet Identifier becomes available for reuse once the Sender has received the PUBCOMP Packet.",
+          "sha256": "1e05307c08e05775b4524559e8269f8ce958618f8dfb6389231e47fb190ec567"
+        },
+        {
+          "source_text": "Note that a Sender is permitted to send further PUBLISH Packets with different Packet Identifiers while it is waiting to receive acknowledgements.",
+          "sha256": "ceac0ae24bc41679a66101982f7679ae8b1409b8f7a12e71d8d9e8bed797f9d1"
+        }
+      ],
+      "atoms": [
+        {
+          "key": "unused-id",
+          "item_index": 0,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST assign an unused Packet Identifier when it has a new Application Message to publish.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Two outstanding Broker publications use distinct IDs in FLOW; larger windows, resource pressure and allocation exhaustion remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "new-publish-qos2-dup0",
+          "item_index": 1,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST send a PUBLISH packet containing this Packet Identifier with QoS=2, DUP=0.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Selected initial recovery and three clean FLOW messages; all content/Will/Retain cases and allowed timing need review.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "publish-unacknowledged",
+          "item_index": 2,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST treat the PUBLISH packet as “unacknowledged” until it has received the corresponding PUBREC packet from the receiver. See Section 4.4 for a discussion of unacknowledged messages.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Selected AwaitPubRec recovery plus two FLOW messages before PUBREC; broader delays, concurrency and stored-state observations remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "pubrel-on-pubrec",
+          "item_index": 3,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST send a PUBREL packet when it receives a PUBREC packet from the receiver. This PUBREL packet MUST contain the same Packet Identifier as the original PUBLISH packet.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Selected repeated PUBREC per message in two-inflight FLOW now has actual PUBREL responses; wider repeats and legal interleavings remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "pubrel-original-id",
+          "item_index": 3,
+          "must_ordinal": 1,
+          "must_offset": 97,
+          "source_text": "MUST send a PUBREL packet when it receives a PUBREC packet from the receiver. This PUBREL packet MUST contain the same Packet Identifier as the original PUBLISH packet.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "FLOW concurrent IDs and DUPLEX same-ID bidirectional normal exchanges with both completion orders; broader windows/fault intersections remain subject to Profile and library evidence review.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-DUPLEX-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "overlap-established",
+                "first-direction-completed",
+                "both-directions-completed",
+                "health-completed",
+                "observations-completed"
+              ],
+              "required_branches": [
+                "incoming-first",
+                "outgoing-first"
+              ],
+              "oracle": "qos2_duplex_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "pubrel-unacknowledged",
+          "item_index": 4,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST treat the PUBREL packet as “unacknowledged” until it has received the corresponding PUBCOMP packet from the receiver.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Selected AwaitPubComp recovery and repeated FLOW PUBREL; wider delay, retry and storage combinations remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "no-publish-after-pubrel",
+          "item_index": 5,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST NOT re-send the PUBLISH once it has sent the corresponding PUBREL packet.",
+          "normative_level": "MUST NOT",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "broker-to-client/AwaitPubComp",
+            "broker-to-client/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "No forbidden frame in the captured selected flow/window; not an unbounded absence or all retry paths proof.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "sender",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        }
+      ],
+      "mapping_status": "inventory-only",
+      "normative_review": "pending",
+      "independent_approvals": 0,
+      "runtime_results": "not-produced-by-inventory"
+    },
+    {
+      "official_id": "MQTT-4.3.3-2",
+      "protocol_role": "receiver",
+      "inventory_scope": "two-qos2-lists-only",
+      "source_blocks": [
+        {
+          "kind": "p",
+          "text": "In the QoS 2 delivery protocol, the Receiver"
+        },
+        {
+          "kind": "ul-start",
+          "text": ""
+        },
+        {
+          "kind": "li",
+          "text": "MUST respond with a PUBREC containing the Packet Identifier from the incoming PUBLISH Packet, having accepted ownership of the Application Message."
+        },
+        {
+          "kind": "li",
+          "text": "Until it has received the corresponding PUBREL packet, the Receiver MUST acknowledge any subsequent PUBLISH packet with the same Packet Identifier by sending a PUBREC. It MUST NOT cause duplicate messages to be delivered to any onward recipients in this case."
+        },
+        {
+          "kind": "li",
+          "text": "MUST respond to a PUBREL packet by sending a PUBCOMP packet containing the same Packet Identifier as the PUBREL."
+        },
+        {
+          "kind": "li",
+          "text": "After it has sent a PUBCOMP, the receiver MUST treat any subsequent PUBLISH packet that contains that Packet Identifier as being a new publication."
+        },
+        {
+          "kind": "ul-end",
+          "text": ""
+        },
+        {
+          "kind": "p",
+          "text": "[MQTT-4.3.3-2]."
+        }
+      ],
+      "source_sha256": "88a94ff0601e0232552a05d82d1845ca75ae03d166b29cafad5786152fda381b",
+      "context_paragraphs": [
+        {
+          "source_text": "1 The receiver is not required to complete delivery of the Application Message before sending the PUBREC or PUBCOMP. When its original sender receives the PUBREC packet, ownership of the Application Message is transferred to the receiver.",
+          "sha256": "5a379b2ca2e309fa6de53b27f7e0485f353a2bd0c9e27368b1f4578dc706c130"
+        },
+        {
+          "source_text": "Figure 4.3 shows that there are two methods by which QoS 2 can be handled by the receiver. They differ in the point within the flow at which the message is made available for onward delivery. The choice of Method A or Method B is implementation specific. As long as an implementation chooses exactly one of these approaches, this does not affect the guarantees of a QoS 2 flow.",
+          "sha256": "08204fb56c016b45f151272704690da711b8b0d85d59663e39c19e10737ecd05"
+        }
+      ],
+      "atoms": [
+        {
+          "key": "pubrec-on-publish",
+          "item_index": 0,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST respond with a PUBREC containing the Packet Identifier from the incoming PUBLISH Packet, having accepted ownership of the Application Message.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "client-to-broker/AwaitPubComp",
+            "client-to-broker/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Wire PUBREC is observed; internal ownership and durable state cannot be inferred solely from the ACK.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-FANOUT-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "original-input-completed",
+                "original-fanout-completed",
+                "health-input-completed",
+                "health-fanout-completed",
+                "observations-completed"
+              ],
+              "oracle": "qos2_fanout_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "repeat-pubrec",
+          "item_index": 1,
+          "must_ordinal": 0,
+          "must_offset": 68,
+          "source_text": "Until it has received the corresponding PUBREL packet, the Receiver MUST acknowledge any subsequent PUBLISH packet with the same Packet Identifier by sending a PUBREC. It MUST NOT cause duplicate messages to be delivered to any onward recipients in this case.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "client-to-broker/AwaitPubComp",
+            "client-to-broker/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "One same-connection DUP=1 queued before reading PUBREC plus reconnect repeat; other allowed repeats/flags/interleavings remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FANOUT-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "original-input-completed",
+                "original-fanout-completed",
+                "health-input-completed",
+                "health-fanout-completed",
+                "observations-completed"
+              ],
+              "oracle": "qos2_fanout_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "no-duplicate-onward",
+          "item_index": 1,
+          "must_ordinal": 1,
+          "must_offset": 171,
+          "source_text": "Until it has received the corresponding PUBREL packet, the Receiver MUST acknowledge any subsequent PUBLISH packet with the same Packet Identifier by sending a PUBREC. It MUST NOT cause duplicate messages to be delivered to any onward recipients in this case.",
+          "normative_level": "MUST NOT",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "client-to-broker/AwaitPubComp",
+            "client-to-broker/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.receiver_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Duplicate original input now has one observed delivery at each of two subscribers; Method A/B internal choice, larger fanout, QoS mixes, overlap and all timing remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-FANOUT-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "original-input-completed",
+                "original-fanout-completed",
+                "health-input-completed",
+                "health-fanout-completed",
+                "observations-completed"
+              ],
+              "oracle": "qos2_fanout_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "pubcomp-on-pubrel",
+          "item_index": 2,
+          "must_ordinal": 0,
+          "must_offset": 0,
+          "source_text": "MUST respond to a PUBREL packet by sending a PUBCOMP packet containing the same Packet Identifier as the PUBREL.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "client-to-broker/AwaitPubComp",
+            "client-to-broker/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "Selected FLOW repeats PUBREL per ID with individual PUBCOMP; unknown IDs, broader repeats and completion timing remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-FANOUT-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "original-input-completed",
+                "original-fanout-completed",
+                "health-input-completed",
+                "health-fanout-completed",
+                "observations-completed"
+              ],
+              "oracle": "qos2_fanout_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-DUPLEX-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "overlap-established",
+                "first-direction-completed",
+                "both-directions-completed",
+                "health-completed",
+                "observations-completed"
+              ],
+              "required_branches": [
+                "incoming-first",
+                "outgoing-first"
+              ],
+              "oracle": "qos2_duplex_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        },
+        {
+          "key": "id-reuse-is-new",
+          "item_index": 3,
+          "must_ordinal": 0,
+          "must_offset": 42,
+          "source_text": "After it has sent a PUBCOMP, the receiver MUST treat any subsequent PUBLISH packet that contains that Packet Identifier as being a new publication.",
+          "normative_level": "MUST",
+          "case_id": "MQTT311-QOS2-RECOVER-001",
+          "scenario_version": "3.0.0",
+          "required_branches": [
+            "client-to-broker/AwaitPubComp",
+            "client-to-broker/AwaitPubRec"
+          ],
+          "oracle": "qos2_evidence.branch_proof",
+          "evidence_status": "partial-selected-evidence",
+          "review_status": "pending",
+          "remaining": "New health payload reuses completed incoming ID in two recovery branches and FLOW; other topics/flags/state combinations remain.",
+          "supplemental_evidence": [
+            {
+              "case_id": "MQTT311-QOS2-FLOW-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "input-pair-completed",
+                "outbound-pair-completed",
+                "health-completed",
+                "observation-completed"
+              ],
+              "oracle": "qos2_flow_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-FANOUT-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "original-input-completed",
+                "original-fanout-completed",
+                "health-input-completed",
+                "health-fanout-completed",
+                "observations-completed"
+              ],
+              "oracle": "qos2_fanout_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            },
+            {
+              "case_id": "MQTT311-QOS2-DUPLEX-001",
+              "scenario_version": "1.0.0",
+              "server_role": "receiver",
+              "required_phases": [
+                "overlap-established",
+                "first-direction-completed",
+                "both-directions-completed",
+                "health-completed",
+                "observations-completed"
+              ],
+              "required_branches": [
+                "incoming-first",
+                "outgoing-first"
+              ],
+              "oracle": "qos2_duplex_evidence.check_evidence",
+              "evidence_status": "partial-selected-evidence",
+              "review_status": "pending"
+            }
+          ]
+        }
+      ],
+      "mapping_status": "inventory-only",
+      "normative_review": "pending",
+      "independent_approvals": 0,
+      "runtime_results": "not-produced-by-inventory"
+    }
+  ]
+}

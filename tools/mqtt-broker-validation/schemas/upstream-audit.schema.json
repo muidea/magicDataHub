@@ -1,0 +1,327 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Selected upstream source assessment v1 (not runtime evidence or approval)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "inventory_scope": {
+      "const": "selected-assets-only"
+    },
+    "complete_upstream_inventory": {
+      "const": false
+    },
+    "assessment_kind": {
+      "const": "implementation-static-assessment"
+    },
+    "normative_review": {
+      "const": "pending"
+    },
+    "independent_review": {
+      "const": "pending"
+    },
+    "independent_approvals": {
+      "const": 0
+    },
+    "runtime_results": {
+      "const": "not-produced-by-audit"
+    },
+    "observed_date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "adapter_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "projects": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "enum": [
+              "mosquitto",
+              "paho-testing",
+              "emqx"
+            ]
+          },
+          "repository": {
+            "type": "string",
+            "minLength": 1
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          },
+          "cache_directory": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference_kind": {
+            "enum": [
+              "tag",
+              "commit-snapshot"
+            ]
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          },
+          "license_observation": {
+            "type": "string",
+            "minLength": 1
+          },
+          "license_evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "line": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "file",
+                "line",
+                "text"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "files": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "assets": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+                },
+                "file": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "kind": {
+                  "enum": [
+                    "test-invocation",
+                    "infrastructure",
+                    "test-suite"
+                  ]
+                },
+                "reuse_grade": {
+                  "enum": [
+                    "A",
+                    "B",
+                    "C",
+                    "D"
+                  ]
+                },
+                "integration_status": {
+                  "enum": [
+                    "integrated",
+                    "not-integrated"
+                  ]
+                },
+                "entrypoints": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "protocols": {
+                  "type": "array",
+                  "items": {
+                    "enum": [
+                      "mqtt311",
+                      "mqtt5"
+                    ]
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "dependencies": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "couplings": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "adaptations": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "evidence_limits": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "next_steps": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "evidence": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "file": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "line": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "text": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "file",
+                      "line",
+                      "text"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "catalog_case_id": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                },
+                "parameters": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "proto_ver": {
+                          "const": 4
+                        },
+                        "clean_session": {
+                          "type": "boolean"
+                        }
+                      },
+                      "required": [
+                        "proto_ver"
+                      ],
+                      "additionalProperties": false
+                    },
+                    {
+                      "type": "null"
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "id",
+                "file",
+                "kind",
+                "reuse_grade",
+                "integration_status",
+                "entrypoints",
+                "protocols",
+                "dependencies",
+                "couplings",
+                "adaptations",
+                "evidence_limits",
+                "next_steps",
+                "evidence",
+                "catalog_case_id",
+                "parameters"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "repository",
+          "revision",
+          "cache_directory",
+          "reference_kind",
+          "reference",
+          "license_observation",
+          "license_evidence",
+          "files",
+          "assets"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "schema_version",
+    "inventory_scope",
+    "complete_upstream_inventory",
+    "assessment_kind",
+    "normative_review",
+    "independent_review",
+    "independent_approvals",
+    "runtime_results",
+    "observed_date",
+    "adapter_sha256",
+    "projects"
+  ],
+  "additionalProperties": false
+}

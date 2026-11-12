@@ -1,0 +1,1066 @@
+{
+  "schema_version": 1,
+  "inventory_scope": "representative",
+  "complete_official_inventory": false,
+  "cases": [
+    {
+      "id": "TOOL-CAL-001",
+      "name": "oracle-calibration",
+      "runner": "calibration",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "calibration-peer-completed",
+        "known-mutation-detected"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending"
+      ],
+      "expected_faults": 11
+    },
+    {
+      "id": "MQTT311-CONNECT-001",
+      "name": "connect",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-CONNECTION"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending"
+      ],
+      "entrypoint": "connect",
+      "scenario_version": "2.0.0",
+      "required_events": [
+        "connect-phase"
+      ]
+    },
+    {
+      "id": "MQTT311-QOS2-RECOVER-001",
+      "name": "qos2-connection-recovery",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "entrypoint": "qos2_recovery",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp",
+        "fault_control": "owned frame-preserving ACK-cut proxy; persistent client sessions"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "required_events": [
+        "qos2-branch-start",
+        "fault-cut",
+        "qos2-disconnect",
+        "application-delivery",
+        "observation",
+        "qos2-clean-session-reset",
+        "qos2-branch-completed"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "four sequential direction/stage branches; no concurrent same-ID bidirectional exchange claim",
+        "connection interruption only; no process restart, storage or crash-recovery claim",
+        "0.4 second bounded duplicate observation with actual positive health delivery",
+        "test receiver delivers at PUBREL; broker may distribute at any protocol-permitted phase"
+      ],
+      "scenario_version": "3.0.0"
+    },
+    {
+      "id": "MQTT311-RETAIN-DELETE-001",
+      "name": "retained-delete",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-RETAIN-DELETE"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "v2 covers selected QoS1 Retained store/replay/live/delete and non-Retained preservation; other QoS/restart/ACL combinations remain outside this scenario",
+        "known identical QoS1 DUP exchanges are ACKed separately; negative proof is bounded to two 0.4 second windows"
+      ],
+      "entrypoint": "retained",
+      "required_events": [
+        "retained-phase",
+        "retained-observation"
+      ],
+      "scenario_version": "2.0.0"
+    },
+    {
+      "id": "MQTT311-TOPIC-MATCH-001",
+      "name": "topic-vectors",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-TOPIC-MATCH"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending"
+      ],
+      "entrypoint": "topics",
+      "topic_vector_count": 16,
+      "scenario_version": "2.0.0",
+      "required_events": [
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-observation",
+        "topic-vector"
+      ]
+    },
+    {
+      "id": "MQTT311-SYS-TOPIC-001",
+      "name": "system-topics",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-TOPIC-MATCH"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp",
+        "namespace_control": "$SYS writable, with positive subscriber control; otherwise BLOCKED"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending"
+      ],
+      "entrypoint": "system_topics",
+      "topic_vector_count": 3,
+      "scenario_version": "2.0.0",
+      "required_events": [
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-observation",
+        "topic-vector"
+      ]
+    },
+    {
+      "id": "MQTT311-PAHO-001",
+      "name": "paho-functional",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS1"
+      ],
+      "preconditions": {
+        "isolation": "unique_namespace_or_broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "paho-delivery",
+        "paho-retained-delete-complete",
+        "paho-delete-live",
+        "paho-retained-cleanup"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending"
+      ],
+      "entrypoint": "paho",
+      "live_safe": true
+    },
+    {
+      "id": "UPSTREAM-MOSQ-001",
+      "name": "upstream-03-publish-qos1",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS1"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "puback"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "03-publish-qos1.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-002",
+      "name": "upstream-03-publish-qos2",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "pubrec",
+        "pubcomp"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "03-publish-qos2.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-003",
+      "name": "upstream-02-subpub-qos1",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS1"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "suback",
+        "puback/publish2"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "02-subpub-qos1.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-004",
+      "name": "upstream-02-subpub-qos2",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "suback",
+        "pubrec",
+        "pubcomp/publish2",
+        "pubrel2"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "02-subpub-qos2.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-005",
+      "name": "upstream-04-retain-qos0-clear",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-RETAIN-DELETE"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "publish",
+        "unsuback",
+        "pingresp"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "04-retain-qos0-clear.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-006",
+      "name": "upstream-03-publish-b2c-disconnect-qos2",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "dup publish",
+        "pubrel",
+        "dup pubrel"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "03-publish-b2c-disconnect-qos2.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-007",
+      "name": "upstream-03-publish-c2b-disconnect-qos2",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack 2",
+        "pubrec",
+        "pubcomp"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "03-publish-c2b-disconnect-qos2.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-008",
+      "name": "upstream-03-publish-invalid-utf8",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-TOPIC-VALIDATION"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "puback"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "03-publish-invalid-utf8.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-009",
+      "name": "upstream-02-subscribe-invalid-utf8",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-TOPIC-VALIDATION"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "suback"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "02-subscribe-invalid-utf8.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-010",
+      "name": "upstream-02-subpub-recover-subscriptions",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-SESSION"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack 1",
+        "connack 2",
+        "publish1",
+        "suback1",
+        "suback2"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "02-subpub-recover-subscriptions.py",
+        "parameters": {
+          "proto_ver": 4
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-011",
+      "name": "upstream-07-will-qos0-clean",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-WILL"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "suback",
+        "publish"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "07-will-qos0.py",
+        "parameters": {
+          "proto_ver": 4,
+          "clean_session": true
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "UPSTREAM-MOSQ-012",
+      "name": "upstream-07-will-qos0-persistent",
+      "runner": "upstream",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "obligations": [
+        "OBL-311-WILL"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "connack",
+        "suback",
+        "publish"
+      ],
+      "limitations": [
+        "representative evidence; normative mapping and sufficiency review pending",
+        "original fixed Packet ID/ordering may be broker-specific; FAIL requires review",
+        "original bounded negative observation is not an unbounded absence proof"
+      ],
+      "upstream": {
+        "file": "07-will-qos0.py",
+        "parameters": {
+          "proto_ver": 4,
+          "clean_session": false
+        }
+      },
+      "reuse": "B"
+    },
+    {
+      "id": "MQTT311-QOS2-FLOW-001",
+      "name": "qos2-two-inflight-repeated-controls",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "entrypoint": "qos2_flow",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp",
+        "outbound_window": "two concurrent QoS2 publications required; unavailable capability is BLOCKED"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "qos2-flow-publication",
+        "qos2-flow-new-dup0",
+        "qos2-flow-unique-inflight-ids",
+        "qos2-flow-control-packet",
+        "qos2-flow-single-delivery",
+        "qos2-flow-completed"
+      ],
+      "required_events": [
+        "qos2-flow-start",
+        "qos2-flow-roles",
+        "qos2-flow-phase",
+        "application-delivery",
+        "observation"
+      ],
+      "limitations": [
+        "Selected two-inflight clean-session QoS2 flow only; not a full concurrency or conformance proof.",
+        "Two input IDs and independently allocated Broker IDs; repeated PUBREC/PUBREL each require actual responses and one logical delivery.",
+        "A serial-only outbound sender is legal; absence of a second complete frame without partial bytes is BLOCKED, not a conformance failure.",
+        "No reconnect, process restart, capacity, disk persistence or unbounded absence claim; duplicate observation is 0.4 seconds."
+      ],
+      "scenario_version": "1.0.0"
+    },
+    {
+      "id": "MQTT311-QOS2-FANOUT-001",
+      "name": "qos2-duplicate-input-two-subscribers",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "entrypoint": "qos2_fanout",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "qos2-fanout-input-ack",
+        "qos2-fanout-publication",
+        "qos2-fanout-new-publication",
+        "qos2-fanout-output-ack",
+        "qos2-fanout-single-delivery",
+        "qos2-fanout-completed"
+      ],
+      "required_events": [
+        "qos2-fanout-start",
+        "qos2-fanout-roles",
+        "qos2-fanout-phase",
+        "application-delivery",
+        "qos2-fanout-observation",
+        "qos2-fanout-observation-start"
+      ],
+      "limitations": [
+        "Two exact QoS2 subscriptions on distinct clean connections, one publisher, duplicate original input and healthy input reusing its completed ID; no reconnect.",
+        "Each subscriber delivers each payload once with its own wire handshake and bounded 0.4 second observation; Broker IDs may coincide across connections or differ.",
+        "No mandatory simultaneous outbound window, cross-recipient ACK boundary, Method A/B internals, arbitrary fanout, load or persistent-state claim."
+      ],
+      "scenario_version": "1.0.0"
+    },
+    {
+      "id": "MQTT311-QOS2-DUPLEX-001",
+      "name": "qos2-same-id-bidirectional-two-completion-orders",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "entrypoint": "qos2_duplex",
+      "obligations": [
+        "OBL-311-QOS2-RECOVERY"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "qos2-duplex-publication",
+        "qos2-duplex-new-publication",
+        "qos2-duplex-input-ack",
+        "qos2-duplex-output-ack",
+        "qos2-duplex-single-delivery",
+        "qos2-duplex-completed"
+      ],
+      "required_events": [
+        "qos2-duplex-branch-start",
+        "qos2-duplex-roles",
+        "qos2-duplex-phase",
+        "application-delivery",
+        "qos2-duplex-observation-start",
+        "qos2-duplex-observation",
+        "qos2-duplex-branch-completed"
+      ],
+      "limitations": [
+        "Selected two clean-session branches, completing the incoming or outgoing QoS2 direction first; each uses one owner TCP connection and one helper.",
+        "Learn the Broker outbound ID before initiating the reverse PUBLISH with that same ID; original exchanges overlap, input ID is later reused for different healthy content.",
+        "Four connections, eight application deliveries and four separate 0.4-second observations; no reconnect, storage, crash, arbitrary interleaving or full conformance claim.",
+        "Broker IDs are not prescribed; namespaces are separate per direction and per connection. Existing library fault matrices are not re-executed by this normal-flow case."
+      ],
+      "scenario_version": "1.0.0"
+    },
+    {
+      "id": "MQTT311-MIXED-QOS-001",
+      "name": "mixed-qos-independent-subscribers",
+      "runner": "generic",
+      "profile": "mqtt311-tcp-anonymous-memory",
+      "protocol": "mqtt311",
+      "entrypoint": "mixed_qos",
+      "obligations": [
+        "OBL-311-QOS-NEGOTIATION"
+      ],
+      "preconditions": {
+        "isolation": "broker_instance",
+        "anonymous_access": true,
+        "transport": "tcp"
+      },
+      "evidence_types": [
+        "E-EXEC",
+        "E-NET"
+      ],
+      "required_assertions": [
+        "mixed-suback",
+        "mixed-publication",
+        "mixed-copy-budget",
+        "mixed-delivery-complete",
+        "mixed-matrix-completed"
+      ],
+      "required_events": [
+        "mixed-vector-start",
+        "mixed-roles",
+        "mixed-input-completed",
+        "mixed-delivery",
+        "mixed-observation-start",
+        "mixed-observation",
+        "mixed-vector-completed"
+      ],
+      "limitations": [
+        "Finite 3x3 single-subscription matrix with independent clean subscriber sessions; actual grants determine outgoing QoS",
+        "Overlapping-subscription behavior is excluded from this required case because the locked reference is registration-order sensitive; a separate diagnostic records that compatibility boundary",
+        "Legal retransmissions and QoS1 to QoS0 duplication are permitted where applicable",
+        "Rejected subscriptions or absent best-effort positive control are BLOCKED, not protocol failures; bounded 0.4s observations do not prove unbounded absence",
+        "No reconnect, retained, concurrent publishers, resource scale or complete normative sufficiency claim; official mapping and independent review pending"
+      ],
+      "scenario_version": "1.0.0"
+    }
+  ],
+  "obligations": [
+    {
+      "id": "OBL-311-CONNECTION",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "3.1",
+        "3.2",
+        "3.12",
+        "3.13"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "MQTT311-CONNECT-001"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-QOS1",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "4.3.2"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "UPSTREAM-MOSQ-001",
+        "UPSTREAM-MOSQ-003",
+        "MQTT311-PAHO-001"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-QOS2-RECOVERY",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "4.3.3",
+        "4.4"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "MQTT311-QOS2-RECOVER-001",
+        "UPSTREAM-MOSQ-002",
+        "UPSTREAM-MOSQ-004",
+        "UPSTREAM-MOSQ-006",
+        "UPSTREAM-MOSQ-007",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-FANOUT-001",
+        "MQTT311-QOS2-DUPLEX-001"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-RETAIN-DELETE",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "3.3.1.3"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "MQTT311-RETAIN-DELETE-001",
+        "UPSTREAM-MOSQ-005"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-TOPIC-MATCH",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "4.7.1",
+        "4.7.2"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "MQTT311-TOPIC-MATCH-001",
+        "MQTT311-SYS-TOPIC-001"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-TOPIC-VALIDATION",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "1.5.3",
+        "3.3.2.1",
+        "3.8.3"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "UPSTREAM-MOSQ-008",
+        "UPSTREAM-MOSQ-009"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-SESSION",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "3.1.2.4",
+        "3.2.2.2",
+        "4.1"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "UPSTREAM-MOSQ-010"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-WILL",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "3.1.2.5"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "UPSTREAM-MOSQ-011",
+        "UPSTREAM-MOSQ-012"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    },
+    {
+      "id": "OBL-311-QOS-NEGOTIATION",
+      "protocol": "mqtt311",
+      "role": "server",
+      "source_sections": [
+        "3.3.5",
+        "3.8.4",
+        "4.3"
+      ],
+      "source_url": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html",
+      "official_ids": [],
+      "normative_level": "pending_review",
+      "review_status": "pending",
+      "completion_rule": "all_of_selected_scenarios",
+      "required_cases": [
+        "MQTT311-MIXED-QOS-001"
+      ],
+      "limitations": [
+        "Internal evidence scope, not a fully reviewed atomic official obligation",
+        "Passing selected scenarios supplies TargetedEvidence only; full normative coverage not claimed"
+      ]
+    }
+  ]
+}

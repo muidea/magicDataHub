@@ -1,0 +1,86 @@
+name: Verify MQTT validation tool
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      mqtt_image:
+        description: Pullable mqtt-server registry image with immutable sha256 digest
+        required: true
+        type: string
+      combined_image:
+        description: Pullable datahub-server registry image with immutable sha256 digest
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false # Allow bounded owned-resource cleanup to finish.
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Check syntax, catalog and negative gates without external dependencies
+        run: ./scripts/check-mqtt-validation.sh
+  images:
+    if: github.event_name == 'workflow_dispatch'
+    needs: source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: tools/mqtt-broker-validation
+    env:
+      MQTT_IMAGE: ${{ inputs.mqtt_image }}
+      COMBINED_IMAGE: ${{ inputs.combined_image }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Validate immutable inputs and the shared tool/config checkout
+        shell: python
+        run: |
+          import os, re, subprocess
+          for name in ['MQTT_IMAGE', 'COMBINED_IMAGE']:
+              assert re.fullmatch(r'[a-zA-Z0-9./_:-]+@sha256:[0-9a-f]{64}', os.environ[name])
+          actual = subprocess.check_output(['git', '-C', '../..', 'rev-parse', 'HEAD'], text=True).strip()
+          assert actual == os.environ['GITHUB_SHA']
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Prepare locked clients, product images and reference
+        run: |
+          python3 -B - <<'PY'
+          import os, subprocess
+          for name in ['MQTT_IMAGE', 'COMBINED_IMAGE']:
+              subprocess.run(['docker', 'pull', os.environ[name]], check=True, timeout=180)
+          PY
+          python3 -B prepare.py --pull-reference
+      - name: Verify pinned upstream assessment sources without executing candidates
+        run: python3 -B upstream_audit.py --fetch
+      - name: Verify pinned OASIS source for selected MQTT3.1.1 mapping drafts
+        run: python3 -B normative_map.py --fetch-source
+      - name: Run scoped product gate and preserve reference observations
+        run: |
+          python3 -B run.py --host-project ../.. \
+            --mqtt-image "$MQTT_IMAGE" --combined-image "$COMBINED_IMAGE" \
+            --required-targets mqtt-server,datahub-server \
+            --output "$RUNNER_TEMP/mqtt-validation"
+      - name: Preserve diagnostics outside the source checkout
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: mqtt-representative-validation
+          path: ${{ runner.temp }}/mqtt-validation
+          if-no-files-found: ignore
+          retention-days: 7

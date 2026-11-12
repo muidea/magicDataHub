@@ -1,0 +1,2873 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "event v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "case-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "run_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "attempt_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile_binding": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "id",
+                "version",
+                "sha256",
+                "family",
+                "mode",
+                "configuration_status",
+                "config_sha256"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "family": {
+                  "const": "mqtt311-tcp-anonymous-memory"
+                },
+                "mode": {
+                  "enum": [
+                    "owned-instance",
+                    "live-network-only"
+                  ]
+                },
+                "configuration_status": {
+                  "enum": [
+                    "snapshot-checked",
+                    "controlled-reference",
+                    "unverified"
+                  ]
+                },
+                "config_sha256": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "run_id",
+        "attempt_id",
+        "target",
+        "case_id",
+        "profile_binding"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "case-end"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "status": {
+          "enum": [
+            "PASS",
+            "FAIL",
+            "BLOCKED",
+            "ERROR"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "status"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "profile-checked"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "binding": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "id",
+                "version",
+                "sha256",
+                "family",
+                "mode",
+                "configuration_status",
+                "config_sha256"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "version": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "family": {
+                  "const": "mqtt311-tcp-anonymous-memory"
+                },
+                "mode": {
+                  "enum": [
+                    "owned-instance",
+                    "live-network-only"
+                  ]
+                },
+                "configuration_status": {
+                  "enum": [
+                    "snapshot-checked",
+                    "controlled-reference",
+                    "unverified"
+                  ]
+                },
+                "config_sha256": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{64}$"
+                  }
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "binding"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "assertion"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assertion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "expected": {
+          "type": [
+            "string",
+            "boolean"
+          ]
+        },
+        "observed": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        },
+        "observed_topic": {
+          "type": "string"
+        },
+        "qos": {
+          "enum": [
+            0,
+            1,
+            2
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "assertion",
+        "passed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "upstream-assertion"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "assertion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "passed": {
+          "type": "boolean"
+        },
+        "observed": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        },
+        "expected": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        },
+        "expected_variants": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(?:[0-9a-f]{2})*$"
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "assertion",
+        "passed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "connection"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "peer": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        },
+        "client_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "peer"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "connection-aborted"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "client_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "client_id"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "bytes"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "direction",
+        "hex"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "frame"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "const": "rx"
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "direction",
+        "hex"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "observation"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0
+        },
+        "actual_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "seconds_required",
+        "actual_seconds",
+        "completed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "live-target"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "endpoint": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        },
+        "profile": {
+          "const": "mqtt311-tcp-anonymous-memory"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "endpoint",
+        "profile"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "host-stop"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "exit_code": {
+          "type": "string"
+        },
+        "logs": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "exit_code",
+        "logs"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "cleanup"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "forced": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "resources_found": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "complete",
+        "forced",
+        "errors",
+        "resources_found"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "host-ready"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "endpoints": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "properties": {
+              "protocol": {
+                "type": "string",
+                "minLength": 1
+              },
+              "address": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "protocol",
+              "address"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "endpoints"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "target"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "container": {
+          "type": "string",
+          "minLength": 1
+        },
+        "image_id": {
+          "type": "string",
+          "pattern": "^sha256:[0-9a-f]{64}$"
+        },
+        "endpoint": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        },
+        "profile": {
+          "enum": [
+            "reference",
+            "mqtt-server",
+            "datahub-server"
+          ]
+        },
+        "readonly": {
+          "type": "boolean"
+        },
+        "user": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "container",
+        "image_id",
+        "endpoint",
+        "profile",
+        "readonly",
+        "user"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "proxy-target"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "peer": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        },
+        "listener": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "prefixItems": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "peer",
+        "listener"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "proxy-bytes"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operation": {
+          "enum": [
+            "receive",
+            "forward"
+          ]
+        },
+        "hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "direction",
+        "operation",
+        "hex"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "fault-cut"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "ack_kind": {
+          "enum": [
+            80,
+            112
+          ]
+        },
+        "ack_body_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        },
+        "hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        },
+        "forwarded": {
+          "type": "boolean"
+        },
+        "boundary": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "ack_kind",
+        "ack_body_hex",
+        "hex",
+        "forwarded",
+        "boundary"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "proxy-cleanup"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "complete",
+        "errors"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "planned-topic-vectors"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "vectors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "prefixItems": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "string",
+                "minLength": 1
+              },
+              {
+                "type": "boolean"
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "vectors"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "topic-vector"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "filter": {
+          "type": "string"
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "matches": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "index",
+        "filter",
+        "topic",
+        "matches"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "calibration-peer"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sent_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "sent_hex"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "application-delivery"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "packet_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})*$"
+        },
+        "count": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "packet_id",
+        "topic",
+        "payload_hex",
+        "count",
+        "connection"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-disconnect"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sender_state": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "packet_id": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 65535
+        },
+        "ack_received_by_client": {
+          "type": "boolean"
+        },
+        "withheld": {
+          "enum": [
+            "PUBREC",
+            "PUBCOMP"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "sender_state",
+        "packet_id"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-clean-session-reset"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "client_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "client_id"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-branch-completed"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "tx",
+            "rx",
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "original_deliveries": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "health_deliveries": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "original_deliveries",
+        "health_deliveries"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "upstream-lifecycle"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "operation": {
+          "const": "terminate-requested"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "operation"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "upstream-selection"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "file": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "reuse": {
+          "const": "B"
+        },
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "proto_ver": {
+              "const": 4
+            },
+            "clean_session": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "proto_ver"
+          ],
+          "additionalProperties": false
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "file",
+        "sha256",
+        "reuse",
+        "parameters",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "retained-phase"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "phase": {
+          "enum": [
+            "old-replayed",
+            "non-retained-preserved",
+            "delete-delivered",
+            "late-control-delivered",
+            "post-control-empty",
+            "cleanup-completed"
+          ]
+        },
+        "scenario_version": {
+          "const": "2.0.0"
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "phase",
+        "scenario_version",
+        "connection",
+        "topic"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "retained-observation"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "actual_seconds": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "completed": {
+          "const": true
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "topic",
+        "seconds_required",
+        "actual_seconds",
+        "completed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "connect-phase"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "phase": {
+          "enum": [
+            "connack-accepted",
+            "pingresp-received",
+            "client-disconnected"
+          ]
+        },
+        "scenario_version": {
+          "const": "2.0.0"
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "phase",
+        "scenario_version",
+        "connection"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-branch-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "direction": {
+          "enum": [
+            "client-to-broker",
+            "broker-to-client"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "AwaitPubRec",
+            "AwaitPubComp"
+          ]
+        },
+        "mutation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "scenario_version": {
+          "const": "3.0.0"
+        },
+        "client_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "original_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})+$"
+        },
+        "health_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})+$"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "direction",
+        "phase",
+        "scenario_version",
+        "client_id",
+        "topic",
+        "original_hex",
+        "health_hex"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "topic-vector-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scenario_version": {
+          "const": "2.0.0"
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "filter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "control_topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "matches": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "scenario_version",
+        "index",
+        "root",
+        "filter",
+        "topic",
+        "control_topic",
+        "matches"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "topic-vector-roles"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "positive": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "publisher",
+        "candidate",
+        "positive"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "topic-observation"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "actual_seconds": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "completed": {
+          "const": true
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "seconds_required",
+        "actual_seconds",
+        "completed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-flow-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scenario_version": {
+          "const": "1.0.0"
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "scenario_version",
+        "topic"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-flow-roles"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subscriber": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "publisher",
+        "subscriber"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-flow-phase"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "phase": {
+          "enum": [
+            "input-pair-completed",
+            "outbound-pair-completed",
+            "health-completed",
+            "observation-completed"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "phase"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-fanout-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "scenario_version": {
+          "const": "1.0.0"
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "scenario_version",
+        "topic"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-fanout-roles"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subscribers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "publisher",
+        "subscribers"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-fanout-phase"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "phase": {
+          "enum": [
+            "original-input-completed",
+            "original-fanout-completed",
+            "health-input-completed",
+            "health-fanout-completed",
+            "observations-completed"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "phase"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-fanout-observation"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "actual_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "seconds_required",
+        "actual_seconds",
+        "completed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-fanout-observation-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "seconds_required"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-duplex-branch-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "branch": {
+          "enum": [
+            "incoming-first",
+            "outgoing-first"
+          ]
+        },
+        "scenario_version": {
+          "const": "1.0.0"
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "branch",
+        "scenario_version",
+        "topic"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-duplex-roles"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "branch": {
+          "enum": [
+            "incoming-first",
+            "outgoing-first"
+          ]
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "helper": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "branch",
+        "owner",
+        "helper"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-duplex-phase"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "branch": {
+          "enum": [
+            "incoming-first",
+            "outgoing-first"
+          ]
+        },
+        "phase": {
+          "enum": [
+            "overlap-established",
+            "first-direction-completed",
+            "both-directions-completed",
+            "health-completed",
+            "observations-completed"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "branch",
+        "phase"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-duplex-observation-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "branch": {
+          "enum": [
+            "incoming-first",
+            "outgoing-first"
+          ]
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "branch",
+        "connection",
+        "seconds_required"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-duplex-observation"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "branch": {
+          "enum": [
+            "incoming-first",
+            "outgoing-first"
+          ]
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "actual_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "branch",
+        "connection",
+        "seconds_required",
+        "actual_seconds",
+        "completed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "qos2-duplex-branch-completed"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "branch": {
+          "enum": [
+            "incoming-first",
+            "outgoing-first"
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "branch"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-vector-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "scenario_version": {
+          "const": "1.0.0"
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "index",
+        "scenario_version",
+        "topic"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-roles"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 1
+        },
+        "subscriber": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "index",
+        "publisher",
+        "subscriber"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-input-completed"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "index"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-delivery"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "qos": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "packet_id": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 65535
+            }
+          ]
+        },
+        "topic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "payload_hex": {
+          "type": "string",
+          "pattern": "^(?:[0-9a-f]{2})+$"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "qos",
+        "packet_id",
+        "topic",
+        "payload_hex"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-observation-start"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "seconds_required"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-observation"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "connection": {
+          "type": "string",
+          "minLength": 1
+        },
+        "seconds_required": {
+          "type": "number",
+          "minimum": 0.4
+        },
+        "actual_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "completed": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "connection",
+        "seconds_required",
+        "actual_seconds",
+        "completed"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "mixed-vector-completed"
+        },
+        "schema_version": {
+          "type": "integer",
+          "const": 1
+        },
+        "sequence": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "index": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9
+        }
+      },
+      "required": [
+        "kind",
+        "schema_version",
+        "sequence",
+        "seconds",
+        "index"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

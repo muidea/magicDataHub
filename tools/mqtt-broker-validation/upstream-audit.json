@@ -1,0 +1,1372 @@
+{
+  "schema_version": 1,
+  "inventory_scope": "selected-assets-only",
+  "complete_upstream_inventory": false,
+  "assessment_kind": "implementation-static-assessment",
+  "normative_review": "pending",
+  "independent_review": "pending",
+  "independent_approvals": 0,
+  "runtime_results": "not-produced-by-audit",
+  "observed_date": "2026-11-10",
+  "adapter_sha256": "9c8b2d96c9e2f6bc4ea617e3435e257be4e7efc076e403900fd544c565bf990a",
+  "projects": [
+    {
+      "id": "mosquitto",
+      "repository": "https://github.com/eclipse-mosquitto/mosquitto",
+      "revision": "766fa2c5a9bed6c65249cf555f430b982c417480",
+      "cache_directory": "mosquitto-2.0.22",
+      "reference_kind": "tag",
+      "reference": "v2.0.22",
+      "license_observation": "Selected scripts have no per-file override observed; root LICENSE.txt declares EPL-2.0 and EDL-1.0 dual licensing. License/notice obligations remain attached to external checkout.",
+      "license_evidence": [
+        {
+          "file": "LICENSE.txt",
+          "line": 1,
+          "text": "This project is dual licensed under the Eclipse Public License 2.0 and the"
+        },
+        {
+          "file": "edl-v10",
+          "line": 7,
+          "text": "Redistribution and use in source and binary forms, with or without"
+        },
+        {
+          "file": "epl-v20",
+          "line": 1,
+          "text": "Eclipse Public License - v 2.0"
+        }
+      ],
+      "files": {
+        "LICENSE.txt": "d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c",
+        "edl-v10": "86fc4a3f97cb769c04e8da557036c1066eb8bb22b2d0a5dd31464990fe84047c",
+        "epl-v20": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+        "test/broker/mosq_test_helper.py": "24e8ada25ad3fce34927c768b3d738f74fdb973f4ca1091518ff1a55858596d5",
+        "test/mosq_test.py": "d045bcffa67201115aceef8b052dd127f1258c2bc9aef004d51a29af4af679a7",
+        "test/mqtt5_opts.py": "00a1a30e29092938eeed59240358810914a4120d1b6df08376d3fa3085304576",
+        "test/mqtt5_props.py": "89334b2532372aee57ec3944f54949795fc79922b77fe73726dde9921acf91e2",
+        "test/mqtt5_rc.py": "5950b9765e97c929cd72f0791f0838d6fdccc114e22a11b2dd745a7893128dbb",
+        "test/ptest.py": "e648a0a8ab88e3c20e7ace986b000f50684ec62ed2bc3a97d34897edb9f72f2a",
+        "test/broker/03-publish-qos1.py": "402b2d4b1193770f579b42e15fc3e7958adf30887bf8662061ce1e868b38d353",
+        "test/broker/03-publish-qos2.py": "3ef57b4c0e1336791c421aac76d3e9925611482d2a476dfeb7eb64140c63d64c",
+        "test/broker/02-subpub-qos1.py": "6bb82df8c7345a7ba68ee403a5f0f3d93a24f46104be13136742c5b62b6726fb",
+        "test/broker/02-subpub-qos2.py": "78a7b133f8c7739bd7c4790205703a6bb4efbadcd2837d0c53f2170c496d6d8d",
+        "test/broker/04-retain-qos0-clear.py": "f839f276db11bf7fb4079daf50ff197d5fce0e11e08de3db298362ad832d2c50",
+        "test/broker/03-publish-b2c-disconnect-qos2.py": "b6352b708661f69ca9510ba08e551e472648872d80c6f3f876457c14c38ff849",
+        "test/broker/03-publish-c2b-disconnect-qos2.py": "8261b3d49c5185e0206f3853cdd2036086c5c25e33a2621a2ee08a14336e2f36",
+        "test/broker/03-publish-invalid-utf8.py": "c346a4eb0463ec93a0bb282d940c99dd587c87d64752f793a1ebb58b43316b60",
+        "test/broker/02-subscribe-invalid-utf8.py": "6af65d2073fade29b3f8b75c4f0665b214d81b46e521023a8364867d60990658",
+        "test/broker/02-subpub-recover-subscriptions.py": "3cd1857d546b2b2545d17bfe72d8d75ac393ee6d5fde87ab5afa698893841b41",
+        "test/broker/07-will-qos0.py": "c7d01893a2dedfedce917fbbe20bacebf6db3241243158328a1342e98db011ac"
+      },
+      "assets": [
+        {
+          "id": "UPSTREAM-MOSQ-001",
+          "file": "test/broker/03-publish-qos1.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "PUBACK for client-selected Packet ID only; no subscriber delivery, retry or duplicate proof.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/03-publish-qos1.py",
+              "line": 7,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/03-publish-qos1.py",
+              "line": 21,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/03-publish-qos1.py",
+              "line": 9,
+              "text": "mid = 19"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-001",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-002",
+          "file": "test/broker/03-publish-qos2.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Normal PUBLISH/PUBREC/PUBREL/PUBCOMP only; no interruption or application exactly-once proof.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/03-publish-qos2.py",
+              "line": 7,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/03-publish-qos2.py",
+              "line": 20,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/03-publish-qos2.py",
+              "line": 13,
+              "text": "mid = 312"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-002",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-003",
+          "file": "test/broker/02-subpub-qos1.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Broker-assigned downlink Packet ID is fixed at 1; either ACK/PUBLISH ordering is accepted by receive_unordered; no retry proof.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/02-subpub-qos1.py",
+              "line": 7,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/02-subpub-qos1.py",
+              "line": 26,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/02-subpub-qos1.py",
+              "line": 21,
+              "text": "mid = 1"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-003",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-004",
+          "file": "test/broker/02-subpub-qos2.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Broker-assigned downlink Packet ID is fixed at 1; accepts two ACK/PUBLISH orderings; socket closes after sending PUBCOMP without an application duplicate window.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/02-subpub-qos2.py",
+              "line": 7,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/02-subpub-qos2.py",
+              "line": 31,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/02-subpub-qos2.py",
+              "line": 23,
+              "text": "mid = 1"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-004",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-005",
+          "file": "test/broker/04-retain-qos0-clear.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Uses one-second sleep plus PING ordering after deletion; supplies bounded upstream evidence, not an unbounded absence or cross-connection causal proof.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/04-retain-qos0-clear.py",
+              "line": 9,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/04-retain-qos0-clear.py",
+              "line": 26,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/04-retain-qos0-clear.py",
+              "line": 46,
+              "text": "time.sleep(1)"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-005",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-006",
+          "file": "test/broker/03-publish-b2c-disconnect-qos2.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Fixed downlink Packet ID 1 and implementation ordering assumptions; helper defaults to MQTT3.1.1; comment says QoS1 although actual packets are QoS2; no broker crash or application duplicate window.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/03-publish-b2c-disconnect-qos2.py",
+              "line": 26,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/03-publish-b2c-disconnect-qos2.py",
+              "line": 49,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/03-publish-b2c-disconnect-qos2.py",
+              "line": 37,
+              "text": "mid = 1"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-006",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-007",
+          "file": "test/broker/03-publish-c2b-disconnect-qos2.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "The client actually receives ACK then pretends it was lost; not a real ACK-cut proof. Fixed IDs; no crash or single application-delivery observation.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/03-publish-c2b-disconnect-qos2.py",
+              "line": 6,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/03-publish-c2b-disconnect-qos2.py",
+              "line": 35,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/03-publish-c2b-disconnect-qos2.py",
+              "line": 46,
+              "text": "# We're now going to disconnect and pretend we didn't receive the pubrec."
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-007",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-008",
+          "file": "test/broker/03-publish-invalid-utf8.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "One Topic containing NUL vector; helper expects EOF via recv(1) == empty bytes, not a timeout/absence pass; does not cover every malformed UTF-8 class.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/03-publish-invalid-utf8.py",
+              "line": 7,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/03-publish-invalid-utf8.py",
+              "line": 22,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/03-publish-invalid-utf8.py",
+              "line": 16,
+              "text": "b[11] = 0 # Topic should never have a 0x0000"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-008",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-009",
+          "file": "test/broker/02-subscribe-invalid-utf8.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "One Topic Filter containing NUL vector; helper expects EOF via recv(1) == empty bytes; no exhaustive malformed-filter proof.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/02-subscribe-invalid-utf8.py",
+              "line": 7,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/02-subscribe-invalid-utf8.py",
+              "line": 22,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/02-subscribe-invalid-utf8.py",
+              "line": 16,
+              "text": "b[13] = 0 # Topic should never have a 0x0000"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-009",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-010",
+          "file": "test/broker/02-subpub-recover-subscriptions.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "MQTT3.1.1 branch checks ordinary subscription delivery before/after reconnect. It also accepts a $share filter but only MQTT5 branch expects the shared publication; do not infer shared-subscription semantics in MQTT3.1.1.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/02-subpub-recover-subscriptions.py",
+              "line": 18,
+              "text": "def do_test(proto_ver):"
+            },
+            {
+              "file": "test/broker/02-subpub-recover-subscriptions.py",
+              "line": 40,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/02-subpub-recover-subscriptions.py",
+              "line": 20,
+              "text": "if proto_ver == 5:"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-010",
+          "parameters": {
+            "proto_ver": 4
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-011",
+          "file": "test/broker/07-will-qos0.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Unexpected TCP close triggers one QoS0 Will with clean_session true/false; no keepalive expiry, Will suppression, crash or complete Will matrix.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/07-will-qos0.py",
+              "line": 8,
+              "text": "def do_test(proto_ver, clean_session):"
+            },
+            {
+              "file": "test/broker/07-will-qos0.py",
+              "line": 24,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/07-will-qos0.py",
+              "line": 31,
+              "text": "sock2.close()"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-011",
+          "parameters": {
+            "proto_ver": 4,
+            "clean_session": true
+          }
+        },
+        {
+          "id": "UPSTREAM-MOSQ-012",
+          "file": "test/broker/07-will-qos0.py",
+          "kind": "test-invocation",
+          "reuse_grade": "B",
+          "integration_status": "integrated",
+          "entrypoints": [
+            "do_test"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "test/broker/mosq_test_helper.py",
+            "test/mosq_test.py",
+            "test/mqtt5_opts.py",
+            "test/mqtt5_props.py",
+            "test/mqtt5_rc.py"
+          ],
+          "couplings": [
+            "Starts Mosquitto through mosq_test.start_broker; obtains port through get_port.",
+            "Fixed ClientID/Topic and some Packet ID expectations require a fresh owned instance."
+          ],
+          "adaptations": [
+            "adapters.py extracts original imports/functions and invokes only locked do_test parameters; top-level protocol iterations/exit are omitted.",
+            "Outer runner owns broker lifecycle/config/port; original packet comparisons remain; socket bytes and assertion events are captured."
+          ],
+          "evidence_limits": [
+            "Unexpected TCP close triggers one QoS0 Will with clean_session true/false; no keepalive expiry, Will suppression, crash or complete Will matrix.",
+            "Original bounded timing and exact-byte comparisons are upstream assumptions; normative sufficiency remains pending."
+          ],
+          "next_steps": [
+            "Retain original failures as differences requiring review; use generic recovery/absence scenarios for stronger complementary evidence."
+          ],
+          "evidence": [
+            {
+              "file": "test/broker/07-will-qos0.py",
+              "line": 8,
+              "text": "def do_test(proto_ver, clean_session):"
+            },
+            {
+              "file": "test/broker/07-will-qos0.py",
+              "line": 24,
+              "text": "broker = mosq_test.start_broker(filename=os.path.basename(__file__), port=port)"
+            },
+            {
+              "file": "test/broker/07-will-qos0.py",
+              "line": 31,
+              "text": "sock2.close()"
+            },
+            {
+              "file": "test/mosq_test.py",
+              "line": 93,
+              "text": "packet_recvd = sock.recv(rlen)"
+            }
+          ],
+          "catalog_case_id": "UPSTREAM-MOSQ-012",
+          "parameters": {
+            "proto_ver": 4,
+            "clean_session": false
+          }
+        }
+      ]
+    },
+    {
+      "id": "paho-testing",
+      "repository": "https://github.com/eclipse-paho/paho.mqtt.testing",
+      "revision": "fdab9d2b1ce125385135e5d9f282a0ad315268cc",
+      "cache_directory": "upstream-audit/paho-testing-fdab9d2b1ce1",
+      "reference_kind": "commit-snapshot",
+      "reference": "fdab9d2b1ce125385135e5d9f282a0ad315268cc",
+      "license_observation": "Root LICENSE mentions EPL-2.0 and EDL-1.0; selected Python file headers mention EPL-1.0 and EDL-1.0. Preserve both observations; do not silently apply the root version to every file. No source is copied or relicensed; license reconciliation is pending before integration.",
+      "license_evidence": [
+        {
+          "file": "LICENSE",
+          "line": 1,
+          "text": "Eclipse Public License - v 2.0"
+        },
+        {
+          "file": "LICENSE",
+          "line": 5,
+          "text": "and Eclipse Distribution License v1.0 which accompany this distribution."
+        },
+        {
+          "file": "interoperability/client_test.py",
+          "line": 6,
+          "text": "are made available under the terms of the Eclipse Public License v1.0"
+        }
+      ],
+      "files": {
+        "LICENSE": "bc0f3f447097eb82a29ad6c2f4929572bb548b6bd4c9e38fde1bf131a771b7a0",
+        "README.md": "b021ce7e6375a9105d0374cce83cc4bd59755339dabc3de1b6864b88d1448c78",
+        "interoperability/README.md": "69cd2957600e0a5c1e91b3743f3d312bf014c96406fff855e5079fd7742dc7ee",
+        "interoperability/client_test.py": "601ff53754d52d2ac9750f75562bade184022495a2139b80553795ae1bb6184d",
+        "interoperability/client_test5.py": "cf221695739610641615dfefe13981a537addf52cd693a212f9181e70e0395bc",
+        "interoperability/mqtt/clients/V311/main.py": "e5470217b4c776ccf216d8613fb0dbdd865c0749f0fee1aa724ce05bb680dc0b",
+        "interoperability/mqtt/clients/V311/internal.py": "a71829ad6a052472cd8461a4f581b6830a29d31bac9d36c574030f9ca43cbccf",
+        "interoperability/mqtt/formats/MQTTV311/MQTTV311.py": "82d89686aca0cc7175e9263ce65aab0411ef5cc2fa360b6e5627ea3cd3f9bd13",
+        "interoperability/mqtt/restart/netproxy.py": "d9a95f4cc18934a9cbfdbc7202baa1725722aab76ed4329410b427c020802d84",
+        "interoperability/mqtt/restart/control.py": "d2c6a12a301ccd9177dad6a5415f3597496e57e43df91e18b3a12df032266703",
+        "interoperability/run_test.py": "d25a573aba1beeb605060bbaf1df070530533927d03f3d5da7df203b3f8fcff3",
+        "interoperability/mbt/main.py": "4422099c93aa65678a86157ba91345b214670e8ceacf449788a8d2a91120be4c"
+      },
+      "assets": [
+        {
+          "id": "PAHO-311-CODEC",
+          "file": "interoperability/mqtt/formats/MQTTV311/MQTTV311.py",
+          "kind": "infrastructure",
+          "reuse_grade": "B",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "getPacket",
+            "unpackPacket"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "Python stdlib",
+            "mqtt.formats.MQTTV311 package"
+          ],
+          "couplings": [
+            "Incoming validation uses Python assert; optimized Python changes behavior.",
+            "Blocking socket framing and exceptions need a bounded outer runner."
+          ],
+          "adaptations": [
+            "Candidate external codec adapter; retain incoming validation and capture raw frames independently."
+          ],
+          "evidence_limits": [
+            "Not an independent oracle by itself; packet generator/parser bugs could be shared.",
+            "No runtime compatibility or protocol-sufficiency claim from static inspection."
+          ],
+          "next_steps": [
+            "Resolve file/root license-version observations, test EOF/partial frames and known valid/invalid vectors before adoption."
+          ],
+          "evidence": [
+            {
+              "file": "interoperability/mqtt/formats/MQTTV311/MQTTV311.py",
+              "line": 22,
+              "text": "Assertions are used to validate incoming data, but are omitted from outgoing packets.  This is"
+            },
+            {
+              "file": "interoperability/mqtt/formats/MQTTV311/MQTTV311.py",
+              "line": 63,
+              "text": "buf = aSocket.recv(1) # get the first byte fixed header"
+            },
+            {
+              "file": "interoperability/mqtt/formats/MQTTV311/MQTTV311.py",
+              "line": 94,
+              "text": "assert len(rest) == remlength"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "PAHO-311-CLIENT",
+          "file": "interoperability/mqtt/clients/V311/main.py",
+          "kind": "infrastructure",
+          "reuse_grade": "C",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "Client.connect",
+            "sendtosocket"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "mqtt.clients.V311.internal",
+            "mqtt.formats.MQTTV311",
+            "Python socket/_thread"
+          ],
+          "couplings": [
+            "Callbacks/threads and receiver state are package-specific.",
+            "sendtosocket repeatedly sends data rather than the unsent slice and has no zero-progress guard; full-buffer sends cannot establish partial-write correctness."
+          ],
+          "adaptations": [
+            "Port only needed wire/client scenarios into bounded transport; any send/receive fix requires new calibration rather than claiming unmodified upstream execution."
+          ],
+          "evidence_limits": [
+            "Static control-flow observation; no runtime defect reproduction or target-broker finding in this audit."
+          ],
+          "next_steps": [
+            "Add short/zero-write, EOF and thread-exit controls; reconcile license observations before integration."
+          ],
+          "evidence": [
+            {
+              "file": "interoperability/mqtt/clients/V311/main.py",
+              "line": 37,
+              "text": "def sendtosocket(mysocket, data):"
+            },
+            {
+              "file": "interoperability/mqtt/clients/V311/main.py",
+              "line": 42,
+              "text": "sent += mysocket.send(data)"
+            },
+            {
+              "file": "interoperability/mqtt/clients/V311/internal.py",
+              "line": 24,
+              "text": "class Receivers:"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "PAHO-311-SUITE",
+          "file": "interoperability/client_test.py",
+          "kind": "test-suite",
+          "reuse_grade": "B",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "Test.setUpClass",
+            "Test.testBasic",
+            "cleanup"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "unittest",
+            "mqtt.clients.V311",
+            "module globals initialized in __main__"
+          ],
+          "couplings": [
+            "Existing host/port CLI is insufficient for safe reuse: cleanup subscribes # and deletes observed Retained values.",
+            "Fixed ClientIDs/Topics, sleeps, module globals and callback counts; importing a test class alone does not initialize the CLI globals."
+          ],
+          "adaptations": [
+            "Use a new owned broker instance only; replace cleanup/initialization with owned lifecycle while retaining reviewed assertions."
+          ],
+          "evidence_limits": [
+            "No live-safe designation and no native A classification.",
+            "Callback counts and sleeps need oracle review and transport evidence before use."
+          ],
+          "next_steps": [
+            "Select individual methods, resolve globals/lifecycle and license observations, calibrate assertions before adding executable catalog entries."
+          ],
+          "evidence": [
+            {
+              "file": "interoperability/client_test.py",
+              "line": 71,
+              "text": "curclient.subscribe([\"#\"], [0])"
+            },
+            {
+              "file": "interoperability/client_test.py",
+              "line": 76,
+              "text": "curclient.publish(message[0], b\"\", 0, retained=True)"
+            },
+            {
+              "file": "interoperability/client_test.py",
+              "line": 96,
+              "text": "def setUpClass(cls):"
+            },
+            {
+              "file": "interoperability/client_test.py",
+              "line": 84,
+              "text": "-h: --hostname= hostname or ip address of server to run tests against"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "PAHO-RESTART-PROXY",
+          "file": "interoperability/mqtt/restart/netproxy.py",
+          "kind": "infrastructure",
+          "reuse_grade": "C",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "ControlBrokers"
+          ],
+          "protocols": [
+            "mqtt311",
+            "mqtt5"
+          ],
+          "dependencies": [
+            "paho.mqtt.client",
+            "mqtt.formats.MQTTV311",
+            "mqtt.formats.MQTTV5",
+            "mqtt/restart/control.py"
+          ],
+          "couplings": [
+            "Separate control broker localhost:7777 and fixed control Topic/ClientID.",
+            "Legacy positional mqtt.Client constructor and unbounded thread/control lifetimes need compatibility/ownership evaluation."
+          ],
+          "adaptations": [
+            "Extract fault boundaries into an owned bounded proxy; do not replace current frame-preserving ACK-cut proxy with the unmodified script."
+          ],
+          "evidence_limits": [
+            "Static evaluation only; no Paho2.1 compatibility or frame-preservation execution evidence."
+          ],
+          "next_steps": [
+            "Design isolated control channel, byte forwarding capture and deadline/cleanup calibration before adoption."
+          ],
+          "evidence": [
+            {
+              "file": "interoperability/mqtt/restart/netproxy.py",
+              "line": 37,
+              "text": "options[\"control_connection\"] = \"localhost:7777\""
+            },
+            {
+              "file": "interoperability/mqtt/restart/netproxy.py",
+              "line": 46,
+              "text": "self.client = mqtt.Client(\"proxy_control\")"
+            },
+            {
+              "file": "interoperability/mqtt/restart/control.py",
+              "line": 45,
+              "text": "while not self.ready:"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "PAHO-MODEL-RUNNER",
+          "file": "interoperability/run_test.py",
+          "kind": "infrastructure",
+          "reuse_grade": "D",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "cleanup",
+            "MQTTV311_spec.test.run"
+          ],
+          "protocols": [
+            "mqtt311"
+          ],
+          "dependencies": [
+            "mbt/main.py",
+            "MQTTV311_spec import",
+            "recorded test traces"
+          ],
+          "couplings": [
+            "Imports MQTTV311_spec whereas inspected tree exposes interoperability/specifications/MQTTV311.py; dependency closure is not established.",
+            "Cleanup subscribes # and clears Retained; model comparison and replay depend on upstream state and trace format."
+          ],
+          "adaptations": [
+            "Reference model/trace selection concepts only; do not execute existing replay runner."
+          ],
+          "evidence_limits": [
+            "No complete dependency inventory or reproducible model-run claim."
+          ],
+          "next_steps": [
+            "Resolve model import layout, trace provenance, semantic comparison and isolated cleanup before considering a C port."
+          ],
+          "evidence": [
+            {
+              "file": "interoperability/run_test.py",
+              "line": 21,
+              "text": "import MQTTV311_spec, client_test"
+            },
+            {
+              "file": "interoperability/run_test.py",
+              "line": 59,
+              "text": "aclient.subscribe([\"#\"], [0])"
+            },
+            {
+              "file": "interoperability/mbt/main.py",
+              "line": 209,
+              "text": "class Models:"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "PAHO-5-SUITE",
+          "file": "interoperability/client_test5.py",
+          "kind": "test-suite",
+          "reuse_grade": "D",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "Callbacks",
+            "Test"
+          ],
+          "protocols": [
+            "mqtt5"
+          ],
+          "dependencies": [
+            "mqtt.clients.V5",
+            "mqtt.formats.MQTTV5",
+            "unittest"
+          ],
+          "couplings": [
+            "Requires separate MQTT5 profile and package dependencies."
+          ],
+          "adaptations": [
+            "Reference candidate only until explicit MQTT5 controlled host exists."
+          ],
+          "evidence_limits": [
+            "Current MQTT3.1.1 execution supplies no MQTT5 result."
+          ],
+          "next_steps": [
+            "Audit individual methods and dependencies under a future MQTT5 profile."
+          ],
+          "evidence": [
+            {
+              "file": "interoperability/client_test5.py",
+              "line": 21,
+              "text": "import mqtt.clients.V5 as mqtt_client, time, logging, socket, sys, getopt, traceback"
+            },
+            {
+              "file": "interoperability/client_test5.py",
+              "line": 22,
+              "text": "import mqtt.formats.MQTTV5 as MQTTV5"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        }
+      ]
+    },
+    {
+      "id": "emqx",
+      "repository": "https://github.com/emqx/emqx",
+      "revision": "ef2beebdc29f89540827d7663c2f9a0e63130c7b",
+      "cache_directory": "upstream-audit/emqx-ef2beebdc29f",
+      "reference_kind": "commit-snapshot",
+      "reference": "ef2beebdc29f89540827d7663c2f9a0e63130c7b",
+      "license_observation": "This revision root LICENSE is Business Source License 1.1, with additional-use grant and future change-license terms. Selected suites contain copyright headers, no file-level license override observed. This is a source observation, not redistribution or production approval; other revisions may differ.",
+      "license_evidence": [
+        {
+          "file": "LICENSE",
+          "line": 1,
+          "text": "Business Source License 1.1"
+        },
+        {
+          "file": "LICENSE",
+          "line": 9,
+          "text": "Licensed Work:        EMQX Version 5.9.0 or later."
+        },
+        {
+          "file": "LICENSE",
+          "line": 24,
+          "text": "Change License:       Apache License, Version 2.0"
+        },
+        {
+          "file": "apps/emqx/test/emqx_frame_SUITE.erl",
+          "line": 2,
+          "text": "%% Copyright (c) 2018-2026 EMQ Technologies Co., Ltd. All Rights Reserved."
+        }
+      ],
+      "files": {
+        "LICENSE": "0e90e2b83808ce332d5a9cdb2931ec989f88817daaee54aa2d725ef46a6db118",
+        "NOTICE": "43e7faa0ae5938f9857e624606c7088d56228ace12aea40e8cee876fc4b9762a",
+        "README.md": "e187f6d127f568de64a5459dfd545b55c723a3be7bc2728f906bac60d0ad2599",
+        "apps/emqx/test/emqx_mqtt_protocol_v5_SUITE.erl": "99286fe6fa474451a3976d1296aeaa05fd19741bb63e235773ad41fcc7f3239a",
+        "apps/emqx/test/emqx_session_mem_SUITE.erl": "72cb3f24d073bf2f82d5279523f0eeca546e4797fa2158eef5b479e6a7c2cc54",
+        "apps/emqx/test/emqx_frame_SUITE.erl": "685ca3566578fe67b2a1f3292899d400dfe9d05dd84ba3d1448b3efd46e84bcb",
+        "apps/emqx/test/emqx_common_test_helpers.erl": "43e293f40c9824e47656b5fc8de0510ef381e917829e3ca303b784248f712186",
+        "scripts/ct/run.sh": "0ac4b3a120bf4ac131ce9c0d24df2c00e48860f34a33abe54abaa4180e3e637e",
+        "mix.exs": "9467e83ff12ee6e66074702b2029f3791f98a3816fae3edb3563bceadc997e2f"
+      },
+      "assets": [
+        {
+          "id": "EMQX-SESSION",
+          "file": "apps/emqx/test/emqx_session_mem_SUITE.erl",
+          "kind": "test-suite",
+          "reuse_grade": "C",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "t_publish_qos2",
+            "t_retry"
+          ],
+          "protocols": [
+            "mqtt311",
+            "mqtt5"
+          ],
+          "dependencies": [
+            "Erlang/Common Test/EUnit",
+            "emqx_session_mem",
+            "emqx_cth_suite",
+            "meck",
+            "emqx/include records"
+          ],
+          "couplings": [
+            "Starts EMQX applications, mocks internal modules and asserts internal session records/timer effects."
+          ],
+          "adaptations": [
+            "Extract protocol input/ACK/reconnect expectations into a new network scenario; internal timer/record assertions need separate evidence."
+          ],
+          "evidence_limits": [
+            "Cannot redirect this suite to an arbitrary MQTT endpoint.",
+            "No direct A/B execution; no license grant or protocol correctness inferred from extraction plan."
+          ],
+          "next_steps": [
+            "Review standard-permitted retry timing and role semantics, resolve reuse/license terms, then calibrate any port."
+          ],
+          "evidence": [
+            {
+              "file": "apps/emqx/test/emqx_session_mem_SUITE.erl",
+              "line": 36,
+              "text": "ok = meck:new("
+            },
+            {
+              "file": "apps/emqx/test/emqx_session_mem_SUITE.erl",
+              "line": 40,
+              "text": "Apps = emqx_cth_suite:start("
+            },
+            {
+              "file": "apps/emqx/test/emqx_session_mem_SUITE.erl",
+              "line": 489,
+              "text": "{ok, Session1} = emqx_session_mem:pubrel(1, Session),"
+            },
+            {
+              "file": "apps/emqx/test/emqx_session_mem_SUITE.erl",
+              "line": 1565,
+              "text": "t_retry(_) ->"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "EMQX-MQTT5",
+          "file": "apps/emqx/test/emqx_mqtt_protocol_v5_SUITE.erl",
+          "kind": "test-suite",
+          "reuse_grade": "C",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "init_per_group",
+            "t_basic_test"
+          ],
+          "protocols": [
+            "mqtt5"
+          ],
+          "dependencies": [
+            "EMQX Common Test helpers",
+            "emqtt",
+            "snabbkaffe",
+            "optional quicer",
+            "EMQX runtime listener configuration"
+          ],
+          "couplings": [
+            "Creates local EMQX listeners with fixed ports; multiple transports and internal helpers/config are part of suite setup."
+          ],
+          "adaptations": [
+            "Select TCP network sequences and replace EMQX lifecycle; re-express internal assertions separately under a future MQTT5 profile."
+          ],
+          "evidence_limits": [
+            "Not runnable natively against current MQTT3.1.1 hosts.",
+            "No need to migrate full suite or start EMQX for this static assessment."
+          ],
+          "next_steps": [
+            "Audit selected method closure and license terms, create MQTT5 controlled profile, then assess B versus C per method."
+          ],
+          "evidence": [
+            {
+              "file": "apps/emqx/test/emqx_mqtt_protocol_v5_SUITE.erl",
+              "line": 64,
+              "text": "Apps = emqx_cth_suite:start("
+            },
+            {
+              "file": "apps/emqx/test/emqx_mqtt_protocol_v5_SUITE.erl",
+              "line": 68,
+              "text": "bind = 2883"
+            },
+            {
+              "file": "apps/emqx/test/emqx_mqtt_protocol_v5_SUITE.erl",
+              "line": 219,
+              "text": "{ok, C} = emqtt:start_link([{proto_ver, v5} | Config]),"
+            },
+            {
+              "file": "scripts/ct/run.sh",
+              "line": 3,
+              "text": "## This script runs CT (and necessary dependencies) in docker container(s)"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        },
+        {
+          "id": "EMQX-FRAME",
+          "file": "apps/emqx/test/emqx_frame_SUITE.erl",
+          "kind": "test-suite",
+          "reuse_grade": "D",
+          "integration_status": "not-integrated",
+          "entrypoints": [
+            "t_parse_cont",
+            "t_parse_no_connect_expected"
+          ],
+          "protocols": [
+            "mqtt311",
+            "mqtt5"
+          ],
+          "dependencies": [
+            "emqx_frame",
+            "EMQX packet records/macros",
+            "Common Test/EUnit"
+          ],
+          "couplings": [
+            "Direct parser/serializer calls and internal parse-state defaults are implementation tests, not broker wire behavior."
+          ],
+          "adaptations": [
+            "Reference malformed/fragmented-input ideas only; derive any new network vector from the standard and calibrate independently."
+          ],
+          "evidence_limits": [
+            "Internal parser acceptance does not imply legal first packet on a broker connection."
+          ],
+          "next_steps": [
+            "Do not turn parser defaults into protocol expectations; identify a normative network gap before adding cases."
+          ],
+          "evidence": [
+            {
+              "file": "apps/emqx/test/emqx_frame_SUITE.erl",
+              "line": 213,
+              "text": "t_parse_no_connect_expected(_) ->"
+            },
+            {
+              "file": "apps/emqx/test/emqx_frame_SUITE.erl",
+              "line": 216,
+              "text": "?assertMatch({Publish, <<>>, _}, emqx_frame:parse(PublishBin)),"
+            },
+            {
+              "file": "apps/emqx/test/emqx_frame_SUITE.erl",
+              "line": 222,
+              "text": "t_parse_cont(_) ->"
+            }
+          ],
+          "catalog_case_id": null,
+          "parameters": null
+        }
+      ]
+    }
+  ]
+}

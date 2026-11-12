@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Internal evidence scope v1; normative review pending",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+    },
+    "protocol": {
+      "const": "mqtt311"
+    },
+    "role": {
+      "const": "server"
+    },
+    "source_sections": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "source_url": {
+      "const": "https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/os/mqtt-v3.1.1-os.html"
+    },
+    "official_ids": {
+      "const": []
+    },
+    "normative_level": {
+      "const": "pending_review"
+    },
+    "review_status": {
+      "const": "pending"
+    },
+    "completion_rule": {
+      "const": "all_of_selected_scenarios"
+    },
+    "required_cases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z0-9]+(?:-[A-Z0-9]+)*$"
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    }
+  },
+  "required": [
+    "id",
+    "protocol",
+    "role",
+    "source_sections",
+    "source_url",
+    "official_ids",
+    "normative_level",
+    "review_status",
+    "completion_rule",
+    "required_cases",
+    "limitations"
+  ],
+  "additionalProperties": false
+}

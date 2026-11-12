@@ -7,6 +7,7 @@ trap 'rm -f "$results"' EXIT HUP INT TERM
 python3 scripts/verify-dependency-identity.py >"$results"
 cat "$results"
 python3 -m unittest discover -s tests -p 'test_*.py' -v
+./scripts/check-mqtt-validation.sh
 cargo fmt --all -- --check
 cargo check --workspace --all-targets --locked --offline
 cargo clippy --workspace --all-targets --locked --offline -- -D warnings

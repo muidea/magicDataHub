@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "mqtt311-live-unverified",
+  "version": "1.0.0",
+  "family": "mqtt311-tcp-anonymous-memory",
+  "target": "external",
+  "protocol": "mqtt311",
+  "role": "server",
+  "transport": "tcp",
+  "authentication": "anonymous",
+  "storage": "unverified",
+  "composition": "external-unverified",
+  "failure_policy": "unverified",
+  "configuration_files": [],
+  "limits": {},
+  "expected_qos": [
+    0,
+    1,
+    2
+  ],
+  "extensions_enabled": null,
+  "excluded_claims": [
+    "complete MQTT conformance",
+    "independent normative approval",
+    "production capacity or SLO",
+    "process restart or crash durability",
+    "MQTT5, TLS, authentication, WebSocket, bridge and optional host extensions"
+  ],
+  "normative_review": "pending"
+}

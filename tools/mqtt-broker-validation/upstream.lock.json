@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "mosquitto": {
+    "repository": "https://github.com/eclipse-mosquitto/mosquitto",
+    "tag": "v2.0.22",
+    "commit": "766fa2c5a9bed6c65249cf555f430b982c417480",
+    "license": "EPL-2.0 OR BSD-3-Clause (EDL-1.0); root LICENSE.txt/edl-v10, no selected-file override observed",
+    "files": {
+      "LICENSE.txt": "d3c4ccace4e5d3cc89d34cf2a0bc85b8596bfc0a32b815d0d77f9b7c41b5350c",
+      "edl-v10": "86fc4a3f97cb769c04e8da557036c1066eb8bb22b2d0a5dd31464990fe84047c",
+      "epl-v20": "8c349f80764d0648e645f41ef23772a70c995a0924b5235f735f4a3d09df127c",
+      "test/broker/mosq_test_helper.py": "24e8ada25ad3fce34927c768b3d738f74fdb973f4ca1091518ff1a55858596d5",
+      "test/mosq_test.py": "d045bcffa67201115aceef8b052dd127f1258c2bc9aef004d51a29af4af679a7",
+      "test/mqtt5_opts.py": "00a1a30e29092938eeed59240358810914a4120d1b6df08376d3fa3085304576",
+      "test/mqtt5_props.py": "89334b2532372aee57ec3944f54949795fc79922b77fe73726dde9921acf91e2",
+      "test/mqtt5_rc.py": "5950b9765e97c929cd72f0791f0838d6fdccc114e22a11b2dd745a7893128dbb",
+      "test/ptest.py": "e648a0a8ab88e3c20e7ace986b000f50684ec62ed2bc3a97d34897edb9f72f2a",
+      "test/broker/03-publish-qos1.py": "402b2d4b1193770f579b42e15fc3e7958adf30887bf8662061ce1e868b38d353",
+      "test/broker/03-publish-qos2.py": "3ef57b4c0e1336791c421aac76d3e9925611482d2a476dfeb7eb64140c63d64c",
+      "test/broker/02-subpub-qos1.py": "6bb82df8c7345a7ba68ee403a5f0f3d93a24f46104be13136742c5b62b6726fb",
+      "test/broker/02-subpub-qos2.py": "78a7b133f8c7739bd7c4790205703a6bb4efbadcd2837d0c53f2170c496d6d8d",
+      "test/broker/04-retain-qos0-clear.py": "f839f276db11bf7fb4079daf50ff197d5fce0e11e08de3db298362ad832d2c50",
+      "test/broker/03-publish-b2c-disconnect-qos2.py": "b6352b708661f69ca9510ba08e551e472648872d80c6f3f876457c14c38ff849",
+      "test/broker/03-publish-c2b-disconnect-qos2.py": "8261b3d49c5185e0206f3853cdd2036086c5c25e33a2621a2ee08a14336e2f36",
+      "test/broker/03-publish-invalid-utf8.py": "c346a4eb0463ec93a0bb282d940c99dd587c87d64752f793a1ebb58b43316b60",
+      "test/broker/02-subscribe-invalid-utf8.py": "6af65d2073fade29b3f8b75c4f0665b214d81b46e521023a8364867d60990658",
+      "test/broker/02-subpub-recover-subscriptions.py": "3cd1857d546b2b2545d17bfe72d8d75ac393ee6d5fde87ab5afa698893841b41",
+      "test/broker/07-will-qos0.py": "c7d01893a2dedfedce917fbbe20bacebf6db3241243158328a1342e98db011ac"
+    },
+    "cases": [
+      {
+        "file": "03-publish-qos1.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "03-publish-qos2.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "02-subpub-qos1.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "02-subpub-qos2.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "04-retain-qos0-clear.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "03-publish-b2c-disconnect-qos2.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "03-publish-c2b-disconnect-qos2.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "03-publish-invalid-utf8.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "02-subscribe-invalid-utf8.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "02-subpub-recover-subscriptions.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "07-will-qos0.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4,
+          "clean_session": true
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      },
+      {
+        "file": "07-will-qos0.py",
+        "reuse": "B",
+        "parameters": {
+          "proto_ver": 4,
+          "clean_session": false
+        },
+        "review": "network-only functions reviewed; exact ID/ordering expectations retained as upstream limitations"
+      }
+    ]
+  },
+  "paho": {
+    "version": "2.1.0",
+    "filename": "paho_mqtt-2.1.0-py3-none-any.whl",
+    "url": "https://files.pythonhosted.org/packages/c4/cb/00451c3cf31790287768bb12c6bec834f5d292eaf3022afc88e14b8afc94/paho_mqtt-2.1.0-py3-none-any.whl",
+    "sha256": "6db9ba9b34ed5bc6b6e3812718c7e06e2fd7444540df2455d2c51bd58808feee"
+  },
+  "reference_image": "eclipse-mosquitto@sha256:81a6193ae693942a3231cd3ac52875b02b7e3a19da671b2fb4b55cc874c5b279"
+}
