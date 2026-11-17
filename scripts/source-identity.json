@@ -63,7 +63,7 @@
     "modorch-fedengine-duckdb": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "1fc89e3a95817857f40a2e17495c12ac0cb73481fe1cd4c8bb52c1f1d5f4edab",
+      "sha256": "137b77e8b260b074a862a0ba2ac0a7546e30bc6cdd1c02167edfb56573ece38b",
       "features": []
     },
     "modorch-fedengine-management": {
