@@ -49,6 +49,8 @@ pub struct FedEngineReference {
     pub pgwire: bool,
     #[serde(default = "yes")]
     pub management_api: bool,
+    #[serde(default)]
+    pub allow_public_ingress: bool,
 }
 fn yes() -> bool {
     true

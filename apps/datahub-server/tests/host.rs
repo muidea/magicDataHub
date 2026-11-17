@@ -398,6 +398,43 @@ async fn http_only_profile_ignores_unselected_pg_transport_and_auth_configuratio
     Ok(())
 }
 
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn public_wildcard_listeners_require_explicit_opt_in_and_allow_anonymous_mqtt() -> Result<()>
+{
+    let fixture = Fixture::new();
+    fixture.file("mqtt/combined.toml", "127.0.0.1:0", "0.0.0.0:0");
+    fixture.file("fedengine/combined.toml", "127.0.0.1:0", "0.0.0.0:0");
+    let rejected = fixture.config();
+    assert!(datahub_mqtt::Plan::load(&rejected).is_err());
+    assert!(datahub_fedengine::Plan::load(&rejected).is_err());
+
+    fixture.file(
+        "mqtt/combined.toml",
+        "anonymous_access = true",
+        "anonymous_access = true\nallow_public_listener_without_tls = true",
+    );
+    fixture.file(
+        "combined-development.toml",
+        "config_file = \"fedengine/combined.toml\"",
+        "config_file = \"fedengine/combined.toml\"\nallow_public_ingress = true",
+    );
+    let host = fixture.config();
+    let mqtt = datahub_mqtt::Plan::load(&host)?;
+    let fedengine = datahub_fedengine::Plan::load(&host)?;
+    assert!(mqtt.config().anonymous_access);
+    assert!(mqtt.config().allow_public_listener_without_tls);
+    assert!(mqtt.config().listener.ip().is_unspecified());
+    assert!(fedengine.config().management.listen.starts_with("0.0.0.0:"));
+    let mut c = Composition::new(host);
+    mqtt.register(&mut c)?;
+    fedengine.register(&mut c)?;
+    let running = c.build()?.start().await?;
+    let ready = running.ready() && running.endpoints.len() == 2;
+    running.shutdown().await?;
+    assert!(ready);
+    Ok(())
+}
+
 // Test-only public lifecycle probe. No debug/fault ingress is added to services.
 #[derive(Clone, Default)]
 struct HostSchedulerProbe(std::sync::Arc<std::sync::Mutex<Option<modorch::TaskScheduler>>>);

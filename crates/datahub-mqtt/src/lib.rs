@@ -27,7 +27,7 @@ impl Plan {
         let config = parsed
             .into_core_config()
             .ok_or_else(|| invalid("this service requires enabled MQTT Core"))?;
-        if !config.listener.ip().is_loopback()
+        if (!config.listener.ip().is_loopback() && !config.allow_public_listener_without_tls)
             || !config.anonymous_access
             || config.auth.is_some()
             || config.storage.is_some()
@@ -37,7 +37,7 @@ impl Plan {
             || config.mqtt5
         {
             return Err(invalid(
-                "first host profile requires anonymous loopback MQTT3.1.1 memory Core without optional providers",
+                "host MQTT profile requires anonymous MQTT3.1.1 memory Core (non-loopback requires allow_public_listener_without_tls=true)",
             ));
         }
         Ok(Self { config })

@@ -1,5 +1,5 @@
 {
-  "lock_sha256": "c6a9154438f8360b427bdbf4fdb1bab504b2e188ef431d68c66f0b48b1e25995",
+  "lock_sha256": "c2c2cbb51ebc12dd01b3810ea73d24cda32d7fd66925c7fbc40c9fc093b8e497",
   "packages": {
     "modorch": {
       "version": "0.0.3",
@@ -98,8 +98,8 @@
     },
     "modorch-mqtt": {
       "version": "0.1.0-alpha.1",
-      "source": "git+https://github.com/muidea/modorch-mqtt?rev=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad#d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad",
-      "sha256": "40fc6a998e9a60f2a0e614b8a2d871955827236da21d961d81f0bc05ebd24328",
+      "source": null,
+      "sha256": "e2e91591cfd3b3db5662eea52f2aeb71dd4e8bcd1c64255cac219919300859cf",
       "features": [
         "default",
         "toml"
@@ -107,14 +107,14 @@
     },
     "modorch-mqtt-api": {
       "version": "0.1.0-alpha.1",
-      "source": "git+https://github.com/muidea/modorch-mqtt?rev=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad#d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad",
+      "source": null,
       "sha256": "ddad0d50b657e2e736dc62086b4234f5abd244f7768b4dfa94bfe21230e143af",
       "features": []
     },
     "modorch-mqtt-core": {
       "version": "0.1.0-alpha.1",
-      "source": "git+https://github.com/muidea/modorch-mqtt?rev=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad#d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad",
-      "sha256": "a276e3ae6c920cee886cbfc675d0b149ee1f7b644791550fe09949910806290a",
+      "source": null,
+      "sha256": "67966b76405d843e9556342604149398faefe8cb0d2f49272980cfb9b89cdfaa",
       "features": [
         "default"
       ]

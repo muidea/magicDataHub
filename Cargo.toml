@@ -12,8 +12,8 @@ repository = "https://github.com/muidea/magicDataHub"
 
 [workspace.dependencies]
 modorch = { version = "=0.0.3", git = "https://github.com/muidea/modorch-rs", rev = "336ba20196044e1b81fb2ca297a18b5e258a5800" }
-# modorch-mqtt is pinned to the F67-07/08 protocol-reviewed revision; modorch-fedengine stays local until its own closing SHA.
-modorch-mqtt = { version = "=0.1.0-alpha.1", git = "https://github.com/muidea/modorch-mqtt", rev = "d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad", features = ["toml"] }
+# Local source until updated modorch-mqtt changes are pushed to origin/master.
+modorch-mqtt = { version = "=0.1.0-alpha.1", path = "../modorch-mqtt/crates/modorch-mqtt", features = ["toml"] }
 modorch-fedengine = { version = "=0.1.0", path = "../modorch-fedengine/crates/modorch-fedengine" }
 datahub-config = { path = "crates/datahub-config", version = "=0.1.0" }
 datahub-app = { path = "crates/datahub-app", version = "=0.1.0" }

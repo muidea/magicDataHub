@@ -61,9 +61,12 @@ impl Plan {
             (reference.pgwire, &config.pgwire.listen),
             (reference.management_api, &config.management.listen),
         ] {
-            if enabled && !listen.parse::<SocketAddr>()?.ip().is_loopback() {
+            if enabled
+                && !reference.allow_public_ingress
+                && !listen.parse::<SocketAddr>()?.ip().is_loopback()
+            {
                 return Err(invalid(
-                    "first host profile requires loopback database ingress",
+                    "first host profile requires loopback database ingress unless allow_public_ingress = true",
                 ));
             }
         }
