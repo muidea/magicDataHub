@@ -1,0 +1,369 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Oracle, applicability, SHOULD deviation and sufficiency ledger; never independent approval",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "independent_approvals": {
+      "const": 0
+    },
+    "review_status": {
+      "const": "pending"
+    },
+    "runtime_results": {
+      "const": "not-produced-by-ledger"
+    },
+    "full_conformance": {
+      "const": "Partial"
+    },
+    "selected_id_oracles": {
+      "type": "array",
+      "minItems": 18,
+      "maxItems": 18,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^MQTT-[0-9]+\\.[0-9]+\\.[0-9]+-[0-9]+$"
+          },
+          "normative_level": {
+            "enum": ["MUST", "MUST NOT", "SHOULD", "SHOULD NOT"]
+          },
+          "applicability": {
+            "enum": ["required", "conditional", "excluded"]
+          },
+          "condition": {
+            "type": ["string", "null"]
+          },
+          "exclusion_rationale": {
+            "type": ["string", "null"]
+          },
+          "should_deviation": {
+            "type": ["string", "null"]
+          },
+          "case_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "alternative_groups": {
+            "type": "array",
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          },
+          "required_assertions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "captured_wire_checks": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "required_event_kinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parent_verifier": {
+            "type": "string",
+            "pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"
+          },
+          "positive_oracles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "negative_counterexamples": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "allowed_variants": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parameter_rationale": {
+            "type": "string",
+            "minLength": 1
+          },
+          "remaining_gaps": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "evidence_claim": {
+            "const": "TargetedEvidenceOnly"
+          },
+          "review_status": {
+            "const": "pending"
+          }
+        },
+        "required": [
+          "id", "normative_level", "applicability", "condition", "exclusion_rationale",
+          "should_deviation", "case_ids", "alternative_groups", "required_assertions",
+          "captured_wire_checks", "required_event_kinds", "parent_verifier",
+          "positive_oracles", "negative_counterexamples", "allowed_variants",
+          "parameter_rationale", "remaining_gaps", "evidence_claim", "review_status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "compound_atom_oracles": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "parent_id": {"enum": ["MQTT-4.3.3-1", "MQTT-4.3.3-2"]},
+          "key": {"type": "string", "minLength": 1},
+          "normative_level": {"enum": ["MUST", "MUST NOT"]},
+          "applicability": {"const": "required"},
+          "case_ids": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "required_assertions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "captured_wire_checks": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "required_event_kinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parent_verifier": {"type": "string", "pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"},
+          "positive_oracles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "negative_counterexamples": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "allowed_variants": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parameter_rationale": {"type": "string", "minLength": 1},
+          "remaining_gaps": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "evidence_claim": {"const": "TargetedEvidenceOnly"},
+          "review_status": {"const": "pending"}
+        },
+        "required": [
+          "parent_id", "key", "normative_level", "applicability", "case_ids",
+          "required_assertions", "captured_wire_checks", "required_event_kinds",
+          "parent_verifier", "positive_oracles", "negative_counterexamples",
+          "allowed_variants", "parameter_rationale", "remaining_gaps",
+          "evidence_claim", "review_status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "mixed_qos_draft_oracles": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"enum": ["MQTT-3.3.5-1", "MQTT-3.8.4-5", "MQTT-3.8.4-6"]},
+          "source_text": {"type": "string", "minLength": 1},
+          "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "normative_level": {"const": "MUST"},
+          "applicability": {"const": "required"},
+          "case_ids": {"const": ["MQTT311-MIXED-QOS-001"]},
+          "required_assertions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "captured_wire_checks": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "required_event_kinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parent_verifier": {"const": "mixed_qos_evidence.check_evidence"},
+          "positive_oracles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "negative_counterexamples": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "allowed_variants": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parameter_rationale": {"type": "string", "minLength": 1},
+          "remaining_gaps": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "evidence_claim": {"const": "TargetedEvidenceOnly"},
+          "review_status": {"const": "pending"}
+        },
+        "required": [
+          "id", "source_text", "source_sha256", "normative_level", "applicability",
+          "case_ids", "required_assertions", "captured_wire_checks", "required_event_kinds",
+          "parent_verifier", "positive_oracles", "negative_counterexamples",
+          "allowed_variants", "parameter_rationale", "remaining_gaps",
+          "evidence_claim", "review_status"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "internal_obligation_oracles": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "pattern": "^OBL-311-[A-Z0-9-]+$"},
+          "applicability": {"enum": ["required", "conditional", "excluded"]},
+          "condition": {"type": ["string", "null"]},
+          "exclusion_rationale": {"type": ["string", "null"]},
+          "required_cases": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "conditional_cases": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "required_assertions": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "captured_wire_checks": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "required_event_kinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parent_verifier": {"type": "string", "pattern": "^[a-z0-9_]+\\.[a-z0-9_]+$"},
+          "positive_oracles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "negative_counterexamples": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "allowed_variants": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "parameter_rationale": {"type": "string", "minLength": 1},
+          "remaining_gaps": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {"type": "string", "minLength": 1}
+          },
+          "evidence_claim": {"const": "TargetedEvidenceOnly"},
+          "review_status": {"const": "pending"}
+        },
+        "required": [
+          "id", "applicability", "condition", "exclusion_rationale", "required_cases",
+          "conditional_cases", "required_assertions", "captured_wire_checks",
+          "required_event_kinds", "parent_verifier", "positive_oracles",
+          "negative_counterexamples", "allowed_variants", "parameter_rationale",
+          "remaining_gaps", "evidence_claim", "review_status"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "independent_approvals",
+    "review_status",
+    "runtime_results",
+    "full_conformance",
+    "selected_id_oracles",
+    "compound_atom_oracles",
+    "mixed_qos_draft_oracles",
+    "internal_obligation_oracles"
+  ],
+  "additionalProperties": false
+}

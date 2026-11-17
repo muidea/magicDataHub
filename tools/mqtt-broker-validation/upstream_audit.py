@@ -79,6 +79,20 @@ def validate_assessment(value, catalog, lock):
             if asset['file'] not in project['files'] or asset['file'] not in {item['file'] for item in asset['evidence']}:
                 raise InputError('asset lacks locked primary source evidence')
             evidence += asset['evidence']
+            if asset['reuse_grade'] not in {'A', 'B', 'C', 'D'}:
+                raise InputError('invalid reuse_grade on assessed asset')
+            if any(not asset.get(field) for field in ('adaptations', 'evidence_limits', 'next_steps')):
+                raise InputError('assessed asset lacks required adaptation/limit/decision rationale')
+            for dependency in asset['dependencies']:
+                if '/' in dependency and dependency.endswith(('.py', '.erl', '.sh')):
+                    if asset['integration_status'] == 'integrated':
+                        matched = dependency in project['files']
+                    else:
+                        matched = dependency in project['files'] or any(
+                            path.endswith('/' + dependency) for path in project['files']
+                        )
+                    if not matched:
+                        raise InputError('asset dependency path lacks locked source evidence')
             identity = asset['catalog_case_id']
             if asset['integration_status'] == 'integrated':
                 case = selected.get(identity)
@@ -89,9 +103,6 @@ def validate_assessment(value, catalog, lock):
                         or asset['file'] != 'test/broker/' + case['upstream']['file']
                         or asset['parameters'] != case['upstream']['parameters']):
                     raise InputError('integrated assessment differs from executable B invocation')
-                for dependency in asset['dependencies']:
-                    if '/' in dependency and dependency.endswith('.py') and dependency not in project['files']:
-                        raise InputError('integrated asset dependency lacks locked source evidence')
                 integrated.add(identity)
             elif identity is not None or asset['parameters'] is not None:
                 raise InputError('candidate assessment cannot claim an executable catalog invocation')

@@ -24,14 +24,14 @@
 
 | 编号 | 优先级 / 分类 | 当前剩余项 | 收口出口 |
 |---|---|---|---|
-| MQTT-T01 | P1 / 官方映射与语义审查 | 连接四个、Retained七个、QoS2三个选定官方ID已形成原文草案，仍draft/pending；Topic四个编号已补原文草案，最新共十八个ID/十三个完整段落、结构版本8；QoS2两个完整列表及12个MUST已导入inventory-only，逐项语义/充分性及跨章节关联义务仍待审核；九个内部范围均保留 official_ids=[] | 先逐类核对完整正文和跨段上下文，绑定版本、方向/阶段、适用条件、断言及证据；连接/Retained/QoS2/Topic草案完成语义/充分性审查后再升级审定状态；不凭元数据通过批准 |
-| MQTT-T02 | P1 / 完整数据模型 | 十二份 schema 约束当前代表性结构，尚未实现完整官方原子义务、适用性、SHOULD 偏离、必需场景/替代组与充分性聚合模型 | 按设计 §5.3–5.4、§12–13 明确定义及正反向门禁；不适用须有依据，漏项或证据不足不能 CONFORMANT，已知违规不能被其他 PASS 抵消 |
-| MQTT-T03 | P1 / Oracle 与证据充分性 | 已有十一种真实错误校准及 Retained v2 正反例；父进程对连接/Retained/QoS2恢复/FLOW/FANOUT/DUPLEX/Topic已逐字节重建；MQTT-GAP-004的Topic标签反例已修复；MIXED已补实际授予、允许副本、最高授予投递缺失的明确失败断言，全部场景充分性仍需按义务审查。当前校准和0.4秒窗口不构成全部合法时序/故障的充分性结论 | 建立“义务—必需断言—捕获字节/事件—父进程检查—正确/错误对端”对照；先取得具体缺口反例，再补校验或测试；保留合法提前交付、DUP/ID复用等允许结果及参数依据 |
-| MQTT-T04 | P1 / 上游依赖与接入决策 | 首批选定资产静态审计已完成；integrated Mosquitto asset 的路径依赖已加入锁定文件校验；完整目录审计、剩余逐用例依赖闭包与候选实际接入仍待。Paho 短写/零写是静态观察，尚无运行反例；许可证表述及EMQX内部运行时耦合仍保留 | 先补首轮承诺资产的依赖闭包与A/B/C/D决策；如接入候选，再处理许可证、Profile、退出/清理及Oracle。M1不要求首期移植全部Paho/EMQX资产，未接入候选不计运行PASS |
+| MQTT-T01 | P1 / 官方映射与语义审查（工程台账已建，独立语义审查待审） | 已新增 [oracle-sufficiency.json](oracle-sufficiency.json)、[oracle-sufficiency.schema.json](schemas/oracle-sufficiency.schema.json) 与 [oracle_sufficiency.py](oracle_sufficiency.py)：将 18 个选定 ID、12 个 QoS2 MUST 原子、3 个 MIXED OASIS 原文段落及 SHA-256 摘要（`MQTT-3.3.5-1`/`3.8.4-5`/`3.8.4-6`）与 9 个内部义务全部绑定至病例、必需断言、事件类型与父进程校验器；`independent_approvals=0`、`review_status=pending` | 逐类完成人工独立语义复核后方可升级审定状态；不凭元数据通过批准 |
+| MQTT-T02 | P1 / 完整数据模型（模型与聚合门禁已落地，审查待审） | [oracle_sufficiency.py](oracle_sufficiency.py) `evaluate_sufficiency` 与 [oracle-sufficiency.schema.json](schemas/oracle-sufficiency.schema.json) 已实现适用条件（`required`/`conditional`/`excluded` + `exclusion_rationale`）、`should_deviation` 记录、`alternative_groups`、未验证 PASS 转 `ERROR` 以及无抵消严格聚合（任一 `FAIL`/`ERROR`/`BLOCKED`/`NOT_TESTED` 阻止通过，全 `PASS` 在未独立批准下保持 `Partial` / `INCONCLUSIVE`）；[test_oracle_sufficiency.py](tests/test_oracle_sufficiency.py) 覆盖正反例 | 后续扩展全协议 M1 原子条目与人工独立批准后再升级总体结论；已知违规或漏项不能被其他 PASS 抵消 |
+| MQTT-T03 | P1 / Oracle 与证据充分性（台账对照已落地） | [oracle-sufficiency.json](oracle-sufficiency.json) 已为 18+12+3+9 共 42 条目逐一登记 `required_assertions`、`captured_wire_checks`、`required_event_kinds`、可导入 `parent_verifier` callable、`positive_oracles`/`negative_counterexamples` 实存测试引用、`allowed_variants` 与 `parameter_rationale`；保留 MIXED/Topic 0.4s 窗口与重叠行剔除边界 | 保持合法提前交付、DUP/ID 复用及允许降级语义；后续如需扩充 M1 范围，先取得具体缺口反例再补校准与校验 |
+| MQTT-T04 | P1 / 上游依赖与接入决策（依赖闭包校验已落地） | [upstream_audit.py](upstream_audit.py) 已对全量 21 项集成及候选资产（Mosquitto/Paho/EMQX）强制校验 `reuse_grade`、`adaptations`/`evidence_limits`/`next_steps` 决策依据以及 `.py`/`.erl`/`.sh` 依赖路径到锁定源码文件的闭包；[test_upstream_audit.py](tests/test_upstream_audit.py) 已增加负例门禁 | 首批静态盘点与依赖闭包已收口；后续若决定实际接入 Paho/EMQX 候选，再单列许可证、Profile 与运行 Oracle |
 | MQTT-T05 | 环境阻断 / 参考观测 | 锁定 Mosquitto 拒绝客户端写字面 $SYS，缺少正向对照，参考场景BLOCKED；普通可写 $validation 命名空间及两个产品隔离目标已有通过 | 保留独立原因及目标门禁；若需该参考场景通过，另确定合法可控的正向前提并重验。不得改为PASS/N/A/协议违规，也不为全绿放宽产品规则 |
 | MQTT-T07 | P1 / 参考行为差异（已从首轮必需用例剔除，诊断保留） | 锁定Mosquitto 2.0.22在MIXED重叠行呈现确定的注册顺序敏感性：`exact→+→#`仅观测QoS0，`#→+→exact`与`+→#→exact`首先观测QoS2；三种顺序均成功授予0/1/2。原始帧与固定源码的逐订阅QoS及dest_ids去重路径已核对，根因线索已收窄；2026-11-12新增[overlap_diagnostic.py](overlap_diagnostic.py)：`--requests 0,1,2`对锁定Mosquitto 2.0.22复现三种顺序的QoS0/QoS2差异；当前standalone临时实例三种顺序均为1个QoS2副本。输出固定为`diagnostic-only`/`INCONCLUSIVE`，不进入catalog或门禁 | 该行已从首轮必需 catalog 用例剔除，保留为独立诊断；下一出口是上游修复/解释或明确版本处置，并独立复核§3.3.5与§3.8.4语义。不能视参考为真值、改用最小QoS或调配置掩盖，不据此新增产品库缺陷 |
-| MQTT-T06 | P1 / 可复现交付 | 工具、样例及相关改动已提交到 magicDataHub `41eecf2`（MQTT `59dff8d`），两仓库工作树 clean，远端 master 已指向提交；宿主仍为同级 path 依赖，尚无匹配这些提交的干净远端 CI run、release 镜像和常驻部署。当前三容器仍为 2 天前镜像，live 配置/构建来源 unverified | 精确提交已形成；下一步在干净 checkout/CI 执行三服务、远端/镜像/工作流，固定业务 revision/锁/身份，再部署匹配版本并验收；不以版本号或Workflow文件代替执行 |
-| F67-01–08 | P2 / 库完整协议验收 | F6/F7的完整Profile、逐项语义/表格、剩余组合定界、客户端组合、真实独立实审和严格结项仍待；两个工具宿主Profile不能代替两版完整验收Profile | 沿库仓库的 `docs/f6-f7-closure-plan.md`推进；当前1064个评审对象、844行内部检查是既有基线，真实独立批准0；新增库缺口使用F67-G编号另行登记 |
+| MQTT-T06 | P1 / 可复现交付 | `modorch-mqtt` 已推送协议结项提交 `d0ae55f`（含 `F67-01–08` 协议验收闭环），宿主 [Cargo.toml](../../Cargo.toml) 已切换并锁定该 Git revision，工具及宿主本地重验与身份指纹已更新；尚无匹配最新提交的干净远端 CI run、新构建镜像与常驻服务替换 | 推送宿主提交并在干净 checkout/CI 执行三服务、远端/镜像/工作流（`verify.yml` 传入 `mqtt_revision=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad`），再部署匹配版本并验收；不以版本号或Workflow文件代替执行 |
+| F67-01–08 | 已在协议验收范围结项 | `modorch-mqtt` 的 F6（437/437）与 F7（607/607）+ 18 矩阵/222 组合在 `c367fa4`/`f9474a9`（最终结论于 `d0ae55f`）经三轮 `F67-07` 独立复审（AI 评审、新会话、未参与实现，负责人认可）全部 `Passed`（1,064/1,064），`F67-08` 结项，范围限定于 `acceptance-profile.json` 的 Server 与 `linux-x86_64` | 若受控输入变更需重跑复审；不自动替代 `check-release.py` 的 178 项发布义务或工具侧 `MQTT-T01–T04` 的人工独立审批 |
 | 发布 / SLO | P2 / 独立专项 | 178项发布义务独立批准0；三服务release镜像、代表性负载/长期RSS/吞吐/P99、跨平台/文件系统、硬件断电、安全、magicCommon及远端CI材料不全 | 按库仓库的 `docs/release.md`取得相应真实证据；dev镜像、短测、SIGKILL或协议门禁通过均不能替代这些出口 |
 | 后续宿主范围 | 用户已明确后续单列 | MQTT5、Auth/TLS/Storage、WebSocket、Admin及MQTT→SQL业务桥接尚未作为首轮宿主能力验收；库中已有可选实现不等于宿主启用 | 每项先确定显式Profile、配置、资源/鉴权和验收；不自动扩大本轮。Enhanced Authentication/AUTH继续按明确不支持及11项UnsupportedConditional管理，启用时另立任务 |
 
@@ -48,8 +48,8 @@
 - **已收口（选定范围）**：MIXED v1的代码、schema、catalog反向绑定、父进程原始证据、正反例、产品镜像和live入口验证均已闭环；不再作为待开发项。
 - **保留的真实差异**：参考Mosquitto MIXED重叠行存在可复现的注册顺序敏感性（`exact→+→#`缺最高授予QoS2，其他两种顺序首先出现QoS2），作为MQTT-T07诊断跟踪；当前首轮必需门禁不再FAIL；根因线索已收窄到逐订阅入队与同客户端`dest_ids`去重，该差异未归因到magicDataHub产品库，也未修改oracle掩盖。
 - **环境阻断**：MQTT-T05的`$SYS`正向写入继续BLOCKED；不能改成PASS或N/A。
-- **仍开放的P1**：MQTT-T01官方语义审查、MQTT-T02完整义务/证据模型、MQTT-T03充分性聚合、MQTT-T04上游依赖闭包、MQTT-T06精确版本/干净CI/匹配部署。
-- **仍开放的P2/后续范围**：F67-01–08、发布/SLO以及MQTT5、Auth/TLS/Storage、WebSocket、Admin和业务桥接。
+- **仍开放的P1**：MQTT-T01–T04 的人工独立语义审查（`independent_approvals=0`/`review_status=pending`，实现侧台账、非抵消聚合与依赖闭包已于 2026-11-16 落地）、MQTT-T06 精确版本/干净 CI/匹配部署。
+- **仍开放的P2/后续范围**：发布/SLO（178 项发布义务 0 批准）以及宿主后续可选范围（MQTT5、Auth/TLS/Storage、WebSocket、Admin 和业务桥接）。`modorch-mqtt` 的 F67-01–08 协议验收已在 `d0ae55f` 范围结项。
 
 ## 2026-11-12 重叠诊断复现
 
@@ -70,6 +70,6 @@
 
 库内已有精确入口包括`crates/modorch-mqtt-core/src/tests/protocol.rs`的`packet_identifier_namespaces_are_independent_in_simultaneous_qos2_directions`，`crates/modorch-mqtt-core/src/tests/storage.rs`的同号双向SQLite/提交故障/SIGKILL矩阵及`crates/modorch-mqtt-core/src/connection/receive_tests.rs`的部分ACK矩阵；路径相对于modorch-mqtt仓库。相关Feature、传输与平台限制仍按源码及库内计划保留，本次仅核对源码/契约存在，没有重新执行这些专项。
 
-MQTT-T02的完整模型、MQTT-T04的上游闭包、MQTT-T05的参考环境前提、MQTT-T06的精确版本/干净CI/匹配部署仍分别开放。FLOW/FANOUT/DUPLEX/MIXED的选定范围不重复登记为待开发，也不关闭F67-01–08或发布/SLO专项。
+MQTT-T01–T04 的实现侧台账/聚合/依赖闭包与单元测试已于 2026-11-16 补齐，独立语义审查（`independent_approvals=0`/`review_status=pending`）、MQTT-T05 参考环境前提、MQTT-T06 精确版本/干净 CI/匹配部署仍分别开放。FLOW/FANOUT/DUPLEX/MIXED 的选定范围不重复登记为待开发，也不关闭 F67-07–08、独立人工实审或发布/SLO 专项。
 
 总体生态的非MQTT遗留项继续见工作区设计文档 `modorch_ecosystem_design_docs_2026-11-09/待收口核对清单_2026-11-09.md` §24：四个来源的激活兼容问题、GUI、框架组合指南及FedEngine类型/扩展准确性、生产专项未被本次工具收口关闭。本次未重查业务源状态；数据准确性/扩展更新保持用户已确认的后续待办。

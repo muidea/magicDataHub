@@ -1,6 +1,6 @@
 # 源码提交边界
 
-提交应形成可构建、可验证的开发基线。服务、库、框架分别属于独立Git仓库，不在宿主中复制业务库、框架源码或外部方案历史。当前本地开发依赖要求modorch-mqtt与modorch-fedengine处于同级目录，精确约束和框架Git revision以Cargo.toml、Cargo.lock及源码身份门禁为准。
+提交应形成可构建、可验证的开发基线。服务、库、框架分别属于独立Git仓库，不在宿主中复制业务库、框架源码或外部方案历史。当前 `modorch-mqtt` 已在 Cargo.toml 中固定为协议结项 Git revision，本地开发仍要求 `modorch-fedengine` 处于同级目录（同时镜像溯源脚本也会核对同级业务库 checkout 状态），精确约束和框架Git revision以Cargo.toml、Cargo.lock及源码身份门禁为准。
 
 ## 应提交内容
 

@@ -11,4 +11,5 @@ PY
 python3 -B run.py --check
 python3 -B upstream_audit.py
 python3 -B normative_map.py
+python3 -B oracle_sufficiency.py
 python3 -B -m unittest discover -s tests -v

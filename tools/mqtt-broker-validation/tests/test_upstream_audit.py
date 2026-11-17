@@ -182,6 +182,25 @@ class UpstreamAudit(unittest.TestCase):
             for operation in [dependencies, allocate, supervise]:
                 operation.assert_not_called()
 
+    def test_candidate_dependency_closure_and_decision_rationale_enforced(self):
+        bad_dep = copy.deepcopy(self.value)
+        paho = next(p for p in bad_dep['projects'] if p['id'] == 'paho-testing')
+        paho['assets'][0]['dependencies'].append('interoperability/missing_helper.py')
+        with self.assertRaises(InputError):
+            self.validate(bad_dep)
+
+        bad_erl_dep = copy.deepcopy(self.value)
+        emqx = next(p for p in bad_erl_dep['projects'] if p['id'] == 'emqx')
+        emqx['assets'][0]['dependencies'].append('apps/emqx/test/unlisted_helper.erl')
+        with self.assertRaises(InputError):
+            self.validate(bad_erl_dep)
+
+        missing_decision = copy.deepcopy(self.value)
+        emqx_miss = next(p for p in missing_decision['projects'] if p['id'] == 'emqx')
+        emqx_miss['assets'][0]['next_steps'] = []
+        with self.assertRaises(InputError):
+            self.validate(missing_decision)
+
 
 if __name__ == '__main__':
     unittest.main()

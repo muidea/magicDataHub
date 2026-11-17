@@ -1589,6 +1589,7 @@ dependencies = [
 [[package]]
 name = "modorch-mqtt"
 version = "0.1.0-alpha.1"
+source = "git+https://github.com/muidea/modorch-mqtt?rev=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad#d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad"
 dependencies = [
  "modorch",
  "modorch-mqtt-api",
@@ -1600,6 +1601,7 @@ dependencies = [
 [[package]]
 name = "modorch-mqtt-api"
 version = "0.1.0-alpha.1"
+source = "git+https://github.com/muidea/modorch-mqtt?rev=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad#d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad"
 dependencies = [
  "bytes",
  "serde",
@@ -1609,6 +1611,7 @@ dependencies = [
 [[package]]
 name = "modorch-mqtt-core"
 version = "0.1.0-alpha.1"
+source = "git+https://github.com/muidea/modorch-mqtt?rev=d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad#d0ae55ff3adb3b6364f5e827576d9fb3b79a35ad"
 dependencies = [
  "bytes",
  "getrandom 0.3.4",

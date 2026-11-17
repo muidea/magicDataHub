@@ -1,0 +1,2289 @@
+{
+  "schema_version": 1,
+  "independent_approvals": 0,
+  "review_status": "pending",
+  "runtime_results": "not-produced-by-ledger",
+  "full_conformance": "Partial",
+  "selected_id_oracles": [
+    {
+      "id": "MQTT-3.3.1-5",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.3.1-6",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.3.1-8",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.3.1-9",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.3.1-10",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.3.1-11",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.3.1-12",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-RETAIN-DELETE-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Retained PUBLISH flags (RETAIN=1/0) verified on raw TX/RX frames",
+        "Empty retained payload clears stored message verified by quiet window on late subscriber"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked",
+        "test_retained.test_parent_accepts_complete_wire_proof_with_early_delivery_and_legal_duplicate"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window",
+        "test_retained.test_success_labels_cannot_replace_missing_phase_raw_bytes_handshake_or_positive_control"
+      ],
+      "allowed_variants": [
+        "PUBLISH before SUBACK ordering tolerated when wire proof preserves retained/non-retained state",
+        "Identical QoS1 duplicate acknowledged per hop without creating extra new deliveries"
+      ],
+      "parameter_rationale": "Covers retained set/overwrite/empty-payload delete/quiet window plus WILL-independent RETAIN flag checks.",
+      "remaining_gaps": [
+        "Requires bounded 0.4s quiet window rather than unbounded steady-state observation; pending human semantic review",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.1.4-4",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-CONNECT-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "captured_wire_checks": [
+        "CONNECT CleanSession=1 & keepAlive decoded from raw TX bytes",
+        "First RX frame is CONNACK return_code=0 session_present=0",
+        "PINGREQ->PINGRESP & clean DISCONNECT TX followed by socket EOF"
+      ],
+      "required_event_kinds": [
+        "connect-phase",
+        "connection",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "connection.check_evidence",
+      "positive_oracles": [
+        "test_connection.test_parent_accepts_complete_split_capture"
+      ],
+      "negative_counterexamples": [
+        "test_connection.test_success_labels_cannot_replace_missing_or_wrong_wire_and_phase_proof",
+        "test_connection.test_old_label_only_proof_cannot_pass"
+      ],
+      "allowed_variants": [
+        "CleanSession CONNECT with keepAlive=5/10/30s",
+        "Local close right after clean DISCONNECT tx"
+      ],
+      "parameter_rationale": "Fixed minimal clean handshake + PINGREQ/PINGRESP + DISCONNECT exchange establishes basic TCP/MQTTv3.1.1 framing.",
+      "remaining_gaps": [
+        "TLS/WebSocket/username-password/cleanSession=0 CONNECT variants excluded from minimal M0 profile unless bound to target profile",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.2.0-1",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-CONNECT-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "captured_wire_checks": [
+        "CONNECT CleanSession=1 & keepAlive decoded from raw TX bytes",
+        "First RX frame is CONNACK return_code=0 session_present=0",
+        "PINGREQ->PINGRESP & clean DISCONNECT TX followed by socket EOF"
+      ],
+      "required_event_kinds": [
+        "connect-phase",
+        "connection",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "connection.check_evidence",
+      "positive_oracles": [
+        "test_connection.test_parent_accepts_complete_split_capture"
+      ],
+      "negative_counterexamples": [
+        "test_connection.test_success_labels_cannot_replace_missing_or_wrong_wire_and_phase_proof",
+        "test_connection.test_old_label_only_proof_cannot_pass"
+      ],
+      "allowed_variants": [
+        "CleanSession CONNECT with keepAlive=5/10/30s",
+        "Local close right after clean DISCONNECT tx"
+      ],
+      "parameter_rationale": "Fixed minimal clean handshake + PINGREQ/PINGRESP + DISCONNECT exchange establishes basic TCP/MQTTv3.1.1 framing.",
+      "remaining_gaps": [
+        "TLS/WebSocket/username-password/cleanSession=0 CONNECT variants excluded from minimal M0 profile unless bound to target profile",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.2.2-1",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-CONNECT-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "captured_wire_checks": [
+        "CONNECT CleanSession=1 & keepAlive decoded from raw TX bytes",
+        "First RX frame is CONNACK return_code=0 session_present=0",
+        "PINGREQ->PINGRESP & clean DISCONNECT TX followed by socket EOF"
+      ],
+      "required_event_kinds": [
+        "connect-phase",
+        "connection",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "connection.check_evidence",
+      "positive_oracles": [
+        "test_connection.test_parent_accepts_complete_split_capture"
+      ],
+      "negative_counterexamples": [
+        "test_connection.test_success_labels_cannot_replace_missing_or_wrong_wire_and_phase_proof",
+        "test_connection.test_old_label_only_proof_cannot_pass"
+      ],
+      "allowed_variants": [
+        "CleanSession CONNECT with keepAlive=5/10/30s",
+        "Local close right after clean DISCONNECT tx"
+      ],
+      "parameter_rationale": "Fixed minimal clean handshake + PINGREQ/PINGRESP + DISCONNECT exchange establishes basic TCP/MQTTv3.1.1 framing.",
+      "remaining_gaps": [
+        "TLS/WebSocket/username-password/cleanSession=0 CONNECT variants excluded from minimal M0 profile unless bound to target profile",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.12.4-1",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-CONNECT-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "captured_wire_checks": [
+        "CONNECT CleanSession=1 & keepAlive decoded from raw TX bytes",
+        "First RX frame is CONNACK return_code=0 session_present=0",
+        "PINGREQ->PINGRESP & clean DISCONNECT TX followed by socket EOF"
+      ],
+      "required_event_kinds": [
+        "connect-phase",
+        "connection",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "connection.check_evidence",
+      "positive_oracles": [
+        "test_connection.test_parent_accepts_complete_split_capture"
+      ],
+      "negative_counterexamples": [
+        "test_connection.test_success_labels_cannot_replace_missing_or_wrong_wire_and_phase_proof",
+        "test_connection.test_old_label_only_proof_cannot_pass"
+      ],
+      "allowed_variants": [
+        "CleanSession CONNECT with keepAlive=5/10/30s",
+        "Local close right after clean DISCONNECT tx"
+      ],
+      "parameter_rationale": "Fixed minimal clean handshake + PINGREQ/PINGRESP + DISCONNECT exchange establishes basic TCP/MQTTv3.1.1 framing.",
+      "remaining_gaps": [
+        "TLS/WebSocket/username-password/cleanSession=0 CONNECT variants excluded from minimal M0 profile unless bound to target profile",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-2.3.1-6",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001"
+      ],
+      "alternative_groups": [
+        [
+          "MQTT311-QOS2-RECOVER-001"
+        ],
+        [
+          "MQTT311-QOS2-FLOW-001",
+          "MQTT311-QOS2-FANOUT-001",
+          "MQTT311-QOS2-DUPLEX-001"
+        ]
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect.",
+      "remaining_gaps": [
+        "Independent human semantic approval of MQTT-2.3.1-6 / 3.2.2-2 / 4.4.0-1 remains pending (0 approvals)",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.2.2-2",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001"
+      ],
+      "alternative_groups": [
+        [
+          "MQTT311-QOS2-RECOVER-001"
+        ],
+        [
+          "MQTT311-QOS2-FLOW-001",
+          "MQTT311-QOS2-FANOUT-001",
+          "MQTT311-QOS2-DUPLEX-001"
+        ]
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect.",
+      "remaining_gaps": [
+        "Independent human semantic approval of MQTT-2.3.1-6 / 3.2.2-2 / 4.4.0-1 remains pending (0 approvals)",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-4.4.0-1",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001"
+      ],
+      "alternative_groups": [
+        [
+          "MQTT311-QOS2-RECOVER-001"
+        ],
+        [
+          "MQTT311-QOS2-FLOW-001",
+          "MQTT311-QOS2-FANOUT-001",
+          "MQTT311-QOS2-DUPLEX-001"
+        ]
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect.",
+      "remaining_gaps": [
+        "Independent human semantic approval of MQTT-2.3.1-6 / 3.2.2-2 / 4.4.0-1 remains pending (0 approvals)",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.8.4-1",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-TOPIC-MATCH-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBSCRIBE filters (+, #, /, $SYS negative control) & SUBACK return codes verified from raw bytes",
+        "RX PUBLISH topic names and payload identity matched against planned positive/negative vectors"
+      ],
+      "required_event_kinds": [
+        "planned-topic-vectors",
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-vector",
+        "topic-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "topic_evidence.check_evidence",
+      "positive_oracles": [
+        "test_topics.test_general_system_and_legal_duplicate_combinations",
+        "test_topics.test_legal_duplicate_ack_and_new_exchange_id_reuse"
+      ],
+      "negative_counterexamples": [
+        "test_topics.test_negative_probe_receipt_is_rejected_even_with_matching_positive_labels",
+        "test_topics.test_unexpected_publication_cannot_pass_quiet_window"
+      ],
+      "allowed_variants": [
+        "Legal QoS1 duplicate ACK and completed PacketId reuse across planned vectors",
+        "Publish-before-SUBACK buffering when topic filter and roles match plan"
+      ],
+      "parameter_rationale": "Bounded vector set covers single-level +, multi-level #, leading /, and $SYS isolation with negative control probes.",
+      "remaining_gaps": [
+        "MQTT-4.7.2-1 non-$SYS wildcard exclusion passes independently, whereas sibling MQTT311-SYS-TOPIC-001 remains reference BLOCKED on Mosquitto default $SYS config",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.8.4-2",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-TOPIC-MATCH-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBSCRIBE filters (+, #, /, $SYS negative control) & SUBACK return codes verified from raw bytes",
+        "RX PUBLISH topic names and payload identity matched against planned positive/negative vectors"
+      ],
+      "required_event_kinds": [
+        "planned-topic-vectors",
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-vector",
+        "topic-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "topic_evidence.check_evidence",
+      "positive_oracles": [
+        "test_topics.test_general_system_and_legal_duplicate_combinations",
+        "test_topics.test_legal_duplicate_ack_and_new_exchange_id_reuse"
+      ],
+      "negative_counterexamples": [
+        "test_topics.test_negative_probe_receipt_is_rejected_even_with_matching_positive_labels",
+        "test_topics.test_unexpected_publication_cannot_pass_quiet_window"
+      ],
+      "allowed_variants": [
+        "Legal QoS1 duplicate ACK and completed PacketId reuse across planned vectors",
+        "Publish-before-SUBACK buffering when topic filter and roles match plan"
+      ],
+      "parameter_rationale": "Bounded vector set covers single-level +, multi-level #, leading /, and $SYS isolation with negative control probes.",
+      "remaining_gaps": [
+        "MQTT-4.7.2-1 non-$SYS wildcard exclusion passes independently, whereas sibling MQTT311-SYS-TOPIC-001 remains reference BLOCKED on Mosquitto default $SYS config",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-4.7.2-1",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-TOPIC-MATCH-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBSCRIBE filters (+, #, /, $SYS negative control) & SUBACK return codes verified from raw bytes",
+        "RX PUBLISH topic names and payload identity matched against planned positive/negative vectors"
+      ],
+      "required_event_kinds": [
+        "planned-topic-vectors",
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-vector",
+        "topic-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "topic_evidence.check_evidence",
+      "positive_oracles": [
+        "test_topics.test_general_system_and_legal_duplicate_combinations",
+        "test_topics.test_legal_duplicate_ack_and_new_exchange_id_reuse"
+      ],
+      "negative_counterexamples": [
+        "test_topics.test_negative_probe_receipt_is_rejected_even_with_matching_positive_labels",
+        "test_topics.test_unexpected_publication_cannot_pass_quiet_window"
+      ],
+      "allowed_variants": [
+        "Legal QoS1 duplicate ACK and completed PacketId reuse across planned vectors",
+        "Publish-before-SUBACK buffering when topic filter and roles match plan"
+      ],
+      "parameter_rationale": "Bounded vector set covers single-level +, multi-level #, leading /, and $SYS isolation with negative control probes.",
+      "remaining_gaps": [
+        "MQTT-4.7.2-1 non-$SYS wildcard exclusion passes independently, whereas sibling MQTT311-SYS-TOPIC-001 remains reference BLOCKED on Mosquitto default $SYS config",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-4.7.3-4",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "should_deviation": null,
+      "case_ids": [
+        "MQTT311-TOPIC-MATCH-001"
+      ],
+      "alternative_groups": [],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBSCRIBE filters (+, #, /, $SYS negative control) & SUBACK return codes verified from raw bytes",
+        "RX PUBLISH topic names and payload identity matched against planned positive/negative vectors"
+      ],
+      "required_event_kinds": [
+        "planned-topic-vectors",
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-vector",
+        "topic-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "topic_evidence.check_evidence",
+      "positive_oracles": [
+        "test_topics.test_general_system_and_legal_duplicate_combinations",
+        "test_topics.test_legal_duplicate_ack_and_new_exchange_id_reuse"
+      ],
+      "negative_counterexamples": [
+        "test_topics.test_negative_probe_receipt_is_rejected_even_with_matching_positive_labels",
+        "test_topics.test_unexpected_publication_cannot_pass_quiet_window"
+      ],
+      "allowed_variants": [
+        "Legal QoS1 duplicate ACK and completed PacketId reuse across planned vectors",
+        "Publish-before-SUBACK buffering when topic filter and roles match plan"
+      ],
+      "parameter_rationale": "Bounded vector set covers single-level +, multi-level #, leading /, and $SYS isolation with negative control probes.",
+      "remaining_gaps": [
+        "MQTT-4.7.2-1 non-$SYS wildcard exclusion passes independently, whereas sibling MQTT311-SYS-TOPIC-001 remains reference BLOCKED on Mosquitto default $SYS config",
+        "normative_map evidence_claim=TargetedEvidenceOnly, review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    }
+  ],
+  "compound_atom_oracles": [
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "unused-id",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=unused-id (must_ordinal=0).",
+      "remaining_gaps": [
+        "Two outstanding Broker publications use distinct IDs in FLOW; larger windows, resource pressure and allocation exhaustion remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "new-publish-qos2-dup0",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=new-publish-qos2-dup0 (must_ordinal=0).",
+      "remaining_gaps": [
+        "Selected initial recovery and three clean FLOW messages; all content/Will/Retain cases and allowed timing need review.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "publish-unacknowledged",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=publish-unacknowledged (must_ordinal=0).",
+      "remaining_gaps": [
+        "Selected AwaitPubRec recovery plus two FLOW messages before PUBREC; broader delays, concurrency and stored-state observations remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "pubrel-on-pubrec",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=pubrel-on-pubrec (must_ordinal=0).",
+      "remaining_gaps": [
+        "Selected repeated PUBREC per message in two-inflight FLOW now has actual PUBREL responses; wider repeats and legal interleavings remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "pubrel-original-id",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-DUPLEX-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=pubrel-original-id (must_ordinal=1).",
+      "remaining_gaps": [
+        "FLOW concurrent IDs and DUPLEX same-ID bidirectional normal exchanges with both completion orders; broader windows/fault intersections remain subject to Profile and library evidence review.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "pubrel-unacknowledged",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=pubrel-unacknowledged (must_ordinal=0).",
+      "remaining_gaps": [
+        "Selected AwaitPubComp recovery and repeated FLOW PUBREL; wider delay, retry and storage combinations remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-1",
+      "key": "no-publish-after-pubrel",
+      "normative_level": "MUST NOT",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=no-publish-after-pubrel (must_ordinal=0).",
+      "remaining_gaps": [
+        "No forbidden frame in the captured selected flow/window; not an unbounded absence or all retry paths proof.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-2",
+      "key": "pubrec-on-publish",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-FANOUT-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=pubrec-on-publish (must_ordinal=0).",
+      "remaining_gaps": [
+        "Wire PUBREC is observed; internal ownership and durable state cannot be inferred solely from the ACK.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-2",
+      "key": "repeat-pubrec",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FANOUT-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=repeat-pubrec (must_ordinal=0).",
+      "remaining_gaps": [
+        "One same-connection DUP=1 queued before reading PUBREC plus reconnect repeat; other allowed repeats/flags/interleavings remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-2",
+      "key": "no-duplicate-onward",
+      "normative_level": "MUST NOT",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-FANOUT-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=no-duplicate-onward (must_ordinal=1).",
+      "remaining_gaps": [
+        "Duplicate original input now has one observed delivery at each of two subscribers; Method A/B internal choice, larger fanout, QoS mixes, overlap and all timing remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-2",
+      "key": "pubcomp-on-pubrel",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-FANOUT-001",
+        "MQTT311-QOS2-DUPLEX-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=pubcomp-on-pubrel (must_ordinal=0).",
+      "remaining_gaps": [
+        "Selected FLOW repeats PUBREL per ID with individual PUBCOMP; unknown IDs, broader repeats and completion timing remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "parent_id": "MQTT-4.3.3-2",
+      "key": "id-reuse-is-new",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-QOS2-RECOVER-001",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-FANOUT-001",
+        "MQTT311-QOS2-DUPLEX-001"
+      ],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery"
+      ],
+      "captured_wire_checks": [
+        "CleanSession=0 reconnect CONNACK session_present=1 decoded from RX frame",
+        "Fault-cut proxy byte logs + unacknowledged PUBLISH/PUBREL retransmitted with same PacketId & DUP=1 on re-PUBLISH",
+        "Single application delivery across reconnect and clean session reset"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state",
+        "test_qos2.test_wire_replay_accepts_early_forwarding_id_reuse_and_repeated_pubrel"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass",
+        "test_qos2.test_forwarded_ack_cannot_claim_unreceived_ack"
+      ],
+      "allowed_variants": [
+        "Broker-assigned subscriber PacketId on clean=0 session resume",
+        "Early forwarding before inbound PUBCOMP with no duplicate application delivery",
+        "Repeated PUBREL answered with PUBCOMP; PacketId reuse strictly after completion"
+      ],
+      "parameter_rationale": "Fixed 3-branch fault-cut + clean-session-reset scenario exercises recovery, retransmission, single-delivery, and cleanup across disconnect. Bound atom=id-reuse-is-new (must_ordinal=0).",
+      "remaining_gaps": [
+        "New health payload reuses completed incoming ID in two recovery branches and FLOW; other topics/flags/state combinations remain.",
+        "atom review_status=pending"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    }
+  ],
+  "mixed_qos_draft_oracles": [
+    {
+      "id": "MQTT-3.3.5-1",
+      "source_text": "When Clients make subscriptions with Topic Filters that include wildcards, it is possible for a Client’s subscriptions to overlap so that a published message might match multiple filters. In this case the Server MUST deliver the message to the Client respecting the maximum QoS of all the matching subscriptions [MQTT-3.3.5-1]. In addition, the Server MAY deliver further copies of the message, one for each additional matching subscription and respecting the subscription’s QoS in each case.",
+      "source_sha256": "abb71bb0513789be529ebd9d832aab5dedcd72e1e36c1f3d62e6f34a57c72e81",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-MIXED-QOS-001"
+      ],
+      "required_assertions": [
+        "mixed-suback",
+        "mixed-publication",
+        "mixed-copy-budget",
+        "mixed-delivery-complete",
+        "mixed-matrix-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBACK granted QoS <= requested QoS parsed from raw RX frame per matrix row",
+        "Delivered PUBLISH QoS equals min(publish_qos, granted_qos) with matching QoS0/1/2 handshake"
+      ],
+      "required_event_kinds": [
+        "mixed-vector-start",
+        "mixed-roles",
+        "mixed-observation-start",
+        "mixed-observation",
+        "mixed-delivery",
+        "mixed-input-completed",
+        "mixed-vector-completed",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "mixed_qos_evidence.check_evidence",
+      "positive_oracles": [
+        "test_mixed_qos.test_legal_grants_optional_copies_retries_and_early_forwarding"
+      ],
+      "negative_counterexamples": [
+        "test_mixed_qos.test_all_raw_evidence_and_matrix_boundaries_required",
+        "test_mixed_qos.test_wrong_qos_and_payload_rejected_with_consistent_raw_capture"
+      ],
+      "allowed_variants": [
+        "Single independent clean subscriber per row; requested QoS 0/1/2 vs published QoS 0/1/2 (granted <= requested)",
+        "Multiple overlapping subscriptions explicitly deferred to overlap diagnostic / profile-specific addendum"
+      ],
+      "parameter_rationale": "9-row orthogonal matrix exercises independent granted-QoS negotiation & downgrade rules without conflating Mosquitto 2.0.22 overlap dedup discrepancy (MQTT-T07).",
+      "remaining_gaps": [
+        "Overlapping wildcard dedup excluded from MQTT311-MIXED-QOS-001 (tracked separately in MQTT-T07)",
+        "Requires independent semantic approval before normative-map promotion"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.8.4-5",
+      "source_text": "The SUBACK Packet sent by the Server to the Client MUST contain a return code for each Topic Filter/QoS pair. This return code MUST either show the maximum QoS that was granted for that Subscription or indicate that the subscription failed [MQTT-3.8.4-5]. The Server might grant a lower maximum QoS than the subscriber requested. The QoS of Payload Messages sent in response to a Subscription MUST be the minimum of the QoS of the originally published message and the maximum QoS granted by the Server. The server is permitted to send duplicate copies of a message to a subscriber in the case where the original message was published with QoS 1 and the maximum QoS granted was QoS 0 [MQTT-3.8.4-6].",
+      "source_sha256": "d044341f6e594603e6a319d7f01e7e8ef7765f47ce83422811773edcc2504230",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-MIXED-QOS-001"
+      ],
+      "required_assertions": [
+        "mixed-suback",
+        "mixed-publication",
+        "mixed-copy-budget",
+        "mixed-delivery-complete",
+        "mixed-matrix-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBACK granted QoS <= requested QoS parsed from raw RX frame per matrix row",
+        "Delivered PUBLISH QoS equals min(publish_qos, granted_qos) with matching QoS0/1/2 handshake"
+      ],
+      "required_event_kinds": [
+        "mixed-vector-start",
+        "mixed-roles",
+        "mixed-observation-start",
+        "mixed-observation",
+        "mixed-delivery",
+        "mixed-input-completed",
+        "mixed-vector-completed",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "mixed_qos_evidence.check_evidence",
+      "positive_oracles": [
+        "test_mixed_qos.test_legal_grants_optional_copies_retries_and_early_forwarding"
+      ],
+      "negative_counterexamples": [
+        "test_mixed_qos.test_all_raw_evidence_and_matrix_boundaries_required",
+        "test_mixed_qos.test_wrong_qos_and_payload_rejected_with_consistent_raw_capture"
+      ],
+      "allowed_variants": [
+        "SUBACK return code in {0, 1, 2, 0x80} with granted_qos <= requested_qos",
+        "0x80 failure code transitions row/case to BLOCKED positive precondition rather than silent skip"
+      ],
+      "parameter_rationale": "SUBACK raw byte parsing verifies exact per-filter return code without assuming requested QoS equals granted QoS.",
+      "remaining_gaps": [
+        "Multi-filter single SUBSCRIBE packet batching deferred beyond 1-filter-per-row matrix",
+        "Pending independent semantic review"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "MQTT-3.8.4-6",
+      "source_text": "The SUBACK Packet sent by the Server to the Client MUST contain a return code for each Topic Filter/QoS pair. This return code MUST either show the maximum QoS that was granted for that Subscription or indicate that the subscription failed [MQTT-3.8.4-5]. The Server might grant a lower maximum QoS than the subscriber requested. The QoS of Payload Messages sent in response to a Subscription MUST be the minimum of the QoS of the originally published message and the maximum QoS granted by the Server. The server is permitted to send duplicate copies of a message to a subscriber in the case where the original message was published with QoS 1 and the maximum QoS granted was QoS 0 [MQTT-3.8.4-6].",
+      "source_sha256": "d044341f6e594603e6a319d7f01e7e8ef7765f47ce83422811773edcc2504230",
+      "normative_level": "MUST",
+      "applicability": "required",
+      "case_ids": [
+        "MQTT311-MIXED-QOS-001"
+      ],
+      "required_assertions": [
+        "mixed-suback",
+        "mixed-publication",
+        "mixed-copy-budget",
+        "mixed-delivery-complete",
+        "mixed-matrix-completed"
+      ],
+      "captured_wire_checks": [
+        "SUBACK granted QoS <= requested QoS parsed from raw RX frame per matrix row",
+        "Delivered PUBLISH QoS equals min(publish_qos, granted_qos) with matching QoS0/1/2 handshake"
+      ],
+      "required_event_kinds": [
+        "mixed-vector-start",
+        "mixed-roles",
+        "mixed-observation-start",
+        "mixed-observation",
+        "mixed-delivery",
+        "mixed-input-completed",
+        "mixed-vector-completed",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "mixed_qos_evidence.check_evidence",
+      "positive_oracles": [
+        "test_mixed_qos.test_legal_grants_optional_copies_retries_and_early_forwarding"
+      ],
+      "negative_counterexamples": [
+        "test_mixed_qos.test_all_raw_evidence_and_matrix_boundaries_required",
+        "test_mixed_qos.test_wrong_qos_and_payload_rejected_with_consistent_raw_capture"
+      ],
+      "allowed_variants": [
+        "Delivered QoS = min(publish_qos, granted_qos)",
+        "Inbound QoS1 with granted QoS0 permits duplicate QoS0 delivery under MQTT-3.8.4-6",
+        "Quiet window 0.4s per row"
+      ],
+      "parameter_rationale": "Bound matrix enforces exact min(publish_qos, granted_qos) formula and explicit exception for QoS1->granted-QoS0 duplicates.",
+      "remaining_gaps": [
+        "Multi-recipient heterogeneous QoS fanout outside single-subscriber M0 scope",
+        "Pending independent semantic review"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    }
+  ],
+  "internal_obligation_oracles": [
+    {
+      "id": "OBL-311-CONNECTION",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "MQTT311-CONNECT-001"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "valid-success-CONNACK",
+        "expected-control-packet",
+        "connect-socket-closed"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across MQTT311-CONNECT-001"
+      ],
+      "required_event_kinds": [
+        "connect-phase",
+        "connection",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "connection.check_evidence",
+      "positive_oracles": [
+        "test_connection.test_parent_accepts_complete_split_capture"
+      ],
+      "negative_counterexamples": [
+        "test_connection.test_success_labels_cannot_replace_missing_or_wrong_wire_and_phase_proof"
+      ],
+      "allowed_variants": [
+        "CleanSession=1 connect/ping/disconnect baseline"
+      ],
+      "parameter_rationale": "Covers minimal CONNECT/CONNACK/PING/DISCONNECT oracle.",
+      "remaining_gaps": [
+        "Pending independent semantic review"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-QOS1",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "UPSTREAM-MOSQ-001",
+        "UPSTREAM-MOSQ-003",
+        "MQTT311-PAHO-001"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "connack",
+        "puback",
+        "suback",
+        "puback/publish2",
+        "paho-delivery",
+        "paho-retained-delete-complete",
+        "paho-delete-live",
+        "paho-retained-cleanup"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across UPSTREAM-MOSQ-001, UPSTREAM-MOSQ-003, MQTT311-PAHO-001"
+      ],
+      "required_event_kinds": [
+        "upstream-assertion",
+        "upstream-lifecycle",
+        "upstream-selection",
+        "assertion"
+      ],
+      "parent_verifier": "reporting.check_pass",
+      "positive_oracles": [
+        "test_runner.test_complete_evidence_can_pass_bounded_gate"
+      ],
+      "negative_counterexamples": [
+        "test_runner.test_missing_required_assertion_cannot_pass"
+      ],
+      "allowed_variants": [
+        "Upstream Mosquitto QoS1 + Paho interoperability smoke cases"
+      ],
+      "parameter_rationale": "Combines locked upstream Mosquitto QoS1 cases with local Paho M0 smoke case.",
+      "remaining_gaps": [
+        "Direct python-level raw frame capture for UPSTREAM-MOSQ-* relies on broker test harness logs; pending independent review"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-QOS2-RECOVERY",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "MQTT311-QOS2-RECOVER-001",
+        "UPSTREAM-MOSQ-002",
+        "UPSTREAM-MOSQ-004",
+        "UPSTREAM-MOSQ-006",
+        "UPSTREAM-MOSQ-007",
+        "MQTT311-QOS2-FLOW-001",
+        "MQTT311-QOS2-FANOUT-001",
+        "MQTT311-QOS2-DUPLEX-001"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "qos2-session-present",
+        "qos2-cut-correct-ACK",
+        "qos2-proxy-cleanup",
+        "qos2-retransmit-mid",
+        "qos2-retransmit-dup",
+        "qos2-retransmit-content",
+        "qos2-PUBREL",
+        "qos2-single-application-delivery",
+        "qos2-health-control-and-single-delivery",
+        "connack",
+        "pubrec",
+        "pubcomp",
+        "suback",
+        "pubcomp/publish2",
+        "pubrel2",
+        "dup publish",
+        "pubrel",
+        "dup pubrel",
+        "connack 2",
+        "qos2-flow-publication",
+        "qos2-flow-new-dup0",
+        "qos2-flow-unique-inflight-ids",
+        "qos2-flow-control-packet",
+        "qos2-flow-single-delivery",
+        "qos2-flow-completed",
+        "qos2-fanout-input-ack",
+        "qos2-fanout-publication",
+        "qos2-fanout-new-publication",
+        "qos2-fanout-output-ack",
+        "qos2-fanout-single-delivery",
+        "qos2-fanout-completed",
+        "qos2-duplex-publication",
+        "qos2-duplex-new-publication",
+        "qos2-duplex-input-ack",
+        "qos2-duplex-output-ack",
+        "qos2-duplex-single-delivery",
+        "qos2-duplex-completed"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across MQTT311-QOS2-RECOVER-001, UPSTREAM-MOSQ-002, UPSTREAM-MOSQ-004, UPSTREAM-MOSQ-006, UPSTREAM-MOSQ-007, MQTT311-QOS2-FLOW-001, MQTT311-QOS2-FANOUT-001, MQTT311-QOS2-DUPLEX-001"
+      ],
+      "required_event_kinds": [
+        "qos2-branch-start",
+        "qos2-branch-completed",
+        "qos2-disconnect",
+        "qos2-clean-session-reset",
+        "fault-cut",
+        "proxy-bytes",
+        "proxy-cleanup",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "qos2_evidence.check_evidence",
+      "positive_oracles": [
+        "test_qos2.test_legal_resume_uses_broker_assigned_ids_and_preserves_delivery_state"
+      ],
+      "negative_counterexamples": [
+        "test_qos2.test_missing_or_duplicate_branch_cannot_pass"
+      ],
+      "allowed_variants": [
+        "Local QoS2 recovery/flow/fanout/duplex + locked Mosquitto upstream QoS2 cases"
+      ],
+      "parameter_rationale": "Covers fault-cut recovery, steady flow, 2-peer fanout, full duplex, plus upstream QoS2 cases.",
+      "remaining_gaps": [
+        "Pending independent semantic approval"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-RETAIN-DELETE",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "MQTT311-RETAIN-DELETE-001",
+        "UPSTREAM-MOSQ-005"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "retained-delivery",
+        "retained-observation-completed",
+        "connack",
+        "publish",
+        "unsuback",
+        "pingresp"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across MQTT311-RETAIN-DELETE-001, UPSTREAM-MOSQ-005"
+      ],
+      "required_event_kinds": [
+        "retained-phase",
+        "retained-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "retained.check_evidence",
+      "positive_oracles": [
+        "test_retained.test_publish_before_suback_and_identical_qos1_duplicate_are_accepted_and_acked"
+      ],
+      "negative_counterexamples": [
+        "test_retained.test_old_empty_changed_or_unmarked_duplicate_cannot_pass_quiet_window"
+      ],
+      "allowed_variants": [
+        "Local retained set/delete + upstream Mosquitto retained keepalive case"
+      ],
+      "parameter_rationale": "Covers retain flag, storage, overwrite, empty payload deletion, and 0.4s quiet window.",
+      "remaining_gaps": [
+        "Bounded quiet window only; pending independent review"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-TOPIC-MATCH",
+      "applicability": "conditional",
+      "condition": "MQTT311-SYS-TOPIC-001 requires target broker $SYS topic tree enabled (MQTT-T05)",
+      "exclusion_rationale": null,
+      "required_cases": [
+        "MQTT311-TOPIC-MATCH-001"
+      ],
+      "conditional_cases": [
+        "MQTT311-SYS-TOPIC-001"
+      ],
+      "required_assertions": [
+        "topic-delivery",
+        "expected-control-packet",
+        "topic-observation-completed"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across MQTT311-TOPIC-MATCH-001, MQTT311-SYS-TOPIC-001"
+      ],
+      "required_event_kinds": [
+        "planned-topic-vectors",
+        "topic-vector-start",
+        "topic-vector-roles",
+        "topic-vector",
+        "topic-observation",
+        "bytes",
+        "frame",
+        "application-delivery",
+        "assertion"
+      ],
+      "parent_verifier": "topic_evidence.check_evidence",
+      "positive_oracles": [
+        "test_topics.test_general_system_and_legal_duplicate_combinations"
+      ],
+      "negative_counterexamples": [
+        "test_topics.test_negative_probe_receipt_is_rejected_even_with_matching_positive_labels"
+      ],
+      "allowed_variants": [
+        "General +, #, leading / vectors required; $SYS vector conditional on broker $SYS configuration"
+      ],
+      "parameter_rationale": "Separates deterministic wildcard matching from target-dependent $SYS publication availability.",
+      "remaining_gaps": [
+        "MQTT-T05 reference Mosquitto $SYS disabled -> MQTT311-SYS-TOPIC-001 remains BLOCKED without offsetting"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-TOPIC-VALIDATION",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "UPSTREAM-MOSQ-008",
+        "UPSTREAM-MOSQ-009"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "connack",
+        "puback",
+        "suback"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across UPSTREAM-MOSQ-008, UPSTREAM-MOSQ-009"
+      ],
+      "required_event_kinds": [
+        "upstream-assertion",
+        "upstream-lifecycle",
+        "upstream-selection",
+        "assertion"
+      ],
+      "parent_verifier": "reporting.check_pass",
+      "positive_oracles": [
+        "test_runner.test_complete_evidence_can_pass_bounded_gate"
+      ],
+      "negative_counterexamples": [
+        "test_runner.test_missing_required_assertion_cannot_pass"
+      ],
+      "allowed_variants": [
+        "Upstream Mosquitto publish/subscribe invalid UTF-8 and topic filter cases"
+      ],
+      "parameter_rationale": "Backed by locked UPSTREAM-MOSQ-008 and UPSTREAM-MOSQ-009 invocations.",
+      "remaining_gaps": [
+        "Upstream-harness assertions only; local wire-level verifier not yet native"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-SESSION",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "UPSTREAM-MOSQ-010"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "connack 1",
+        "connack 2",
+        "publish1",
+        "suback1",
+        "suback2"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across UPSTREAM-MOSQ-010"
+      ],
+      "required_event_kinds": [
+        "upstream-assertion",
+        "upstream-lifecycle",
+        "upstream-selection",
+        "assertion"
+      ],
+      "parent_verifier": "reporting.check_pass",
+      "positive_oracles": [
+        "test_runner.test_complete_evidence_can_pass_bounded_gate"
+      ],
+      "negative_counterexamples": [
+        "test_runner.test_missing_required_assertion_cannot_pass"
+      ],
+      "allowed_variants": [
+        "Upstream Mosquitto session takeover / clean-session state case"
+      ],
+      "parameter_rationale": "Backed by locked UPSTREAM-MOSQ-010 invocation.",
+      "remaining_gaps": [
+        "Upstream-harness assertions only; MQTT 5.0 takeover rules out of 3.1.1 scope"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-WILL",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "UPSTREAM-MOSQ-011",
+        "UPSTREAM-MOSQ-012"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "connack",
+        "suback",
+        "publish"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across UPSTREAM-MOSQ-011, UPSTREAM-MOSQ-012"
+      ],
+      "required_event_kinds": [
+        "upstream-assertion",
+        "upstream-lifecycle",
+        "upstream-selection",
+        "assertion"
+      ],
+      "parent_verifier": "reporting.check_pass",
+      "positive_oracles": [
+        "test_runner.test_complete_evidence_can_pass_bounded_gate"
+      ],
+      "negative_counterexamples": [
+        "test_runner.test_missing_required_assertion_cannot_pass"
+      ],
+      "allowed_variants": [
+        "Upstream Mosquitto Will publish/retain cases"
+      ],
+      "parameter_rationale": "Backed by locked UPSTREAM-MOSQ-011 and UPSTREAM-MOSQ-012 invocations.",
+      "remaining_gaps": [
+        "Upstream-harness assertions only; clean disconnect Will suppression checked via upstream cases"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    },
+    {
+      "id": "OBL-311-QOS-NEGOTIATION",
+      "applicability": "required",
+      "condition": null,
+      "exclusion_rationale": null,
+      "required_cases": [
+        "MQTT311-MIXED-QOS-001"
+      ],
+      "conditional_cases": [],
+      "required_assertions": [
+        "mixed-suback",
+        "mixed-publication",
+        "mixed-copy-budget",
+        "mixed-delivery-complete",
+        "mixed-matrix-completed"
+      ],
+      "captured_wire_checks": [
+        "Verified assertions & protocol/wire frames across MQTT311-MIXED-QOS-001"
+      ],
+      "required_event_kinds": [
+        "mixed-vector-start",
+        "mixed-roles",
+        "mixed-observation-start",
+        "mixed-observation",
+        "mixed-delivery",
+        "mixed-input-completed",
+        "mixed-vector-completed",
+        "bytes",
+        "frame",
+        "assertion"
+      ],
+      "parent_verifier": "mixed_qos_evidence.check_evidence",
+      "positive_oracles": [
+        "test_mixed_qos.test_legal_grants_optional_copies_retries_and_early_forwarding"
+      ],
+      "negative_counterexamples": [
+        "test_mixed_qos.test_wrong_qos_and_payload_rejected_with_consistent_raw_capture"
+      ],
+      "allowed_variants": [
+        "9-row independent subscriber matrix; overlapping wildcard row tracked separately in MQTT-T07"
+      ],
+      "parameter_rationale": "Draft semantic boundary for MQTT-3.3.5-1, 3.8.4-5, and 3.8.4-6 pending formal normative-map promotion.",
+      "remaining_gaps": [
+        "Excluded overlap row remains documented under MQTT-T07 diagnostic; pending independent approval"
+      ],
+      "evidence_claim": "TargetedEvidenceOnly",
+      "review_status": "pending"
+    }
+  ]
+}
