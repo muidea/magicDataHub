@@ -12,4 +12,5 @@ modorch.workspace = true
 modorch-fedengine.workspace = true
 datahub-config.workspace = true
 datahub-app.workspace = true
+datahub-web.workspace = true
 toml.workspace = true

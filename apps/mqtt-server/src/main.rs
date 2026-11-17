@@ -22,7 +22,23 @@ fn main() -> Result<()> {
     };
     let config = Config::load(&path, Service::Mqtt)?;
     let mut composition = Composition::new(config.clone());
-    datahub_mqtt::Plan::load(&config)?.register(&mut composition)?;
+    let mut mqtt_plan = datahub_mqtt::Plan::load(&config)?;
+    if config.web.enabled {
+        let listen = config.web.listen.ok_or_else(|| {
+            datahub_app::invalid("enabled MQTT web management requires web.listen")
+        })?;
+        let contrib = mqtt_plan.enable_web_admin();
+        mqtt_plan.register(&mut composition)?;
+        datahub_web::WebGatewayPlan::new(
+            listen,
+            config.web.bearer_token_env.clone(),
+            config.application.name.clone(),
+            vec![contrib],
+        )?
+        .register(&mut composition)?;
+    } else {
+        mqtt_plan.register(&mut composition)?;
+    }
     let demand = composition.check()?;
     if check {
         println!("configuration valid; demand={demand:?}; runtime not started");

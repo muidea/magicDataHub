@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>magicDataHub · 管理控制台</title>
+  <link rel="stylesheet" href="/manage/style.css">
+  <script type="module" src="/manage/shell.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/manage/">
+      <span id="brand-mark" class="brand-mark">D</span>
+      <span><span id="brand-title">DataHub</span><small id="brand-subtitle">管理控制台</small></span>
+    </a>
+    <nav id="nav" aria-label="主导航"></nav>
+    <div id="sidebar-bottom" class="sidebar-bottom">
+      <div id="auth-status">管理控制台</div>
+      <small id="app-name-label"></small>
+    </div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <button type="button" id="toggle-database-tree" aria-controls="database-navigation" aria-expanded="false" hidden>☰ 数据库树</button>
+      <span>工作空间 <span class="separator">/</span> <strong id="breadcrumb">加载中…</strong></span>
+      <span id="connection" role="status">正在连接…</span>
+    </header>
+    <div class="workspace-body">
+      <aside id="database-navigation" class="database-navigation" aria-label="数据库目录" hidden>
+        <div class="database-tree-heading">
+          <strong>数据库</strong>
+          <button type="button" id="reload-database-tree" class="small" aria-label="刷新数据库树" title="刷新目录">↻</button>
+        </div>
+        <input id="database-search" type="search" placeholder="筛选数据库" aria-label="筛选数据库">
+        <label class="system-toggle"><input type="checkbox" id="database-system">显示系统 Schema</label>
+        <div id="database-tree" aria-label="数据库树"></div>
+      </aside>
+      <main id="main" tabindex="-1">
+        <div class="page-heading">
+          <div>
+            <h1 id="page-title">加载中…</h1>
+            <p id="page-subtitle"></p>
+          </div>
+          <div id="page-actions" class="actions"></div>
+        </div>
+        <div id="pending" class="notice warning" hidden></div>
+        <section id="stats" class="stats" aria-label="管理概览"></section>
+        <div id="content" aria-live="polite"><div class="empty">正在初始化管理控制台…</div></div>
+      </main>
+    </div>
+    <footer><span id="footer-title">magicDataHub</span><span id="footer-services">统一服务管理控制台</span></footer>
+  </div>
+  <div id="toast" role="status" hidden></div>
+  <dialog id="dialog" aria-labelledby="dialog-title">
+    <form id="editor">
+      <div class="dialog-heading">
+        <div><div class="eyebrow">MANAGEMENT</div><h2 id="dialog-title"></h2></div>
+        <button type="button" id="close-dialog" class="icon-button" aria-label="关闭">×</button>
+      </div>
+      <div id="dialog-body"></div>
+      <p id="dialog-error" class="form-error" role="alert" hidden></p>
+      <div class="dialog-footer">
+        <button type="button" id="cancel-dialog">取消</button>
+        <button type="submit" id="submit-dialog" class="primary">提交</button>
+      </div>
+    </form>
+  </dialog>
+  <dialog id="auth-dialog" aria-labelledby="auth-dialog-title">
+    <form id="auth-form">
+      <div class="dialog-heading">
+        <div><div class="eyebrow">AUTHENTICATION</div><h2 id="auth-dialog-title">输入管理口令</h2></div>
+      </div>
+      <div class="panel-body">
+        <div class="notice">当前管理控制台已启用 Bearer Token 保护，请输入配置的口令以继续。</div>
+        <label class="field">
+          <span>管理 Token</span>
+          <input id="auth-token-input" type="password" autocomplete="current-password" required placeholder="输入 Bearer Token">
+        </label>
+        <p id="auth-error" class="form-error" role="alert" hidden></p>
+      </div>
+      <div class="dialog-footer">
+        <button type="submit" class="primary">验证并进入</button>
+      </div>
+    </form>
+  </dialog>
+  <noscript>请启用 JavaScript 以使用管理端；也可直接调用 /api/v1 管理 API。</noscript>
+</body>
+</html>

@@ -22,7 +22,23 @@ fn main() -> Result<()> {
     };
     let config = Config::load(&path, Service::FedEngine)?;
     let mut composition = Composition::new(config.clone());
-    datahub_fedengine::Plan::load(&config)?.register(&mut composition)?;
+    let fed_plan = datahub_fedengine::Plan::load(&config)?;
+    if let Some((slot, contrib)) = fed_plan.web_contribution() {
+        let listen = match config.web.listen {
+            Some(addr) => addr,
+            None => fed_plan.management_listen()?,
+        };
+        fed_plan.register_with_router_slot(&mut composition, Some(slot))?;
+        datahub_web::WebGatewayPlan::new(
+            listen,
+            config.web.bearer_token_env.clone(),
+            config.application.name.clone(),
+            vec![contrib],
+        )?
+        .register(&mut composition)?;
+    } else {
+        fed_plan.register(&mut composition)?;
+    }
     let demand = composition.check()?;
     if check {
         println!("configuration valid; demand={demand:?}; runtime not started");

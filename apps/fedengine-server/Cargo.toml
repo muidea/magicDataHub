@@ -11,4 +11,5 @@ repository.workspace = true
 datahub-app.workspace = true
 datahub-config.workspace = true
 datahub-fedengine.workspace = true
+datahub-web.workspace = true
 tokio.workspace = true

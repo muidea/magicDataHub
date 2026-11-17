@@ -3,6 +3,7 @@
 use serde::Deserialize;
 use std::{
     io::Read,
+    net::SocketAddr,
     path::{Path, PathBuf},
 };
 
@@ -147,6 +148,15 @@ impl Runtime {
         Ok(())
     }
 }
+#[derive(Clone, Debug, Default, Deserialize)]
+#[serde(default, deny_unknown_fields)]
+pub struct WebConfig {
+    pub enabled: bool,
+    pub listen: Option<SocketAddr>,
+    pub allow_public_ingress: bool,
+    pub bearer_token_env: Option<String>,
+}
+
 #[derive(Clone, Debug, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Config {
@@ -155,6 +165,8 @@ pub struct Config {
     pub runtime: Runtime,
     pub mqtt: Option<FileReference>,
     pub fedengine: Option<FedEngineReference>,
+    #[serde(default)]
+    pub web: WebConfig,
 }
 impl Config {
     /// File references use the canonical host configuration's parent, never library CWD.
@@ -200,6 +212,28 @@ impl Config {
             return Err(Error::Invalid(
                 "EmbeddedCore is not supported; select PGWire or management HTTP",
             ));
+        }
+        if let Some(addr) = self.web.listen
+            && !addr.ip().is_loopback()
+            && !self.web.allow_public_ingress
+        {
+            return Err(Error::Invalid(
+                "non-loopback web listener requires web.allow_public_ingress = true",
+            ));
+        }
+        if matches!(service, Service::Mqtt) && self.web.enabled && self.web.listen.is_none() {
+            return Err(Error::Invalid(
+                "enabled MQTT web management requires web.listen",
+            ));
+        }
+        if let Some(env_name) = &self.web.bearer_token_env
+            && (env_name.is_empty()
+                || env_name.len() > 128
+                || !env_name
+                    .bytes()
+                    .all(|b| b.is_ascii_alphanumeric() || b == b'_'))
+        {
+            return Err(Error::Invalid("invalid web.bearer_token_env name"));
         }
         self.runtime.validate()
     }
@@ -283,6 +317,7 @@ mod tests {
                 config_file: "mqtt.toml".into(),
             }),
             fedengine: None,
+            web: Default::default(),
         }
     }
     #[test]

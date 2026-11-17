@@ -22,8 +22,38 @@ fn main() -> Result<()> {
     };
     let config = Config::load(&path, Service::Combined)?;
     let mut composition = Composition::new(config.clone());
-    datahub_mqtt::Plan::load(&config)?.register(&mut composition)?;
-    datahub_fedengine::Plan::load(&config)?.register(&mut composition)?;
+    let mut mqtt_plan = datahub_mqtt::Plan::load(&config)?;
+    let fed_plan = datahub_fedengine::Plan::load(&config)?;
+    if fed_plan.management_enabled() || config.web.enabled {
+        let listen = match config.web.listen {
+            Some(addr) => addr,
+            None if fed_plan.management_enabled() => fed_plan.management_listen()?,
+            None => {
+                return Err(datahub_app::invalid(
+                    "web.listen is required when fedengine.management_api is disabled",
+                ));
+            }
+        };
+        let mut contributions = Vec::new();
+        let mut fed_slot = None;
+        if let Some((slot, contrib)) = fed_plan.web_contribution() {
+            fed_slot = Some(slot);
+            contributions.push(contrib);
+        }
+        contributions.push(mqtt_plan.enable_web_admin());
+        mqtt_plan.register(&mut composition)?;
+        fed_plan.register_with_router_slot(&mut composition, fed_slot)?;
+        datahub_web::WebGatewayPlan::new(
+            listen,
+            config.web.bearer_token_env.clone(),
+            config.application.name.clone(),
+            contributions,
+        )?
+        .register(&mut composition)?;
+    } else {
+        mqtt_plan.register(&mut composition)?;
+        fed_plan.register(&mut composition)?;
+    }
     let demand = composition.check()?;
     if check {
         println!("configuration valid; demand={demand:?}; runtime not started");

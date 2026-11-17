@@ -11,4 +11,5 @@ repository.workspace = true
 datahub-app.workspace = true
 datahub-config.workspace = true
 datahub-mqtt.workspace = true
+datahub-web.workspace = true
 tokio.workspace = true

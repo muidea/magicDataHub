@@ -2,6 +2,8 @@
 #![forbid(unsafe_code)]
 use datahub_app::{Composition, Demand, Endpoint, Result, invalid};
 use datahub_config::{Config, MAX_CONFIG_BYTES, read_document, resolve};
+use datahub_web::{RouterSlot, WebContribution};
+use modorch::ComponentRef;
 use modorch_fedengine::{
     FedEngineBundle, FedEngineConfig, FedEngineProfile, FedEngineRegisteredComponents,
 };
@@ -87,21 +89,48 @@ impl Plan {
     pub fn config(&self) -> &FedEngineConfig {
         &self.config
     }
+    pub fn management_enabled(&self) -> bool {
+        self.http
+    }
+    pub fn management_listen(&self) -> Result<SocketAddr> {
+        Ok(self.config.management.listen.parse()?)
+    }
+    pub fn web_contribution(&self) -> Option<(RouterSlot, WebContribution)> {
+        if !self.http {
+            return None;
+        }
+        let slot: RouterSlot = Arc::default();
+        let contribution = WebContribution {
+            service: "fedengine",
+            requires: vec![ComponentRef::initiator("management-api")],
+            slot: Some(Arc::clone(&slot)),
+            builder: None,
+        };
+        Some((slot, contribution))
+    }
     pub fn register(
         self,
         composition: &mut Composition,
     ) -> Result<Arc<FedEngineRegisteredComponents>> {
+        self.register_with_router_slot(composition, None)
+    }
+    pub fn register_with_router_slot(
+        self,
+        composition: &mut Composition,
+        router_slot: Option<RouterSlot>,
+    ) -> Result<Arc<FedEngineRegisteredComponents>> {
         if self.pgwire {
             composition.endpoint("pgwire", self.config.pgwire.listen.parse()?);
         }
-        if self.http {
+        let hosted_externally = router_slot.is_some();
+        if self.http && !hosted_externally {
             composition.endpoint("management", self.config.management.listen.parse()?);
         }
-        let registered = Arc::new(
-            FedEngineBundle::new(self.config)
-                .profile(self.profile)
-                .register(composition.builder())?,
-        );
+        let mut bundle = FedEngineBundle::new(self.config).profile(self.profile);
+        if let Some(slot) = router_slot {
+            bundle = bundle.with_management_router_slot(slot);
+        }
+        let registered = Arc::new(bundle.register(composition.builder())?);
         let demand = registered.resource_requirements();
         let tasks = demand
             .max_tasks_per_owner

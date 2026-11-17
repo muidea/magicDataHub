@@ -8,7 +8,11 @@ publish.workspace = true
 repository.workspace = true
 
 [dependencies]
+axum.workspace = true
 modorch.workspace = true
 modorch-mqtt.workspace = true
 datahub-config.workspace = true
 datahub-app.workspace = true
+datahub-web.workspace = true
+serde.workspace = true
+serde_json.workspace = true

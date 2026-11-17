@@ -649,6 +649,7 @@ version = "0.1.0"
 dependencies = [
  "datahub-app",
  "datahub-config",
+ "datahub-web",
  "modorch",
  "modorch-fedengine",
  "toml",
@@ -658,10 +659,14 @@ dependencies = [
 name = "datahub-mqtt"
 version = "0.1.0"
 dependencies = [
+ "axum",
  "datahub-app",
  "datahub-config",
+ "datahub-web",
  "modorch",
  "modorch-mqtt",
+ "serde",
+ "serde_json",
 ]
 
 [[package]]
@@ -672,11 +677,28 @@ dependencies = [
  "datahub-config",
  "datahub-fedengine",
  "datahub-mqtt",
+ "datahub-web",
  "modorch",
  "modorch-fedengine",
  "modorch-mqtt",
  "serde_json",
  "tokio",
+]
+
+[[package]]
+name = "datahub-web"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "axum",
+ "datahub-app",
+ "modorch",
+ "serde",
+ "serde_json",
+ "sha2 0.10.9",
+ "tokio",
+ "tokio-util",
+ "tracing",
 ]
 
 [[package]]
@@ -788,6 +810,7 @@ dependencies = [
  "datahub-app",
  "datahub-config",
  "datahub-fedengine",
+ "datahub-web",
  "tokio",
 ]
 
@@ -1409,6 +1432,7 @@ dependencies = [
 name = "modorch-fedengine"
 version = "0.1.0"
 dependencies = [
+ "axum",
  "modorch",
  "modorch-fedengine-catalog",
  "modorch-fedengine-contract",
@@ -1671,6 +1695,7 @@ dependencies = [
  "datahub-app",
  "datahub-config",
  "datahub-mqtt",
+ "datahub-web",
  "tokio",
 ]
 
