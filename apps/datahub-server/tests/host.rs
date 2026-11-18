@@ -777,3 +777,55 @@ async fn late_activation_failure_compensates_two_already_live_ingresses() -> Res
     drop(std::net::TcpListener::bind(http)?);
     Ok(())
 }
+
+#[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+async fn combined_mqtt_accepts_both_311_and_50_clients() -> Result<()> {
+    use tokio::io::{AsyncReadExt, AsyncWriteExt};
+
+    let fixture = Fixture::new();
+    fixture.file(
+        "mqtt/combined.toml",
+        "enabled = true",
+        "enabled = true\nprotocols = [\"3.1.1\", \"5.0\"]",
+    );
+    let host = fixture.config();
+    let mqtt = datahub_mqtt::Plan::load(&host)?;
+    assert!(mqtt.config().mqtt5);
+    let fedengine = datahub_fedengine::Plan::load(&host)?;
+    let mut c = Composition::new(host);
+    let registered_mqtt = mqtt.register(&mut c)?;
+    fedengine.register(&mut c)?;
+    let running = c.build()?.start().await?;
+    let addr = registered_mqtt.handle().local_addr().unwrap();
+
+    // MQTT 3.1.1 CONNECT (client_id = "c311")
+    let mut s311 = tokio::net::TcpStream::connect(addr).await?;
+    let connect_311 = [
+        0x10, 0x10, 0x00, 0x04, b'M', b'Q', b'T', b'T', 0x04, 0x02, 0x00, 0x1e, 0x00, 0x04, b'c',
+        b'3', b'1', b'1',
+    ];
+    s311.write_all(&connect_311).await?;
+    let mut ack311 = [0u8; 4];
+    s311.read_exact(&mut ack311).await?;
+    assert_eq!(ack311, [0x20, 0x02, 0x00, 0x00]);
+    let _ = s311.write_all(&[0xe0, 0x00]).await;
+
+    // MQTT 5.0 CONNECT (client_id = "c50", empty properties length = 0x00)
+    let mut s50 = tokio::net::TcpStream::connect(addr).await?;
+    let connect_50 = [
+        0x10, 0x10, 0x00, 0x04, b'M', b'Q', b'T', b'T', 0x05, 0x02, 0x00, 0x1e, 0x00, 0x00, 0x03,
+        b'c', b'5', b'0',
+    ];
+    s50.write_all(&connect_50).await?;
+    let mut head = [0u8; 2];
+    s50.read_exact(&mut head).await?;
+    assert_eq!(head[0], 0x20);
+    let mut body = vec![0u8; head[1] as usize];
+    s50.read_exact(&mut body).await?;
+    assert_eq!(body[0], 0x00); // session present = 0
+    assert_eq!(body[1], 0x00); // reason code = Success
+    let _ = s50.write_all(&[0xe0, 0x00, 0x00]).await;
+
+    running.shutdown().await?;
+    Ok(())
+}

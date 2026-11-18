@@ -1,5 +1,5 @@
 {
-  "lock_sha256": "f12b805d33ed805cd8dd5cd965f07d6bae7495cc8f0137ef51450644a9636ca3",
+  "lock_sha256": "7e6ace897b0d253c3ef6f3b681a78db505f141665a54eb7a53e20f8c5dbc6570",
   "packages": {
     "modorch": {
       "version": "0.0.3",
@@ -102,6 +102,7 @@
       "sha256": "e2e91591cfd3b3db5662eea52f2aeb71dd4e8bcd1c64255cac219919300859cf",
       "features": [
         "default",
+        "mqtt5",
         "toml"
       ]
     },
@@ -116,7 +117,8 @@
       "source": null,
       "sha256": "534a92c2879d813eccd9abf33091bf7d0ed904c7a368a50c8fc0a8dee2ce740c",
       "features": [
-        "default"
+        "default",
+        "mqtt5"
       ]
     },
     "modorch-observe": {

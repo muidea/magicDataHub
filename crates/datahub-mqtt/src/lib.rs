@@ -38,10 +38,9 @@ impl Plan {
             || config.tls.is_some()
             || config.websocket.is_some()
             || config.admin.is_some()
-            || config.mqtt5
         {
             return Err(invalid(
-                "host MQTT profile requires anonymous MQTT3.1.1 memory Core (non-loopback requires allow_public_listener_without_tls=true)",
+                "host MQTT profile requires anonymous MQTT 3.1.1/5.0 memory Core (non-loopback requires allow_public_listener_without_tls=true)",
             ));
         }
         Ok(Self {
