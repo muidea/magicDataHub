@@ -1,6 +1,7 @@
 {
   "platform": "linux/amd64",
   "base_image": "gcr.io/distroless/cc-debian13@sha256:cc66d222f0a7ec996b78a99fe76a969bc80b539a5016ad866c14d1949bc6d0ab",
+  "odbc_base_image": "muidea/magicdatahub-runtime-base@sha256:741ed9d7628e0c746a198e09f76d27576b431e283c3dbd07c655ccaa5ddd5f8a",
   "duckdb_version": "v2.0.0",
   "libduckdb_sha256": "1f425596ada498cf1703d98768ba833d79254394c3581e5022b270ec7c2dee07"
 }

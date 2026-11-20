@@ -98,8 +98,9 @@ def main():
                 (app / 'extensions/manifest.json').write_text(json.dumps(extension_manifest(), indent=2) + '\n')
                 for config in (app / 'config/fedengine').glob('*.toml'):
                     config.write_text(config.read_text().replace('install_extensions = false', 'install_extensions = false\nextension_directory = "/opt/magicdatahub/extensions"'))
+            service_base = RUNTIME['base_image'] if service == 'mqtt-server' else RUNTIME.get('odbc_base_image', RUNTIME['base_image'])
             provenance = {'service': service, 'framework_version': '0.0.3', 'profile': args.profile,
-                          'base_image': RUNTIME['base_image'], 'platform': RUNTIME['platform'],
+                          'base_image': service_base, 'platform': RUNTIME['platform'],
                           'git_inputs': states, 'clean_git_inputs': clean, 'remote_ci_verified': False,
                           'host_source_sha256': source_before, 'library_identity': identity,
                           'binary_sha256': sha(app / 'bin/service'),
@@ -107,7 +108,7 @@ def main():
             (app / 'provenance.json').write_text(json.dumps(provenance, indent=2) + '\n')
             tag = args.tag_prefix + '/' + service + ':' + args.profile
             subprocess.run(['docker', 'build', '--platform', RUNTIME['platform'], '--file', str(ROOT / 'docker/Dockerfile'),
-                            '--build-arg', 'BASE_IMAGE=' + RUNTIME['base_image'], '--tag', tag,
+                            '--build-arg', 'BASE_IMAGE=' + service_base, '--tag', tag,
                             '--label', 'org.opencontainers.image.source=https://github.com/muidea/magicDataHub',
                             '--label', 'org.opencontainers.image.version=0.1.0-development', str(context)], check=True)
             print(json.dumps({'image': tag, 'status': 'Built', 'profile': args.profile,
