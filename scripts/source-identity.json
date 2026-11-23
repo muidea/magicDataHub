@@ -57,13 +57,13 @@
     "modorch-fedengine-ddl": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "a1572e36025df5c6ff7adea922d6b5f22e1c847932de1e0060b87534ba13baed",
+      "sha256": "9aaab3607c3ec496ad0ef38b77a6200cb7aa30ad8e6a623c7e03a645931373da",
       "features": []
     },
     "modorch-fedengine-duckdb": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "49cbafb8f1752f4789b171b67a6b045fb826a5c2599c1e5f7f652cede68b54e5",
+      "sha256": "87d4f93a89e91f9e9d1d038cb1c9e1558fe51576ef9709adea385a1f5d01e987",
       "features": []
     },
     "modorch-fedengine-management": {
@@ -75,7 +75,7 @@
     "modorch-fedengine-pg-compat": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "432ef8a08dcbf85d740924db43c5a62452e7e9a644bd6419c787f426138d38da",
+      "sha256": "42f615941ee5c3a1301a075e9a4f3fa9b7a34d1cd73e7d57875966fd23aa9e54",
       "features": []
     },
     "modorch-fedengine-pgwire": {
