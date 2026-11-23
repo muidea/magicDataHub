@@ -5,29 +5,29 @@
   "extensions": {
     "postgres": {
       "path": "v2.0.0/linux_amd64/postgres_scanner.duckdb_extension",
-      "sha256": "483c2e309fd64eb95bff29362fa6f69eeff0cda3ddb4677a025c3ac3e7cf5694",
+      "sha256": "a299defff796c383be74559cfec9e462bc7bbe54e3e41165b95abbd270c76862",
       "version": "84921b3bb8",
       "remote_version": "17.7"
     },
     "mysql": {
       "path": "v2.0.0/linux_amd64/mysql_scanner.duckdb_extension",
-      "sha256": "4c452776d46afb8bffb40690a087dae3a31031adc48efbdeb68cec26dd2d209e",
+      "sha256": "007dffe1be971d679dbaa6daf363ad6df7f91e6a5df36378035a446083b753e7",
       "version": "e7ad982aec",
       "remote_version": "5.7.44"
     },
     "oracle": {
       "path": "v2.0.0/linux_amd64/oracle_scanner.duckdb_extension",
-      "sha256": "1f9094353afa7a2e29b7a05aeff8bbaae346a88710bfa5255296378983a56db1",
+      "sha256": "0af3d5622585b5d4a816559d6d64a4d28732297d3d5d15449ca86e7f97ba9745",
       "version": "761c8655d2"
     },
     "sqlserver": {
       "path": "v2.0.0/linux_amd64/sqlserver_scanner.duckdb_extension",
-      "sha256": "69b55f2ecc46493c50f4ce218b968d4f63d739bb1d305ab8e735b98ee8bc0283",
+      "sha256": "a29c6a393ec1013c929c3ea6500642b35de215844f76451fc9c516f61766fd34",
       "version": "1ffa60c48b"
     },
     "odbc_catalog": {
       "path": "v2.0.0/linux_amd64/odbc_catalog_scanner.duckdb_extension",
-      "sha256": "2734c8a3cd8b369488918da73cd3d4afe354ebd2b571b61dcd8a7caa3a787bde",
+      "sha256": "9300460db58814893d15a1555ad4a91513f982d812795872550aacab08cdc3dc",
       "version": "00175f239a"
     }
   }
