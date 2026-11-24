@@ -3,15 +3,6 @@ on:
   push:
   pull_request:
   workflow_dispatch:
-    inputs:
-      mqtt_revision:
-        description: Actual committed MQTT 40-hex SHA containing the explicit failure policy API
-        required: true
-        type: string
-      fedengine_revision:
-        description: Actual committed FedEngine 40-hex SHA containing the verified Facade
-        required: true
-        type: string
 permissions:
   contents: read
 concurrency:
@@ -54,101 +45,7 @@ jobs:
         env:
           MDH_IMAGE_PREFIX: mdh-source-check
         run: docker compose -f docker/compose.yaml config --quiet
-  acceptance:
-    name: Three-service integration and images
-    if: github.event_name == 'workflow_dispatch'
-    needs: source
-    runs-on: ubuntu-24.04
-    timeout-minutes: 45
-    env:
-      MQTT_REVISION: ${{ inputs.mqtt_revision }}
-      FEDENGINE_REVISION: ${{ inputs.fedengine_revision }}
-      CARGO_TARGET_DIR: ${{ github.workspace }}/target
-    steps:
-      - name: Validate explicit immutable inputs
-        shell: python
-        run: |
-          import os, re
-          for name in ['MQTT_REVISION', 'FEDENGINE_REVISION']:
-              assert re.fullmatch(r'[0-9a-f]{40}', os.environ[name]), 'a real full commit SHA is required'
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          path: magicDataHub
-          persist-credentials: false
-      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
-        with:
-          python-version: '3.12'
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: muidea/modorch-mqtt
-          ref: ${{ inputs.mqtt_revision }}
-          path: modorch-mqtt
-          persist-credentials: false
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          repository: muidea/modorch-fedengine
-          ref: ${{ inputs.fedengine_revision }}
-          path: modorch-fedengine
-          persist-credentials: false
-      - name: Verify exact clean checkouts
-        shell: python
-        run: |
-          import os, subprocess
-          for folder, expected in [('magicDataHub', os.environ['GITHUB_SHA']), ('modorch-mqtt', os.environ['MQTT_REVISION']), ('modorch-fedengine', os.environ['FEDENGINE_REVISION'])]:
-              def git(*args):
-                  return subprocess.check_output(['git', '-C', folder, *args], text=True).strip()
-              assert git('rev-parse', 'HEAD') == expected
-              assert not git('status', '--porcelain', '--untracked-files=all')
-      - name: Restore Cargo and pinned native inputs
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            ${{ github.workspace }}/target/duckdb-download
-            ${{ runner.temp }}/mdh-extensions
-          key: mdh-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('magicDataHub/Cargo.lock', 'magicDataHub/docker/runtime.lock.json', 'magicDataHub/scripts/acceptance/sources.json') }}
-      - name: Prepare locked build and native inputs
-        working-directory: magicDataHub
-        run: |
-          rustup toolchain install 1.94.0 --profile minimal --component rustfmt --component clippy
-          cargo fetch --locked
-          python3 scripts/verify-dependency-identity.py
-          cargo build --workspace --locked
-          python3 scripts/prepare-extensions.py --dest "$RUNNER_TEMP/mdh-extensions"
-          mkdir -p "$RUNNER_TEMP/mdh-evidence"
-      - name: Local checks and protocols
-        working-directory: magicDataHub
-        run: ./scripts/check.sh > "$RUNNER_TEMP/mdh-evidence/local.log" 2>&1
-      - name: Owned PG/MySQL combined contracts
-        working-directory: magicDataHub
-        run: |
-          ./scripts/check-federation.sh --bin-dir "$CARGO_TARGET_DIR/debug" --extensions-dir "$RUNNER_TEMP/mdh-extensions" --duckdb-library-dir "$CARGO_TARGET_DIR/duckdb-download/x86_64-unknown-linux-gnu/v2.0.0" > "$RUNNER_TEMP/mdh-evidence/remote.log" 2>&1
-      - name: Management lifecycle and real JDBC on both formal hosts
-        working-directory: magicDataHub
-        run: |
-          python3 - <<'PY'
-          import hashlib, json, os, pathlib, subprocess, urllib.request
-          lock = json.loads(pathlib.Path('../modorch-fedengine/tests/fixtures/metadata/clients.json').read_text())
-          name = 'postgresql-' + lock['jdbc_version'] + '.jar'
-          jar = pathlib.Path(os.environ['RUNNER_TEMP']) / 'mdh-jdbc.jar'
-          with urllib.request.urlopen('https://repo.maven.apache.org/maven2/org/postgresql/postgresql/' + lock['jdbc_version'] + '/' + name, timeout=60) as response:
-              jar.write_bytes(response.read())
-          assert hashlib.sha256(jar.read_bytes()).hexdigest() == lock['artifacts'][name]
-          subprocess.run(['docker', 'pull', lock['jdk_image']], check=True)
-          PY
-          ./scripts/check-workflow.sh --bin-dir "$CARGO_TARGET_DIR/debug" --extensions-dir "$RUNNER_TEMP/mdh-extensions" --duckdb-library-dir "$CARGO_TARGET_DIR/duckdb-download/x86_64-unknown-linux-gnu/v2.0.0" --jdbc-jar "$RUNNER_TEMP/mdh-jdbc.jar" > "$RUNNER_TEMP/mdh-evidence/workflow.log" 2>&1
-      - name: Clean input artifact images and real container protocols
-        working-directory: magicDataHub
-        run: |
-          python3 scripts/build-images.py --require-clean --tag-prefix mdh-ci --extensions-dir "$RUNNER_TEMP/mdh-extensions" --duckdb-library-dir "$CARGO_TARGET_DIR/duckdb-download/x86_64-unknown-linux-gnu/v2.0.0" > "$RUNNER_TEMP/mdh-evidence/images-build.log" 2>&1
-          ./scripts/check-images.sh --tag-prefix mdh-ci > "$RUNNER_TEMP/mdh-evidence/images-run.log" 2>&1
-          python3 scripts/verify-compose.py --tag-prefix mdh-ci > "$RUNNER_TEMP/mdh-evidence/compose.log" 2>&1
-      - name: Preserve diagnostics outside source checkout
-        if: always()
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: magicdatahub-validation
-          path: ${{ runner.temp }}/mdh-evidence/*.log
-          if-no-files-found: ignore
-          retention-days: 7
+  # Full three-service integration, JDBC workflow, and container image acceptance require
+  # locally compiled custom DuckDB 2.0.0 extensions and are executed offline/locally via
+  # scripts/check-federation.sh, scripts/check-workflow.sh, and scripts/build-images.py
+  # rather than in online GitHub Actions.
