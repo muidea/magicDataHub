@@ -39,7 +39,7 @@
     "modorch-fedengine-contract": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "cf5dd5758cfc12134afdcf3351e1af32c789f497c02f8bab69eb75c58c536b48",
+      "sha256": "2c43cdf93f4d7cea034ca8d32c78472a02eb1a776fa8485b87f7388f3750bd5c",
       "features": []
     },
     "modorch-fedengine-core": {
@@ -57,43 +57,43 @@
     "modorch-fedengine-ddl": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "9aaab3607c3ec496ad0ef38b77a6200cb7aa30ad8e6a623c7e03a645931373da",
+      "sha256": "e2caece824fc50a3e7cbe045ea2840dc9239594a904eda3f4f974bf76fe8c54f",
       "features": []
     },
     "modorch-fedengine-duckdb": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "87d4f93a89e91f9e9d1d038cb1c9e1558fe51576ef9709adea385a1f5d01e987",
+      "sha256": "c3ef85d470a40cba4021d5210a733611c74ff68c8e4874d0c272deef73c2b02c",
       "features": []
     },
     "modorch-fedengine-management": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "59c733da1a26bba704b4185cb80059df1e964ba94a5412535ba7943ffc689c8f",
+      "sha256": "fe45ac1b365399e1442b8ca175bda727967a8e0f4ede9c48e0c15049b9fb07c5",
       "features": []
     },
     "modorch-fedengine-pg-compat": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "42f615941ee5c3a1301a075e9a4f3fa9b7a34d1cd73e7d57875966fd23aa9e54",
+      "sha256": "7f0925ff13d623a709bd5997d04e94b998567bb78a8b17425bf64f742395c999",
       "features": []
     },
     "modorch-fedengine-pgwire": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "379b5e9711a0a7c1936f5d9cc8b46e2107b16a2dcde42d8c8fb49ee820b39b75",
+      "sha256": "131d72b399ff59ca9a9ccdd001696c4cf16c5c8b3d9a4ece83f37966936c2646",
       "features": []
     },
     "modorch-fedengine-policy": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "7ef132c6b7d166b01b4ba1099697700d629a17444872cfdafa161db8d6ce7dd1",
+      "sha256": "3fe82a1d987961af496fe2ce7be2a014583c00e50d27f3c894f2b40c8ed5a7fc",
       "features": []
     },
     "modorch-fedengine-query": {
       "version": "0.1.0",
       "source": null,
-      "sha256": "e71a5b6e414bf9df2c82d3f145d7cd18cbf5d40e2f0c31f34d5f48ed4a5b2f44",
+      "sha256": "ca1066da37830f00b10cd0f2090a9c3131e6d55da38bb401fdb41cf12e84fa38",
       "features": []
     },
     "modorch-mqtt": {
