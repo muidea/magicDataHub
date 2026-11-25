@@ -83,15 +83,18 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tag-prefix', required=True)
     parser.add_argument('--profile', choices=['dev', 'release'], default='dev')
+    parser.add_argument('--tag', help='image tag override (defaults to --profile)')
     parser.add_argument('--service', choices=['mqtt-server', 'fedengine-server', 'datahub-server'], help='diagnostic subset; emits no full-image success marker')
     args = parser.parse_args()
-    assert re.fullmatch(r'[a-z0-9]+(?:[._/-][a-z0-9]+)*', args.tag_prefix), 'invalid local image prefix'
+    tag_name = args.tag or args.profile
+    assert re.fullmatch(r'[a-z0-9]+(?:[._/-][a-z0-9]+)*', args.tag_prefix), 'invalid image prefix'
+    assert re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}', tag_name), 'invalid image tag'
     def terminate(*_):
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, terminate)
     with Sources() as sources:
         for service in ([args.service] if args.service else ['mqtt-server', 'fedengine-server', 'datahub-server']):
-            image = args.tag_prefix + '/' + service + ':' + args.profile
+            image = args.tag_prefix + '/' + service + ':' + tag_name
             with tempfile.TemporaryDirectory(prefix='mdh-image-probe-') as temporary:
                 directory = Path(temporary)
                 provenance = inspect_image(image, directory, service)

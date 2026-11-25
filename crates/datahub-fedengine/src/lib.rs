@@ -51,6 +51,9 @@ impl Plan {
         if let Some(value) = &mut config.duckdb.extension_directory {
             freeze(value)?;
         }
+        if let Some(value) = &mut config.duckdb.plugin_extension_directory {
+            freeze(value)?;
+        }
         if reference.pgwire {
             for value in [&mut config.pgwire.tls_cert, &mut config.pgwire.tls_key]
                 .into_iter()

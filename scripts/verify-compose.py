@@ -17,13 +17,15 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--tag-prefix', required=True)
     parser.add_argument('--profile', choices=['dev', 'release'], default='dev')
+    parser.add_argument('--tag', help='image tag override (defaults to --profile)')
     args = parser.parse_args()
+    tag_name = args.tag or args.profile
     def terminate(*_):
         raise KeyboardInterrupt
     signal.signal(signal.SIGTERM, terminate)
     project = 'mdh-compose-check-' + uuid.uuid4().hex[:12]
     command = ['docker', 'compose', '--project-name', project, '--file', str(ROOT / 'docker/compose.yaml')]
-    env = dict(os.environ, MDH_IMAGE_PREFIX=args.tag_prefix, MDH_IMAGE_PROFILE=args.profile,
+    env = dict(os.environ, MDH_IMAGE_PREFIX=args.tag_prefix, MDH_IMAGE_PROFILE=tag_name,
                FEDENGINE_PASSWORD=uuid.uuid4().hex)
     # Never stop an existing instance to free a default development port.
     for port in [1883, 2883, 15432, 15433, 25432, 25433]:

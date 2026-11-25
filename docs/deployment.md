@@ -51,7 +51,7 @@ export MDH_IMAGE_PROFILE=dev
 docker compose -f docker/compose.yaml up -d
 ```
 
-[compose.yaml](../docker/compose.yaml) 使用 Linux host 网络保留回环边界，UID/GID65532、只读根文件系统、cap-drop ALL、no-new-privileges 与临时 /tmp。MQTT 镜像不包含 DuckDB；数据库及组合镜像各用独立 named volume 挂载 `/opt/magicdatahub/var`，DB、WAL、管理状态、凭据目录与 temp 不共享。默认不配置远端源。需要自定义时把完整配置树只读挂载到 `/opt/magicdatahub/config`；相对路径仍按每份文件解析，状态须落到可写卷，SecretRef 保持原格式。
+[compose.yaml](../docker/compose.yaml) 使用标准 Docker `bridge` 网络配合 `-p` 端口映射（默认绑定 `${MDH_BIND_HOST:-127.0.0.1}` 保留回环边界，可设 `MDH_BIND_HOST=0.0.0.0` 对外映射），并保持 UID/GID 65532、只读根文件系统、cap-drop ALL、no-new-privileges、临时 `/tmp` 与 60s 优雅停机宽限期。MQTT 镜像不包含 DuckDB；数据库及组合镜像各用独立 named volume 挂载 `/opt/magicdatahub/var`，DB、WAL、管理状态、凭据目录与 temp 不共享，并额外为可选插件挂载只读共享卷 `/opt/magicdatahub/plugins`。默认不配置远端源。需要自定义时把完整配置树只读挂载到 `/opt/magicdatahub/config`；相对路径仍按每份文件解析，状态须落到可写卷，SecretRef 保持原格式。
 
 | 实例 | MQTT | PGWire | 管理 HTTP |
 |---|---|---|---|
@@ -83,8 +83,21 @@ docker wait $(docker compose -f docker/compose.yaml ps --all --quiet)
 
 FailFast 运行故障返回非零；外部进程管理器可在进程实际退出后按运维策略重启。未知 SQL/DDL/管理写入不可自动重放；读取原管理状态及相同幂等 key 的回执后再判断。强杀或永不返回的原生 I/O 不在正常排空保证内，不能把强杀当成功。当前配置限回环；公网认证/TLS、MQTT 扩展、容量/RSS 与持久存储另行验收。
 
+## 模块化发行镜像与按需 OCI 插件
+
+面向最终用户的 `ghcr.io/muidea` 发布镜像采用“核心预装常用开源库 + 按需 OCI 插件 Init Container + 标准 bridge 网络 `-p` 端口映射”架构：
+
+- **核心服务镜像**：`fedengine-server` 与 `datahub-server` 基于轻量开源运行时（[runtime-core.Dockerfile](../docker/runtime-core.Dockerfile)），采用 DuckDB 核心库 / 预装扩展（`postgres`、`mysql`）/ 服务二进制与配置三层拆包（[Dockerfile](../docker/Dockerfile)），默认内置支持 PostgreSQL / Greenplum / KingbaseES / MySQL / MariaDB / StarRocks，监听容器端口 `5432`（PGWire）、`8080`（HTTP/Web UI）、`1883`（MQTT）。
+- **按需 OCI 插件镜像**：`datahub-plugin-{sqlserver,oracle,db2,hana,dameng}` 以非 root 只读 distroless Init Container（`mdh-plugin-init`）分发，并将对应扩展与厂商 ODBC 驱动同步到共享只读插件卷 `/opt/magicdatahub/plugins`，由 `unixODBC` 通过 `ODBCSYSINI=/opt/magicdatahub/plugins/odbc` 与预置 `LD_LIBRARY_PATH` 加载；其中 `db2`/`hana`/`dameng` 共享同一个 `odbc_catalog_scanner` 基础层。
+- **能力查询与用户编排**：管理 API `GET /api/v1/plugins` 返回 11 类数据源的扩展与 ODBC 驱动就绪状态；用户直接使用 [deploy/docker-compose.yml](../deploy/docker-compose.yml)（如 `docker compose up -d` 或 `docker compose --profile oracle --profile dameng up -d`）。
+- **统一打包、在线构建与验证**：
+  - [release-images.yml](../.github/workflows/release-images.yml) 支持按 `v*` 标签或 `workflow_dispatch`（`all` / `core-only` / `plugins-only`）在线编译并发布全部核心与按需插件镜像至 `ghcr.io/muidea`；
+  - [prepare-extensions.py](../scripts/prepare-extensions.py) 支持 `--fetch-releases` 从 `scripts/acceptance/sources.json` 固定的 5 个定制扩展 GitHub Release 资产拉取、解压并校验 SHA-256（强制屏蔽官方 `extensions.duckdb.org`）；
+  - [stage-vendor-drivers.py](../scripts/stage-vendor-drivers.py) 支持 `--vendor-drivers-source image` 从 digest 固定的 `muidea/magicdatahub-runtime-base` 提取商业 ODBC 驱动，并支持通过 `MDH_{ORACLE,DB2,HANA,DAMENG}_ODBC_URL` / `MDH_<VENDOR>_ODBC_SHA256` 变量单独覆盖单个厂商驱动；
+  - `scripts/release-images.py --tag-prefix ghcr.io/muidea --version v0.1.0 --also-latest --verify` 统一完成构建、[verify-images.py](../scripts/verify-images.py) 核心验证与 [verify-plugins.py](../scripts/verify-plugins.py) 插件及 `ldd` 完整性检查（并支持 `--target plugins-only --plugins <list>` 单独验证指定插件镜像）。
+
 ## CI 与真实版本固定
 
-[CI](../.github/workflows/verify.yml)在push/PR自动执行不依赖外部checkout的源码格式、Python语法、证据门禁与Compose配置检查。完整三服务联合与镜像验收由手动触发，要求两项无默认值的实际40位提交SHA，分别checkout `muidea/modorch-mqtt`、`muidea/modorch-fedengine`，逐一核对HEAD/clean后执行依赖身份、本地/一次性远端、完整管理流程与固定驱动/JDK 的 JDBC、镜像与Compose运行门禁，日志只存CI artifact。读取私有仓库时需要该CI具备对应仓库读取权限。自动源码检查通过不等于联合验收通过。
+[verify.yml](../.github/workflows/verify.yml) 在 push/PR 自动执行不依赖外部 checkout 的源码格式、Python 语法、YAML 与工作流校验、证据门禁与 Compose 配置检查；[release-images.yml](../.github/workflows/release-images.yml) 在手动触发或 `v*` 标签推送时在线下载已固定的定制扩展发布包、编译 Rust 二进制、打包核心与插件 OCI 镜像并完成全套验证后推送至 `ghcr.io/muidea`。
 
-首次源码提交可记录当前本地开发基线；正式Git集成须先使两个业务库包含当前接口的源码形成真实提交，再把宿主依赖改为这些实际 Git revision、更新锁和指纹，并在干净 checkout 执行所有门禁。工作流文件存在不代表远端执行通过，不能使用未包含接口的旧 HEAD 代替。手动工作流的同级 checkout 是过渡验证入口，不表示 Cargo 的 path 已切成正式 Git source。签名、镜像 registry 发布、release profile 与生产容量证据仍独立记录。
+当前开发期两库暂保留同级 `path` 依赖；正式 Git 集成与线上发版执行步骤见[线上构建与发布交接清单](release-checklist.md)与[定制 DuckDB 扩展发布与锁定](extension-release.md)。

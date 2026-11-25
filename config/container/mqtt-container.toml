@@ -1,0 +1,8 @@
+[application]
+name = "magicdatahub-mqtt"
+
+[runtime]
+shutdown_timeout_ms = 30000
+
+[mqtt]
+config_file = "mqtt/standalone.toml"

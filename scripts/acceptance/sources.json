@@ -4,31 +4,46 @@
   "duckdb_version": "v2.0.0",
   "extensions": {
     "postgres": {
+      "repo": "muidea/duckdb-postgres",
+      "branch": "2.0.0",
       "path": "v2.0.0/linux_amd64/postgres_scanner.duckdb_extension",
       "sha256": "c718976d7e8e56c1d8a5c2f78b7285cabdd854ec70e0aa0bd67905a105b253e2",
       "version": "84921b3bb8",
-      "remote_version": "17.7"
+      "remote_version": "17.7",
+      "release_url": "https://github.com/muidea/duckdb-postgres/releases/download/v2.0.0-84921b3bb8/postgres_scanner-v2.0.0-linux_amd64.duckdb_extension.gz"
     },
     "mysql": {
+      "repo": "muidea/duckdb-mysql",
+      "branch": "2.0.0",
       "path": "v2.0.0/linux_amd64/mysql_scanner.duckdb_extension",
       "sha256": "2ee34051747955aa87b7803f362712289d2be8d5570fbe0f4a46781ebd6ec6f6",
       "version": "e7ad982aec",
-      "remote_version": "5.7.44"
+      "remote_version": "5.7.44",
+      "release_url": "https://github.com/muidea/duckdb-mysql/releases/download/v2.0.0-e7ad982aec/mysql_scanner-v2.0.0-linux_amd64.duckdb_extension.gz"
     },
     "oracle": {
+      "repo": "muidea/oracle_scanner",
+      "branch": "2.0.0",
       "path": "v2.0.0/linux_amd64/oracle_scanner.duckdb_extension",
       "sha256": "43880b1af64daac93546d7e35beffd9c6d57f34f47c529627d43061934a00c08",
-      "version": "761c8655d2"
+      "version": "761c8655d2",
+      "release_url": "https://github.com/muidea/oracle_scanner/releases/download/v2.0.0-761c8655d2/oracle_scanner-v2.0.0-linux_amd64.duckdb_extension.gz"
     },
     "sqlserver": {
+      "repo": "muidea/sqlserver_scanner",
+      "branch": "2.0.0",
       "path": "v2.0.0/linux_amd64/sqlserver_scanner.duckdb_extension",
       "sha256": "ee03840b5c665afaf8e6f42fd7a6851f71780e9586348c31c9dbb342b4af5caf",
-      "version": "1ffa60c48b"
+      "version": "1ffa60c48b",
+      "release_url": "https://github.com/muidea/sqlserver_scanner/releases/download/v2.0.0-1ffa60c48b/sqlserver_scanner-v2.0.0-linux_amd64.duckdb_extension.gz"
     },
     "odbc_catalog": {
+      "repo": "muidea/odbc_catalog_scanner",
+      "branch": "2.0.0",
       "path": "v2.0.0/linux_amd64/odbc_catalog_scanner.duckdb_extension",
       "sha256": "f34a139afd7f5854c48176473f56d71dd7519816ac3eb4427e8cd23d3d801305",
-      "version": "00175f239a"
+      "version": "00175f239a",
+      "release_url": "https://github.com/muidea/odbc_catalog_scanner/releases/download/v2.0.0-00175f239a/odbc_catalog_scanner-v2.0.0-linux_amd64.duckdb_extension.gz"
     }
   }
 }

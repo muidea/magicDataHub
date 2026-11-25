@@ -1,7 +1,8 @@
-# Local Linux host-network profile; each database service owns a separate volume.
+# Standard bridge-network Compose stack for the three service images;
+# binds to loopback by default (set MDH_BIND_HOST=0.0.0.0 to expose externally).
 name: magicdatahub
 x-runtime: &runtime
-  network_mode: host
+  networks: [magicdatahub]
   user: "65532:65532"
   read_only: true
   cap_drop: [ALL]
@@ -9,22 +10,42 @@ x-runtime: &runtime
   tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
   restart: "no"
   stop_signal: SIGTERM
+  stop_grace_period: 60s
 
 services:
   mqtt-server:
     <<: *runtime
-    image: ${MDH_IMAGE_PREFIX:?set MDH_IMAGE_PREFIX}/mqtt-server:${MDH_IMAGE_PROFILE:-dev}
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/mqtt-server:${MDH_IMAGE_TAG:-${MDH_IMAGE_PROFILE:-dev}}
+    ports:
+      - "${MDH_BIND_HOST:-127.0.0.1}:${MDH_MQTT_PORT:-1883}:1883"
   fedengine-server:
     <<: *runtime
-    image: ${MDH_IMAGE_PREFIX:?set MDH_IMAGE_PREFIX}/fedengine-server:${MDH_IMAGE_PROFILE:-dev}
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/fedengine-server:${MDH_IMAGE_TAG:-${MDH_IMAGE_PROFILE:-dev}}
+    ports:
+      - "${MDH_BIND_HOST:-127.0.0.1}:${MDH_FEDENGINE_PG_PORT:-15432}:5432"
+      - "${MDH_BIND_HOST:-127.0.0.1}:${MDH_FEDENGINE_HTTP_PORT:-15433}:8080"
     environment: [FEDENGINE_PASSWORD]
-    volumes: [fedengine-state:/opt/magicdatahub/var]
+    volumes:
+      - fedengine-state:/opt/magicdatahub/var
+      - fedengine-plugins:/opt/magicdatahub/plugins:ro
   datahub-server:
     <<: *runtime
-    image: ${MDH_IMAGE_PREFIX:?set MDH_IMAGE_PREFIX}/datahub-server:${MDH_IMAGE_PROFILE:-dev}
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-server:${MDH_IMAGE_TAG:-${MDH_IMAGE_PROFILE:-dev}}
+    ports:
+      - "${MDH_BIND_HOST:-127.0.0.1}:${MDH_DATAHUB_MQTT_PORT:-2883}:1883"
+      - "${MDH_BIND_HOST:-127.0.0.1}:${MDH_DATAHUB_PG_PORT:-25432}:5432"
+      - "${MDH_BIND_HOST:-127.0.0.1}:${MDH_DATAHUB_HTTP_PORT:-25433}:8080"
     environment: [FEDENGINE_PASSWORD]
-    volumes: [datahub-state:/opt/magicdatahub/var]
+    volumes:
+      - datahub-state:/opt/magicdatahub/var
+      - datahub-plugins:/opt/magicdatahub/plugins:ro
+
+networks:
+  magicdatahub:
+    driver: bridge
 
 volumes:
   fedengine-state:
+  fedengine-plugins:
   datahub-state:
+  datahub-plugins:

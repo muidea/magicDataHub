@@ -1,0 +1,9 @@
+[application]
+name = "magicdatahub-fedengine"
+
+[runtime]
+shutdown_timeout_ms = 30000
+
+[fedengine]
+config_file = "fedengine/standalone.toml"
+allow_public_ingress = true

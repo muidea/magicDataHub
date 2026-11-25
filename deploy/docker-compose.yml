@@ -1,0 +1,88 @@
+# Quickstart deployment for magicDataHub with pre-installed PostgreSQL/MySQL
+# support and on-demand database plugins (sqlserver, oracle, db2, hana, dameng).
+# Usage:
+#   docker compose up -d
+#   docker compose --profile oracle --profile dameng up -d
+#   docker compose --profile all up -d
+name: magicdatahub
+
+x-plugin-init: &plugin-init
+  user: "65532:65532"
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
+  restart: "no"
+  volumes:
+    - datahub-plugins:/plugins
+
+services:
+  plugin-sqlserver:
+    <<: *plugin-init
+    profiles: ["sqlserver", "all"]
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-plugin-sqlserver:${MDH_IMAGE_TAG:-v0.1.0}
+
+  plugin-oracle:
+    <<: *plugin-init
+    profiles: ["oracle", "all"]
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-plugin-oracle:${MDH_IMAGE_TAG:-v0.1.0}
+
+  plugin-db2:
+    <<: *plugin-init
+    profiles: ["db2", "all"]
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-plugin-db2:${MDH_IMAGE_TAG:-v0.1.0}
+
+  plugin-hana:
+    <<: *plugin-init
+    profiles: ["hana", "all"]
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-plugin-hana:${MDH_IMAGE_TAG:-v0.1.0}
+
+  plugin-dameng:
+    <<: *plugin-init
+    profiles: ["dameng", "all"]
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-plugin-dameng:${MDH_IMAGE_TAG:-v0.1.0}
+
+  datahub-server:
+    image: ${MDH_IMAGE_PREFIX:-ghcr.io/muidea}/datahub-server:${MDH_IMAGE_TAG:-v0.1.0}
+    networks: [magicdatahub]
+    ports:
+      - "${MDH_BIND_HOST:-0.0.0.0}:${MDH_PG_PORT:-5432}:5432"
+      - "${MDH_BIND_HOST:-0.0.0.0}:${MDH_HTTP_PORT:-8080}:8080"
+      - "${MDH_BIND_HOST:-0.0.0.0}:${MDH_MQTT_PORT:-1883}:1883"
+    environment:
+      - FEDENGINE_PASSWORD=${FEDENGINE_PASSWORD:?set FEDENGINE_PASSWORD}
+    user: "65532:65532"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=64m"]
+    stop_signal: SIGTERM
+    stop_grace_period: 60s
+    restart: unless-stopped
+    volumes:
+      - datahub-state:/opt/magicdatahub/var
+      - datahub-plugins:/opt/magicdatahub/plugins:ro
+    depends_on:
+      plugin-sqlserver:
+        condition: service_completed_successfully
+        required: false
+      plugin-oracle:
+        condition: service_completed_successfully
+        required: false
+      plugin-db2:
+        condition: service_completed_successfully
+        required: false
+      plugin-hana:
+        condition: service_completed_successfully
+        required: false
+      plugin-dameng:
+        condition: service_completed_successfully
+        required: false
+
+networks:
+  magicdatahub:
+    driver: bridge
+
+volumes:
+  datahub-state:
+  datahub-plugins:

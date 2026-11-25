@@ -12,10 +12,11 @@ LOCK = json.loads(Path(__file__).with_name('sources.json').read_text())
 PASSWORD = 'mdh-disposable-source-only'
 
 
-def extension_manifest():
+def extension_manifest(keys=None):
+    selected = list(LOCK['extensions'].keys()) if keys is None else list(keys)
     return {'duckdb_version': LOCK['duckdb_version'], 'platform': 'linux_amd64',
-            'extensions': {key: {field: entry[field] for field in ['path', 'sha256']}
-                           for key, entry in LOCK['extensions'].items()}}
+            'extensions': {key: {field: LOCK['extensions'][key][field] for field in ['path', 'sha256']}
+                           for key in selected}}
 
 
 def command(arguments, **kwargs):
@@ -93,9 +94,11 @@ class Sources:
         self.close()
 
 
-def validate_extensions(directory):
+def validate_extensions(directory, keys=None):
     directory = directory.resolve()
-    for extension in LOCK['extensions'].values():
+    selected = list(LOCK['extensions'].keys()) if keys is None else list(keys)
+    for key in selected:
+        extension = LOCK['extensions'][key]
         path = directory / extension['path']
         assert path.is_file() and not path.is_symlink(), 'missing prepared pinned extension'
         assert hashlib.sha256(path.read_bytes()).hexdigest() == extension['sha256'], 'extension checksum mismatch'

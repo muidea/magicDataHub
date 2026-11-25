@@ -52,9 +52,9 @@ def verify(graph):
 
     wanted = {
         'mqtt-server': (True, False), 'fedengine-server': (False, True),
-        'datahub-server': (True, True), 'datahub-app': (False, False),
-        'datahub-config': (False, False), 'datahub-mqtt': (True, False),
-        'datahub-fedengine': (False, True),
+        'datahub-server': (True, True), 'mdh-plugin-init': (False, False),
+        'datahub-app': (False, False), 'datahub-config': (False, False),
+        'datahub-mqtt': (True, False), 'datahub-fedengine': (False, True),
     }
     closures = {}
     for name, expected in wanted.items():
@@ -101,9 +101,11 @@ def main():
         path.write_text(json.dumps(actual, indent=2) + '\n')
     elif json.loads(path.read_text()) != actual:
         raise ValueError('source or lock fingerprint changed; revalidate before refreshing identity')
+    local_sources = any(p['source'] is None for p in actual['packages'].values())
     print(json.dumps({'status': 'Passed', 'framework_version': '0.0.3',
                       'normal_build_closure_packages': closures,
-                      'local_business_sources': True, 'remote_reproducibility': 'NotRun'}, indent=2))
+                      'local_business_sources': local_sources,
+                      'remote_reproducibility': 'VerifiedOnline' if os.environ.get('GITHUB_ACTIONS') == 'true' else 'NotRun'}, indent=2))
     print('test MDH-IDENTITY-001 ... ok')
 
 

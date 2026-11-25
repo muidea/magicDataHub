@@ -1,0 +1,423 @@
+name: Release Core and Plugin Images
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Release image tag (e.g. v0.1.0); defaults to dev-<short_sha> on manual dispatch
+        required: false
+        type: string
+      target:
+        description: Build target scope
+        required: false
+        default: all
+        type: choice
+        options:
+          - all
+          - plugins-only
+          - core-only
+      plugins:
+        description: Comma-separated plugin subset (sqlserver,oracle,db2,hana,dameng)
+        required: false
+        default: sqlserver,oracle,db2,hana,dameng
+        type: string
+      profile:
+        description: Cargo build profile
+        required: false
+        default: release
+        type: choice
+        options:
+          - release
+          - dev
+      also_latest:
+        description: Also tag pushed/built images as :latest
+        required: false
+        default: false
+        type: boolean
+      push:
+        description: Push verified images to ghcr.io/muidea
+        required: false
+        default: false
+        type: boolean
+      modorch_mqtt_ref:
+        description: Branch/tag/SHA of muidea/modorch-mqtt when Cargo.toml uses local sibling path
+        required: false
+        default: master
+        type: string
+      modorch_fedengine_ref:
+        description: Branch/tag/SHA of muidea/modorch-fedengine when Cargo.toml uses local sibling path
+        required: false
+        default: master
+        type: string
+      extensions_base_url:
+        description: Optional HTTPS base URL overriding extension release downloads
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-images-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  CARGO_INCREMENTAL: '0'
+  RUSTUP_TOOLCHAIN: '1.94.0'
+  PYTHONDONTWRITEBYTECODE: '1'
+
+jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      version: ${{ steps.resolve.outputs.version }}
+      target: ${{ steps.resolve.outputs.target }}
+      plugins: ${{ steps.resolve.outputs.plugins }}
+      ext_keys: ${{ steps.resolve.outputs.ext_keys }}
+      profile: ${{ steps.resolve.outputs.profile }}
+      also_latest: ${{ steps.resolve.outputs.also_latest }}
+      push: ${{ steps.resolve.outputs.push }}
+      checkout_mqtt: ${{ steps.resolve.outputs.checkout_mqtt }}
+      checkout_fedengine: ${{ steps.resolve.outputs.checkout_fedengine }}
+      extensions_base_url: ${{ steps.resolve.outputs.extensions_base_url }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          sparse-checkout: Cargo.toml
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Resolve release build plan
+        id: resolve
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          REF_TYPE: ${{ github.ref_type }}
+          REF_NAME: ${{ github.ref_name }}
+          COMMIT_SHA: ${{ github.sha }}
+          INPUT_VERSION: ${{ inputs.version }}
+          INPUT_TARGET: ${{ inputs.target }}
+          INPUT_PLUGINS: ${{ inputs.plugins }}
+          INPUT_PROFILE: ${{ inputs.profile }}
+          INPUT_ALSO_LATEST: ${{ inputs.also_latest }}
+          INPUT_PUSH: ${{ inputs.push }}
+          INPUT_EXT_BASE_URL: ${{ inputs.extensions_base_url }}
+        run: |
+          python3 - <<'PY'
+          import os, pathlib, re, tomllib
+
+          PLUGIN_TO_EXT = {
+              'sqlserver': 'sqlserver',
+              'oracle': 'oracle',
+              'db2': 'odbc_catalog',
+              'hana': 'odbc_catalog',
+              'dameng': 'odbc_catalog',
+          }
+
+          if os.environ['EVENT_NAME'] == 'push' and os.environ['REF_TYPE'] == 'tag':
+              version = os.environ['REF_NAME']
+              target = 'all'
+              selected_plugins = list(PLUGIN_TO_EXT.keys())
+              profile = 'release'
+              also_latest = 'false' if '-' in version else 'true'
+              push = 'true'
+              ext_base_url = ''
+          else:
+              version = os.environ.get('INPUT_VERSION', '').strip() or f"dev-{os.environ['COMMIT_SHA'][:8]}"
+              target = os.environ.get('INPUT_TARGET', 'all').strip() or 'all'
+              assert target in ('all', 'plugins-only', 'core-only'), f'invalid target: {target}'
+              raw_plugins = os.environ.get('INPUT_PLUGINS', 'sqlserver,oracle,db2,hana,dameng')
+              selected_plugins = []
+              if target in ('all', 'plugins-only'):
+                  for item in raw_plugins.split(','):
+                      name = item.strip()
+                      if not name:
+                          continue
+                      assert name in PLUGIN_TO_EXT, f'invalid plugin: {name}'
+                      if name not in selected_plugins:
+                          selected_plugins.append(name)
+                  assert selected_plugins, 'at least one plugin must be selected'
+              profile = os.environ.get('INPUT_PROFILE', 'release').strip() or 'release'
+              assert profile in ('release', 'dev'), f'invalid profile: {profile}'
+              also_latest = 'true' if os.environ.get('INPUT_ALSO_LATEST') == 'true' else 'false'
+              push = 'true' if os.environ.get('INPUT_PUSH') == 'true' else 'false'
+              ext_base_url = os.environ.get('INPUT_EXT_BASE_URL', '').strip()
+              if ext_base_url:
+                  assert ext_base_url.startswith('https://'), 'extensions_base_url must use https://'
+
+          assert re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}', version), f'invalid image tag: {version}'
+
+          ext_keys = []
+          if target in ('all', 'core-only'):
+              ext_keys.extend(['postgres', 'mysql'])
+          if target in ('all', 'plugins-only'):
+              for p in selected_plugins:
+                  ext = PLUGIN_TO_EXT[p]
+                  if ext not in ext_keys:
+                      ext_keys.append(ext)
+
+          cargo = tomllib.loads(pathlib.Path('Cargo.toml').read_text(encoding='utf-8'))
+          deps = cargo.get('workspace', {}).get('dependencies', {})
+          checkout_mqtt = 'true' if isinstance(deps.get('modorch-mqtt'), dict) and 'path' in deps['modorch-mqtt'] else 'false'
+          checkout_fedengine = 'true' if isinstance(deps.get('modorch-fedengine'), dict) and 'path' in deps['modorch-fedengine'] else 'false'
+
+          outputs = {
+              'version': version,
+              'target': target,
+              'plugins': ','.join(selected_plugins),
+              'ext_keys': ','.join(ext_keys),
+              'profile': profile,
+              'also_latest': also_latest,
+              'push': push,
+              'checkout_mqtt': checkout_mqtt,
+              'checkout_fedengine': checkout_fedengine,
+              'extensions_base_url': ext_base_url,
+          }
+          with open(os.environ['GITHUB_OUTPUT'], 'a', encoding='utf-8') as fh:
+              for k, v in outputs.items():
+                  fh.write(f'{k}={v}\n')
+          PY
+
+  prepare-extensions:
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ${{ runner.temp }}/extensions
+          key: mdh-ext-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/acceptance/sources.json') }}-${{ needs.plan.outputs.ext_keys }}
+      - name: Download and SHA-256 verify pinned DuckDB 2.0.0 extension releases
+        env:
+          EXT_KEYS: ${{ needs.plan.outputs.ext_keys }}
+          EXT_BASE_URL: ${{ needs.plan.outputs.extensions_base_url }}
+          GITHUB_TOKEN: ${{ github.token }}
+          MDH_EXTENSIONS_TOKEN: ${{ secrets.MDH_EXTENSIONS_TOKEN }}
+        run: |
+          args=(--fetch-releases --only "$EXT_KEYS" --dest "$RUNNER_TEMP/extensions")
+          if [ -n "$EXT_BASE_URL" ]; then
+            args+=(--extensions-base-url "$EXT_BASE_URL")
+          fi
+          python3 scripts/prepare-extensions.py "${args[@]}"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: prepared-extensions
+          path: ${{ runner.temp }}/extensions
+          retention-days: 1
+
+  build-rust:
+    needs: plan
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      CARGO_TARGET_DIR: ${{ github.workspace }}/target
+    defaults:
+      run:
+        working-directory: magicDataHub
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: magicDataHub
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: needs.plan.outputs.checkout_mqtt == 'true'
+        with:
+          repository: muidea/modorch-mqtt
+          ref: ${{ inputs.modorch_mqtt_ref || 'master' }}
+          path: modorch-mqtt
+          persist-credentials: false
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        if: needs.plan.outputs.checkout_fedengine == 'true'
+        with:
+          repository: muidea/modorch-fedengine
+          ref: ${{ inputs.modorch_fedengine_ref || 'master' }}
+          path: modorch-fedengine
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - name: Install pinned Rust toolchain
+        run: rustup toolchain install 1.94.0 --profile minimal --component rustfmt --component clippy
+      - uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
+        with:
+          workspaces: magicDataHub -> target
+          save-if: ${{ github.ref_type == 'tag' || github.ref == format('refs/heads/{0}', github.event.repository.default_branch) }}
+      - name: Restore DuckDB native library cache
+        if: needs.plan.outputs.target != 'plugins-only'
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        id: duckdb-cache
+        with:
+          path: target/duckdb-download
+          key: duckdb-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('magicDataHub/Cargo.lock') }}
+      - name: Fetch Cargo deps, verify dependency identity, and check formatting
+        run: |
+          cargo fetch --locked
+          python3 scripts/verify-dependency-identity.py
+          cargo fmt --all -- --check
+      - name: Lint, test, and compile Rust binaries
+        env:
+          TARGET_SCOPE: ${{ needs.plan.outputs.target }}
+          BUILD_PROFILE: ${{ needs.plan.outputs.profile }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/rust-artifacts/bin"
+          profile_flag=()
+          profile_dir="debug"
+          if [ "$BUILD_PROFILE" = "release" ]; then
+            profile_flag+=(--release)
+            profile_dir="release"
+          fi
+
+          if [ "$TARGET_SCOPE" = "plugins-only" ]; then
+            cargo clippy -p mdh-plugin-init --all-targets --locked --offline -- -D warnings
+            cargo test -p mdh-plugin-init --locked --offline
+            cargo build -p mdh-plugin-init --locked --offline "${profile_flag[@]}"
+            cp "$CARGO_TARGET_DIR/$profile_dir/mdh-plugin-init" "$RUNNER_TEMP/rust-artifacts/bin/"
+          else
+            cargo clippy --workspace --all-targets --locked --offline -- -D warnings
+            cargo test --workspace --locked --offline
+            packages=(-p mqtt-server -p fedengine-server -p datahub-server)
+            if [ "$TARGET_SCOPE" = "all" ]; then
+              packages+=(-p mdh-plugin-init)
+            fi
+            cargo build "${packages[@]}" --locked --offline "${profile_flag[@]}"
+            cp \
+              "$CARGO_TARGET_DIR/$profile_dir/mqtt-server" \
+              "$CARGO_TARGET_DIR/$profile_dir/fedengine-server" \
+              "$CARGO_TARGET_DIR/$profile_dir/datahub-server" \
+              "$RUNNER_TEMP/rust-artifacts/bin/"
+            if [ "$TARGET_SCOPE" = "all" ]; then
+              cp "$CARGO_TARGET_DIR/$profile_dir/mdh-plugin-init" "$RUNNER_TEMP/rust-artifacts/bin/"
+            fi
+            mkdir -p "$RUNNER_TEMP/rust-artifacts/lib"
+            cp "$CARGO_TARGET_DIR/duckdb-download/x86_64-unknown-linux-gnu/v2.0.0/libduckdb.so" \
+              "$RUNNER_TEMP/rust-artifacts/lib/libduckdb.so"
+          fi
+          python3 scripts/build-images.py --write-build-meta "$RUNNER_TEMP/rust-artifacts/build-meta.json"
+      - name: Save DuckDB native library cache
+        if: needs.plan.outputs.target != 'plugins-only' && steps.duckdb-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: target/duckdb-download
+          key: ${{ steps.duckdb-cache.outputs.cache-primary-key }}
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: rust-artifacts
+          path: ${{ runner.temp }}/rust-artifacts
+          retention-days: 1
+
+  package-and-verify:
+    needs:
+      - plan
+      - prepare-extensions
+      - build-rust
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: '3.12'
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: prepared-extensions
+          path: ${{ runner.temp }}/extensions
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: rust-artifacts
+          path: ${{ runner.temp }}/rust-artifacts
+      - name: Restore executable permissions on downloaded binaries
+        run: chmod 0755 "$RUNNER_TEMP/rust-artifacts/bin/"*
+      - name: Log in to GitHub Container Registry
+        if: needs.plan.outputs.push == 'true'
+        uses: docker/login-action@8aa5831fb8d48d8f76594c7ddde61ae58019f550 # v4.8.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build, verify, and optionally publish OCI images
+        env:
+          REL_VERSION: ${{ needs.plan.outputs.version }}
+          REL_TARGET: ${{ needs.plan.outputs.target }}
+          REL_PLUGINS: ${{ needs.plan.outputs.plugins }}
+          REL_PROFILE: ${{ needs.plan.outputs.profile }}
+          REL_ALSO_LATEST: ${{ needs.plan.outputs.also_latest }}
+          REL_PUSH: ${{ needs.plan.outputs.push }}
+          MDH_ORACLE_ODBC_URL: ${{ vars.MDH_ORACLE_ODBC_URL }}
+          MDH_ORACLE_ODBC_SHA256: ${{ vars.MDH_ORACLE_ODBC_SHA256 }}
+          MDH_DB2_ODBC_URL: ${{ vars.MDH_DB2_ODBC_URL }}
+          MDH_DB2_ODBC_SHA256: ${{ vars.MDH_DB2_ODBC_SHA256 }}
+          MDH_HANA_ODBC_URL: ${{ vars.MDH_HANA_ODBC_URL }}
+          MDH_HANA_ODBC_SHA256: ${{ vars.MDH_HANA_ODBC_SHA256 }}
+          MDH_DAMENG_ODBC_URL: ${{ vars.MDH_DAMENG_ODBC_URL }}
+          MDH_DAMENG_ODBC_SHA256: ${{ vars.MDH_DAMENG_ODBC_SHA256 }}
+        run: |
+          cmd=(
+            python3 scripts/release-images.py
+            --tag-prefix ghcr.io/muidea
+            --version "$REL_VERSION"
+            --profile "$REL_PROFILE"
+            --target "$REL_TARGET"
+            --extensions-dir "$RUNNER_TEMP/extensions"
+            --duckdb-library-dir "$RUNNER_TEMP/rust-artifacts/lib"
+            --prebuilt-bin-dir "$RUNNER_TEMP/rust-artifacts/bin"
+            --build-meta "$RUNNER_TEMP/rust-artifacts/build-meta.json"
+            --vendor-drivers-source image
+            --verify
+            --manifest-out "$RUNNER_TEMP/release-manifest.json"
+          )
+          if [ -n "$REL_PLUGINS" ]; then
+            cmd+=(--plugins "$REL_PLUGINS")
+          fi
+          if [ "$REL_ALSO_LATEST" = "true" ]; then
+            cmd+=(--also-latest)
+          fi
+          if [ "$REL_PUSH" = "true" ]; then
+            cmd+=(--require-clean --push)
+          fi
+          "${cmd[@]}"
+      - name: Write OCI image release summary
+        if: always()
+        env:
+          MANIFEST_PATH: ${{ runner.temp }}/release-manifest.json
+        run: |
+          python3 - <<'PY'
+          import json, os, pathlib
+          path = pathlib.Path(os.environ['MANIFEST_PATH'])
+          if not path.is_file():
+              print('No release manifest generated.')
+              raise SystemExit(0)
+          data = json.loads(path.read_text(encoding='utf-8'))
+          lines = [
+              f"### Release Images (`{data['tag_prefix']}`, version `{data['version']}`, pushed=`{data['pushed']}`)",
+              "",
+              "| Image | Size (MiB) | Image ID |",
+              "|---|---:|---|",
+          ]
+          for item in data['images']:
+              mib = item['size_bytes'] / (1024 * 1024)
+              lines.append(f"| `{item['image']}` | {mib:.1f} | `{item['id']}` |")
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a', encoding='utf-8') as fh:
+              fh.write('\n'.join(lines) + '\n')
+          PY
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        if: always()
+        with:
+          name: release-manifest
+          path: ${{ runner.temp }}/release-manifest.json
+          if-no-files-found: ignore
+          retention-days: 30

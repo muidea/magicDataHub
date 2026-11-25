@@ -1,0 +1,12 @@
+[application]
+name = "magicdatahub-combined"
+
+[runtime]
+shutdown_timeout_ms = 30000
+
+[mqtt]
+config_file = "mqtt/combined.toml"
+
+[fedengine]
+config_file = "fedengine/combined.toml"
+allow_public_ingress = true

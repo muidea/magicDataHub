@@ -1,0 +1,57 @@
+# Default container bridge profile with pre-installed postgres/mysql and optional plugin extensions.
+[application]
+name = "magicdatahub-fedengine"
+
+[pgwire]
+listen = "0.0.0.0:5432"
+max_connections = 32
+startup_timeout_ms = 10000
+query_timeout_ms = 60000
+output_timeout_ms = 10000
+tls_required = false
+max_statements = 128
+max_portals = 64
+allow_cross_database = false
+
+[duckdb]
+database_path = "../../var/standalone/fedengine.duckdb"
+max_workers = 2
+threads = 1
+memory_limit = "1GB"
+temp_directory = "../../var/standalone/tmp"
+result_channel_batches = 8
+batch_rows = 512
+acquire_timeout_ms = 5000
+install_extensions = false
+extension_directory = "/opt/magicdatahub/extensions"
+plugin_extension_directory = "/opt/magicdatahub/plugins/extensions"
+pool_max_connections = 16
+pool_wait_timeout_ms = 30000
+
+[management]
+mysql_identity_policy = "preserve"
+enabled = true
+listen = "0.0.0.0:8080"
+credentials_directory = "../../var/standalone/secrets"
+queue_capacity = 16
+max_concurrent_operations = 2
+metadata_memory_budget_mb = 512
+metadata_operation_memory_mb = 256
+drain_timeout_ms = 30000
+request_timeout_ms = 10000
+
+[ddl]
+enabled = true
+allow_drop_schema = false
+source_lock_timeout_ms = 30000
+
+[shutdown]
+grace_period_secs = 30
+
+[[users]]
+name = "fedengine"
+password_secret_ref = "FEDENGINE_PASSWORD"
+
+[[virtual_databases]]
+name = "fedengine"
+owner = "fedengine"

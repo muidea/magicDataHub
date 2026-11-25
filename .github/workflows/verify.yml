@@ -34,17 +34,23 @@ jobs:
       - name: Check Python syntax and local evidence gate
         run: |
           python3 - <<'PY'
-          import pathlib
+          import pathlib, yaml
           for folder in ['scripts', 'tests']:
               for path in pathlib.Path(folder).rglob('*.py'):
                   compile(path.read_bytes(), str(path), 'exec')
+          for path in [*pathlib.Path('.github/workflows').glob('*.yml'), *pathlib.Path('docker/templates').glob('*.yml')]:
+              yaml.safe_load(path.read_text(encoding='utf-8'))
           PY
           python3 -B -m unittest discover -s tests -p test_contract_evidence.py -v
           python3 -B -m unittest discover -s tests -p test_source_organization.py -v
-      - name: Validate Compose definition
+          python3 -B -m unittest discover -s tests -p test_release_pipeline.py -v
+      - name: Validate Compose definitions
         env:
           MDH_IMAGE_PREFIX: mdh-source-check
-        run: docker compose -f docker/compose.yaml config --quiet
+          FEDENGINE_PASSWORD: ci-compose-check-only
+        run: |
+          docker compose -f docker/compose.yaml config --quiet
+          docker compose -f deploy/docker-compose.yml --profile all config --quiet
   # Full three-service integration, JDBC workflow, and container image acceptance require
   # locally compiled custom DuckDB 2.0.0 extensions and are executed offline/locally via
   # scripts/check-federation.sh, scripts/check-workflow.sh, and scripts/build-images.py
