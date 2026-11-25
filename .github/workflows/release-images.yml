@@ -403,7 +403,7 @@ jobs:
               for line in pathlib.Path(sys.argv[1]).read_text(encoding='utf-8', errors='replace').splitlines()
               if line.strip() and not any(tok in line.upper() for tok in ('PASSWORD', 'TOKEN', 'AUTHORIZATION'))
           ]
-          tail = ' | '.join(lines[-8:])[:900]
+          tail = ' | '.join(lines[-25:])[:1800]
           print(f'::error::release-images failed: {tail}')
           PY
             exit 1

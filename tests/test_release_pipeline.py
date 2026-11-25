@@ -29,6 +29,7 @@ def load_module(name: str, rel_path: str):
 
 PREPARE = load_module('prepare_extensions', 'scripts/prepare-extensions.py')
 STAGE = load_module('stage_vendor_drivers', 'scripts/stage-vendor-drivers.py')
+UPDATE_LOCK = load_module('update_extension_lock', 'scripts/update-extension-lock.py')
 
 
 class ExtensionReleaseTests(unittest.TestCase):
@@ -154,6 +155,29 @@ class ExtensionReleaseTests(unittest.TestCase):
                 with self.assertRaises(SystemExit):
                     handler.redirect_request(cross_req, io.BytesIO(), 302, 'Found', empty_headers, bad_target)
 
+    def test_parse_duckdb_extension_footer_extracts_version_and_rejects_invalid(self):
+        def build_footer(abi=b'CPP', ext_ver=b'v2.0.0-919558cd4a', duck_ver=b'v2.0.0', plat=b'linux_amd64', fmt=b'4'):
+            slots = [b'', b'', b'', abi, ext_ver, duck_ver, plat, fmt]
+            trailer = b''.join(s.ljust(32, b'\x00') for s in slots) + b'\x00' * 256
+            return b'ELF-header' + trailer
+
+        parsed = UPDATE_LOCK.parse_duckdb_extension_footer(build_footer())
+        self.assertEqual(parsed['extension_version'], 'v2.0.0-919558cd4a')
+        self.assertEqual(parsed['duckdb_version'], 'v2.0.0')
+        self.assertEqual(parsed['platform'], 'linux_amd64')
+        self.assertEqual(parsed['format_version'], '4')
+
+        for bad_payload in (
+            b'too-short',
+            build_footer(ext_ver=b''),
+            build_footer(duck_ver=b'v1.5.0'),
+            build_footer(plat=b'osx_arm64'),
+            build_footer(fmt=b'3'),
+        ):
+            with self.subTest(size=len(bad_payload)):
+                with self.assertRaises(SystemExit):
+                    UPDATE_LOCK.parse_duckdb_extension_footer(bad_payload)
+
 
 class VendorDriverStagingTests(unittest.TestCase):
     def _build_tar(self, tar_path: Path, entries: list[tuple[str, str, bytes | str, int]]) -> None:
@@ -246,6 +270,7 @@ class RuntimeLockAndWorkflowTests(unittest.TestCase):
             self.assertEqual(entry['branch'], '2.0.0', key)
             self.assertRegex(entry['sha256'], r'^[0-9a-f]{64}$', key)
             self.assertTrue(entry['release_url'].startswith(f"https://github.com/{entry['repo']}/"), key)
+            self.assertIn(f"/releases/download/{entry['version']}/", entry['release_url'], key)
             PREPARE.validate_release_url(entry['release_url'])
 
     @staticmethod

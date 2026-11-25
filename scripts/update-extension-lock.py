@@ -24,7 +24,38 @@ def logical_scanner_filename(ext_key: str) -> str:
     return f'{ext_key}_scanner.duckdb_extension'
 
 
-def compute_sha256_from_release(url: str) -> str:
+def parse_duckdb_extension_footer(data: bytes) -> dict[str, str]:
+    """Parse and validate DuckDB v2.0.0 extension metadata from its 512-byte trailer."""
+    if len(data) < 512:
+        raise SystemExit(f'Extension binary is shorter than 512-byte DuckDB metadata footer ({len(data)} bytes)')
+    trailer = data[-512:]
+    fields = []
+    for idx in range(8):
+        slot = trailer[idx * 32:(idx + 1) * 32].rstrip(b'\x00')
+        try:
+            fields.append(slot.decode('utf-8', errors='strict'))
+        except UnicodeDecodeError as exc:
+            raise SystemExit(f'Invalid UTF-8 in DuckDB extension footer slot {idx}: {exc}') from exc
+
+    abi, extension_version, duckdb_version, platform_name, format_version = fields[3:8]
+    if format_version != '4' or duckdb_version != 'v2.0.0' or platform_name != 'linux_amd64':
+        raise SystemExit(
+            f'Unexpected DuckDB extension footer: abi={abi!r}, version={extension_version!r}, '
+            f'duckdb={duckdb_version!r}, platform={platform_name!r}, format={format_version!r}'
+        )
+    if not extension_version:
+        raise SystemExit('DuckDB extension footer is missing extension_version')
+    return {
+        'abi': abi,
+        'extension_version': extension_version,
+        'duckdb_version': duckdb_version,
+        'platform': platform_name,
+        'format_version': format_version,
+    }
+
+
+def inspect_release(url: str) -> tuple[str, dict[str, str]]:
+    """Download a pinned extension release and return (uncompressed_sha256, parsed_footer)."""
     raw = _PREP.download_release(url)
     if urllib.parse.urlsplit(url).path.endswith('.gz'):
         out = io.BytesIO()
@@ -43,7 +74,13 @@ def compute_sha256_from_release(url: str) -> str:
         data = out.getvalue()
     else:
         data = raw
-    return hashlib.sha256(data).hexdigest()
+    footer = parse_duckdb_extension_footer(data)
+    return hashlib.sha256(data).hexdigest(), footer
+
+
+def compute_sha256_from_release(url: str) -> str:
+    sha256, _ = inspect_release(url)
+    return sha256
 
 
 def atomic_write_json(path: Path, payload: dict) -> None:
@@ -79,17 +116,14 @@ def main() -> None:
     release_url = args.url or f'https://github.com/{repo}/releases/download/{args.tag}/{asset_name}'
     release_url = _PREP.validate_release_url(release_url)
 
-    version = args.version
-    if not version:
-        prefix = f'{duckdb_version}-'
-        version = args.tag[len(prefix):] if args.tag.startswith(prefix) else args.tag
-
     if args.sha256:
         sha256 = args.sha256.lower()
         if not re.fullmatch(r'[0-9a-f]{64}', sha256):
             raise SystemExit(f'Invalid --sha256 hex digest: {args.sha256}')
+        version = args.version or args.tag
     else:
-        sha256 = compute_sha256_from_release(release_url)
+        sha256, footer = inspect_release(release_url)
+        version = args.version or footer['extension_version']
 
     before = dict(entry)
     entry['sha256'] = sha256
