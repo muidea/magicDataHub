@@ -314,6 +314,15 @@ class RuntimeLockAndWorkflowTests(unittest.TestCase):
                                 f'{path}:{lineno} interpolates inputs directly inside run:',
                             )
 
+    def test_release_workflow_cache_keys_avoid_commas(self):
+        rel_wf = ROOT / '.github/workflows/release-images.yml'
+        text = rel_wf.read_text(encoding='utf-8')
+        key_lines = [line.strip() for line in text.splitlines() if line.lstrip().startswith('key:')]
+        self.assertTrue(any('needs.plan.outputs.ext_keys_slug' in line for line in key_lines), key_lines)
+        for line in key_lines:
+            self.assertNotIn('needs.plan.outputs.ext_keys }}', line)
+            self.assertNotIn(',', line)
+
 
 if __name__ == '__main__':
     unittest.main()

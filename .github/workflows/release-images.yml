@@ -77,6 +77,7 @@ jobs:
       target: ${{ steps.resolve.outputs.target }}
       plugins: ${{ steps.resolve.outputs.plugins }}
       ext_keys: ${{ steps.resolve.outputs.ext_keys }}
+      ext_keys_slug: ${{ steps.resolve.outputs.ext_keys_slug }}
       profile: ${{ steps.resolve.outputs.profile }}
       also_latest: ${{ steps.resolve.outputs.also_latest }}
       push: ${{ steps.resolve.outputs.push }}
@@ -169,6 +170,7 @@ jobs:
               'target': target,
               'plugins': ','.join(selected_plugins),
               'ext_keys': ','.join(ext_keys),
+              'ext_keys_slug': '-'.join(ext_keys),
               'profile': profile,
               'also_latest': also_latest,
               'push': push,
@@ -195,7 +197,7 @@ jobs:
       - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: ${{ runner.temp }}/extensions
-          key: mdh-ext-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/acceptance/sources.json') }}-${{ needs.plan.outputs.ext_keys }}
+          key: mdh-ext-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('scripts/acceptance/sources.json') }}-${{ needs.plan.outputs.ext_keys_slug }}
       - name: Download and SHA-256 verify pinned DuckDB 2.0.0 extension releases
         env:
           EXT_KEYS: ${{ needs.plan.outputs.ext_keys }}
