@@ -94,14 +94,15 @@ class _SameHostAuthRedirectHandler(urllib.request.HTTPRedirectHandler):
     """Strip Authorization headers when redirecting across hosts (e.g. GitHub -> S3 CDN)."""
 
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        next_req = super().redirect_request(req, fp, code, msg, headers, newurl)
+        safe_newurl = validate_release_url(urllib.parse.urljoin(req.full_url, newurl))
+        next_req = super().redirect_request(req, fp, code, msg, headers, safe_newurl)
         if next_req is None:
             return None
         old_host = (urllib.parse.urlsplit(req.full_url).hostname or '').lower()
-        new_host = (urllib.parse.urlsplit(newurl).hostname or '').lower()
+        new_host = (urllib.parse.urlsplit(safe_newurl).hostname or '').lower()
         if new_host != old_host:
-            next_req.remove_header('Authorization')
-            next_req.remove_unredirected_header('Authorization')
+            for key in {k for k in (*next_req.headers, *next_req.unredirected_hdrs) if k.lower() == 'authorization'}:
+                next_req.remove_header(key)
         return next_req
 
 

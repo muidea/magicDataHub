@@ -1,6 +1,7 @@
 """Unit tests for online release pipeline helpers, lock consistency, and workflow definitions."""
 import gzip
 import hashlib
+import http.client
 import importlib.util
 import io
 import json
@@ -11,6 +12,7 @@ import sys
 import tarfile
 import tempfile
 import unittest
+import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = ROOT / 'scripts'
@@ -105,6 +107,52 @@ class ExtensionReleaseTests(unittest.TestCase):
                 self.assertEqual(out_file.read_bytes(), fake_bin)
             finally:
                 PREPARE.LOCK['extensions']['postgres'] = orig
+
+    def test_same_host_auth_redirect_handler_strips_auth_cross_host_and_blocks_banned(self):
+        handler = PREPARE._SameHostAuthRedirectHandler()
+        base_headers = {
+            'User-Agent': 'magicDataHub-prepare-extensions',
+            'Accept': 'application/octet-stream',
+            'Authorization': 'Bearer secret-token',
+        }
+        empty_headers = http.client.HTTPMessage()
+
+        cross_req = urllib.request.Request(
+            'https://github.com/muidea/repo/releases/download/v2.0.0/a.gz',
+            headers=base_headers,
+        )
+        redirected_cross = handler.redirect_request(
+            cross_req,
+            io.BytesIO(),
+            302,
+            'Found',
+            empty_headers,
+            'https://release-assets.githubusercontent.com/a.gz',
+        )
+        self.assertIsNotNone(redirected_cross)
+        self.assertNotIn('authorization', {k.lower() for k, _ in redirected_cross.header_items()})
+        self.assertEqual(redirected_cross.get_header('User-agent'), 'magicDataHub-prepare-extensions')
+        self.assertEqual(redirected_cross.get_header('Accept'), 'application/octet-stream')
+
+        same_req = urllib.request.Request('https://github.com/a', headers=base_headers)
+        redirected_same = handler.redirect_request(
+            same_req,
+            io.BytesIO(),
+            302,
+            'Found',
+            empty_headers,
+            'https://github.com/b',
+        )
+        self.assertIsNotNone(redirected_same)
+        self.assertEqual(redirected_same.get_header('Authorization'), 'Bearer secret-token')
+
+        for bad_target in (
+            'https://extensions.duckdb.org/v2.0.0/linux_amd64/postgres_scanner.duckdb_extension.gz',
+            'http://example.com/ext.gz',
+        ):
+            with self.subTest(bad_target=bad_target):
+                with self.assertRaises(SystemExit):
+                    handler.redirect_request(cross_req, io.BytesIO(), 302, 'Found', empty_headers, bad_target)
 
 
 class VendorDriverStagingTests(unittest.TestCase):
