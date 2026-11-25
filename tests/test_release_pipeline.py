@@ -323,6 +323,14 @@ class RuntimeLockAndWorkflowTests(unittest.TestCase):
             self.assertNotIn('needs.plan.outputs.ext_keys }}', line)
             self.assertNotIn(',', line)
 
+    def test_release_workflow_uses_docker_buildx_driver(self):
+        rel_wf = ROOT / '.github/workflows/release-images.yml'
+        lines = rel_wf.read_text(encoding='utf-8').splitlines()
+        idx = next((i for i, l in enumerate(lines) if 'docker/setup-buildx-action@' in l), None)
+        self.assertIsNotNone(idx, 'Missing docker/setup-buildx-action step in release-images.yml')
+        block = '\n'.join(lines[idx:idx + 4])
+        self.assertIn('driver: docker', block)
+
 
 if __name__ == '__main__':
     unittest.main()
