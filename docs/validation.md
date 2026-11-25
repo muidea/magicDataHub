@@ -6,7 +6,7 @@
 
 | 入口 | 范围 | 前提 |
 |---|---|---|
-| `./scripts/check.sh` | 依赖身份、Python门禁、fmt/check/Clippy、workspace测试、Rustdoc、三个独立构建、正式协议/信号退出、MQTT专项及local契约 | 同级业务库、Rust1.94、Python3.12、locked Cargo缓存、匹配的libduckdb.so |
+| `./scripts/check.sh` | 依赖身份、Python门禁、fmt/check/Clippy、workspace测试、Rustdoc、三个独立构建、正式协议/信号退出、MQTT专项及local契约 | Rust1.94、Python3.12、locked Cargo缓存、匹配的libduckdb.so |
 | `./scripts/check-mqtt-validation.sh` | MQTT 黑盒工具语法、场景目录和负向门禁测试；无需启动服务 | Python3.12；镜像执行另见工具说明 |
 | `./scripts/check-federation.sh …` | 正式fedengine-server/datahub-server的PG/MySQL、并发MQTT及remote契约 | 已构建的正式binary、Docker、固定扩展与动态库 |
 | `./scripts/check-workflow.sh … --jdbc-jar /absolute/postgresql-42.7.8.jar` | 两个正式数据库宿主的完整管理生命周期、真实 JDBC 目录/读取与组合 MQTT | 正式 binary、Docker、固定扩展/动态库、校验匹配的 JDBC 驱动和固定 JDK 镜像 |
@@ -70,11 +70,11 @@ Task与Blocking I/O准入饱和要求明确Backpressure、任务数有界、MQTT
 | images | MDH-IMAGES-001，三个镜像完整场景全部结束后输出 |
 | workflow | MDH-WORKFLOW-001，两个正式宿主的完整闭环及各自真实 JDBC 四个成功 marker 缺一不可 |
 
-源码/Feature/锁指纹仅在对应改动重新验证后使用`python3 scripts/verify-dependency-identity.py --write-identity`刷新，不能为绕过失败门禁刷新。两个业务库当前使用同级path；正式Git固定与干净远端CI要求真实包含接口的提交，不用旧HEAD占位。
+源码/Feature/锁指纹仅在对应改动重新验证后使用`python3 scripts/verify-dependency-identity.py --write-identity`刷新，不能为绕过失败门禁刷新。框架与两个业务库均已固定真实 Git revision；后续升级上游接口时仍须先推送真实提交，再更新 `Cargo.toml`/`Cargo.lock` 与指纹，不用旧 HEAD 占位。
 
 ## 验收边界
 
-已实现的验收限定于Linux x86_64、固定版本数据源、开发profile和受控流量。镜像要求UID65532、只读root、独立数据卷、固定base/native/扩展，并验证真实协议、慢原生I/O和原卷重开。Compose及外部协议探针见[部署手册](deployment.md)。CI在push/PR运行源码检查，完整集成手动触发并要求两个实际业务SHA；其同级checkout是过渡验证入口，不能替代正式Git依赖，自动源码检查不能代替联合执行证据。
+已实现的验收限定于Linux x86_64、固定版本数据源、开发profile和受控流量。镜像要求UID65532、只读root、独立数据卷、固定base/native/扩展，并验证真实协议、慢原生I/O和原卷重开。Compose及外部协议探针见[部署手册](deployment.md)。CI在push/PR运行源码与工作流检查，完整镜像构建与插件验证由 `release-images.yml` 在 `v*` 标签或手动触发时直接基于固定 Git revision 在线执行；自动源码检查不能替代联合执行或镜像验收证据。
 
 生产容量/RSS/长时、release profile、其他平台、永久卡死/MySQL全部故障、完整公网保护、registry发布、MQTT可选扩展及业务桥接继续独立验收。协议冒烟不代表完整规范或性能SLO；Hub逻辑成本不等于进程RSS，StopIncomplete等待窗口不保证总退出期限。
 

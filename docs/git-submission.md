@@ -1,6 +1,6 @@
 # 源码提交边界
 
-提交应形成可构建、可验证的开发基线。服务、库、框架分别属于独立Git仓库，不在宿主中复制业务库、框架源码或外部方案历史。当前 `modorch-mqtt` 已在 Cargo.toml 中固定为协议结项 Git revision，本地开发仍要求 `modorch-fedengine` 处于同级目录（同时镜像溯源脚本也会核对同级业务库 checkout 状态），精确约束和框架Git revision以Cargo.toml、Cargo.lock及源码身份门禁为准。
+提交应形成可构建、可验证的开发基线。服务、库、框架分别属于独立Git仓库，不在宿主中复制业务库、框架源码或外部方案历史。当前 `modorch-rs`、`modorch-mqtt` 与 `modorch-fedengine` 均已在 `Cargo.toml` 中固定精确 Git revision（如存在同级业务库目录，镜像溯源脚本也会一并核对其 checkout 状态），精确约束以 `Cargo.toml`、`Cargo.lock` 及源码身份门禁为准。
 
 ## 应提交内容
 
@@ -32,7 +32,7 @@ Python字节码、编辑器临时文件及已结束测试创建的日志/目录�
 
 按[验证入口](validation.md)执行对应检查。源码/配置变化执行适用的fmt/check/Clippy/test/doc及真实协议；单纯文档/忽略规则整理核对链接、格式、候选文件与排除规则。完整首次实现基线应保留此前已验证的测试和契约，不因其文件较多而删减。
 
-正式Git集成顺序为：先形成MQTT显式监督入口与FedEngine公开Facade的真实业务库提交，再将宿主切至这些实际Git revision，更新锁/指纹并在干净checkout运行门禁。当前同级path可作为首次本地开发基线提交，但不能声明为仅克隆宿主即可远端复现的正式交付。MQTT与FedEngine也各自提交完整源码/测试/契约/文档及必要Skill快照；FedEngine的旧目录更名和旧服务入口删除必须一并包含。
+正式Git集成顺序为：先形成MQTT显式监督入口与FedEngine公开Facade的真实业务库提交，再将宿主切至这些实际Git revision，更新锁/指纹并在干净checkout运行门禁。当前宿主已全部切换为固定 Git revision，可由干净 checkout 直接复现远端构建；若后续本地联调临时切回同级 `path`，提交前必须恢复已推送的业务库 Git revision 并刷新锁文件与源码身份指纹。MQTT与FedEngine也各自提交完整源码/测试/契约/文档及必要Skill快照；FedEngine的旧目录更名和旧服务入口删除必须一并包含。
 
 经审阅实际暂存后，再核对：
 

@@ -1,78 +1,47 @@
-# 线上构建与发布交接清单
+# 线上构建与发布运行手册
 
-本文档记录将 `modorch-fedengine` 与 `magicDataHub` 推送至 GitHub 并触发 [release-images.yml](../.github/workflows/release-images.yml) 在线编译发布至 `ghcr.io/muidea` 的完整执行顺序（所有步骤由维护者核对后手动执行）。
+本文档记录 `magicDataHub` 的 `v0.1.0` 已发布线上基线，以及后续版本（`vX.Y.Z`）通过 [release-images.yml](../.github/workflows/release-images.yml) 在线编译并发布核心与按需插件 OCI 镜像至 `ghcr.io/muidea` 的标准流程。
 
-## 1. 发布 5 个定制 DuckDB v2.0.0 扩展的 GitHub Release
+## 1. 已发布的 `v0.1.0` 线上基线
 
-经核查当前 GitHub 状态：
-- `muidea/duckdb-postgres` 与 `muidea/duckdb-mysql` 已公开且存在 `2.0.0` 分支，但当前均无 GitHub Release 资产；
-- `muidea/oracle_scanner`、`muidea/sqlserver_scanner`、`muidea/odbc_catalog_scanner` 当前在 GitHub 公开 API 上不可见（需推送对应仓库至 `github.com/muidea/` 的 `2.0.0` 分支并确保公开或配置只读 Token）。
+- **发行标签与流水线**：Git 标签 `v0.1.0`（commit `f81742ea20bbaa5afa8eb427f86ed2b57de9dbe7`）已由 GitHub Actions `Release Core and Plugin Images`（Run `45567971698`）全绿完成，通过 `MDH-IDENTITY-001`、`MDH-IMAGES-001` 与 `MDH-PLUGINS-001` 全部在线门禁。
+- **已公开推送的 `ghcr.io/muidea` 镜像**（均带 `:v0.1.0` 与 `:latest` 标签）：
+  - 核心服务镜像：`ghcr.io/muidea/mqtt-server`、`ghcr.io/muidea/fedengine-server`、`ghcr.io/muidea/datahub-server`
+  - 按需插件 Init Container 镜像：`ghcr.io/muidea/datahub-plugin-sqlserver`、`ghcr.io/muidea/datahub-plugin-oracle`、`ghcr.io/muidea/datahub-plugin-db2`、`ghcr.io/muidea/datahub-plugin-hana`、`ghcr.io/muidea/datahub-plugin-dameng`
+- **固定上游 Git revision**（见 [Cargo.toml](../Cargo.toml#L13-L16)）：
+  - `modorch`：`https://github.com/muidea/modorch-rs` @ `336ba20196044e1b81fb2ca297a18b5e258a5800`
+  - `modorch-mqtt`：`https://github.com/muidea/modorch-mqtt` @ `ebc502edb12324f563bc06c4bee20c297f84fb0d`
+  - `modorch-fedengine`：`https://github.com/muidea/modorch-fedengine` @ `f858bb5a77d90231499823ca543f623489e725a5`
+- **已锁定的 5 个定制 DuckDB v2.0.0 扩展**（全部公开于 GitHub Releases 并锁定于 [sources.json](../scripts/acceptance/sources.json)）：
+  - `postgres`（`muidea/duckdb-postgres`）：`v2.0.0-919558cd4a`
+  - `mysql`（`muidea/duckdb-mysql`）：`v2.0.0-ac9da98f9a`
+  - `oracle`（`muidea/oracle_scanner`）：`v2.0.0-c03164082e`
+  - `sqlserver`（`muidea/sqlserver_scanner`）：`v2.0.0-897d4bc005`
+  - `odbc_catalog`（`muidea/odbc_catalog_scanner`）：`v2.0.0-b0ca053cf1`
 
-按[定制扩展发布指南](extension-release.md)为 5 个仓库部署 `.github/workflows/release-extension.yml`、推送 `v2.0.0-<rev>` 标签后，在 `magicDataHub` 更新 `scripts/acceptance/sources.json`：
+## 2. 后续版本（`vX.Y.Z`）标准发版流程
 
-```sh
-python3 scripts/update-extension-lock.py --ext postgres     --tag v2.0.0-<rev>
-python3 scripts/update-extension-lock.py --ext mysql        --tag v2.0.0-<rev>
-python3 scripts/update-extension-lock.py --ext oracle       --tag v2.0.0-<rev>
-python3 scripts/update-extension-lock.py --ext sqlserver    --tag v2.0.0-<rev>
-python3 scripts/update-extension-lock.py --ext odbc_catalog --tag v2.0.0-<rev>
-python3 scripts/prepare-extensions.py --fetch-releases --dest /tmp/verify-fetch-ext
-```
-
-## 2. 提交并推送 `modorch-fedengine`
-
-当前 `modorch-fedengine` 本地已有 `6ae9422`（领先 `origin/master` 1 个提交）以及模块化插件能力目录改造（`plugins.rs`、multi-dir 扩展加载与 `/api/v1/plugins`）。审核暂存并推送后记下新的 40 位 `HEAD` SHA（记为 `<FEDENGINE_SHA>`）：
-
-```sh
-cd ../modorch-fedengine
-git status --short
-# 审核并提交全部改动后执行:
-git push origin master
-git rev-parse HEAD
-```
-
-当前 `modorch-mqtt` 的 `origin/master` 已固定在 `ebc502edb12324f563bc06c4bee20c297f84fb0d`。
-
-## 3. 将 `magicDataHub/Cargo.toml` 切换为固定 Git revision
-
-`modorch-fedengine` 推送完成后，将 [Cargo.toml](../Cargo.toml#L15-L17) 的两处同级 `path` 依赖切换为固定 Git `rev`（完全脱离本地同级源码依赖）：
-
-```diff
---- a/Cargo.toml
-+++ b/Cargo.toml
-@@ -14,7 +14,6 @@ repository = "https://github.com/muidea/magicDataHub"
- modorch = { version = "=0.0.3", git = "https://github.com/muidea/modorch-rs", rev = "336ba20196044e1b81fb2ca297a18b5e258a5800" }
--# Local source until updated modorch-mqtt changes are pushed to origin/master.
--modorch-mqtt = { version = "=0.1.0-alpha.1", path = "../modorch-mqtt/crates/modorch-mqtt", features = ["toml", "mqtt5"] }
--modorch-fedengine = { version = "=0.1.0", path = "../modorch-fedengine/crates/modorch-fedengine" }
-+modorch-mqtt = { version = "=0.1.0-alpha.1", git = "https://github.com/muidea/modorch-mqtt", rev = "ebc502edb12324f563bc06c4bee20c297f84fb0d", features = ["toml", "mqtt5"] }
-+modorch-fedengine = { version = "=0.1.0", git = "https://github.com/muidea/modorch-fedengine", rev = "<FEDENGINE_SHA>" }
-```
-
-随后刷新锁文件、更新源码身份指纹并运行本地全量校验：
-
-```sh
-cargo update -p modorch-mqtt -p modorch-fedengine
-python3 scripts/verify-dependency-identity.py --write-identity
-./scripts/check.sh
-```
-
-## 4. 推送 `magicDataHub` 并触发 Actions 在线编译发布
-
-1. 提交并推送 `magicDataHub`（含已更新的 `sources.json`、`Cargo.toml`、`Cargo.lock`、`scripts/source-identity.json` 与 `.github/workflows/release-images.yml`）：
+1. **如升级定制 DuckDB 扩展**：按[定制扩展发布指南](extension-release.md)在目标扩展仓库的 `2.0.0` 分支推送 `v2.0.0-<rev>` 标签，发布完成后在本仓库更新并校验锁定文件：
    ```sh
-   git status --short
-   # 审核并提交全部改动后执行:
-   git push origin master
+   python3 scripts/update-extension-lock.py --ext <key> --tag v2.0.0-<rev>
+   python3 scripts/prepare-extensions.py --fetch-releases --dest /tmp/verify-fetch-ext
    ```
-2. 建议先在 GitHub Actions 手动运行 `Release Core and Plugin Images`（`workflow_dispatch`：`target=all`，`profile=release`，`push=false`）确认完整构筑与验证全绿（若 4 套商业 ODBC 驱动需由默认固定基础镜像替换为独立厂商源，可在仓库 Variables 设置 `MDH_<VENDOR>_ODBC_URL` 与 `MDH_<VENDOR>_ODBC_SHA256`）；
-3. 验证无误后推送发行标签触发正式发布至 `ghcr.io/muidea`：
+2. **如升级上游业务库 / 框架**：先将对应仓库真实提交推送至 `origin/master`，更新 [Cargo.toml](../Cargo.toml#L13-L16) 固定 `rev`，随后刷新锁文件、更新源码身份指纹并运行全量门禁：
    ```sh
-   git tag v0.1.0
-   git push origin v0.1.0
+   cargo update -p modorch -p modorch-mqtt -p modorch-fedengine
+   python3 scripts/verify-dependency-identity.py --write-identity
+   ./scripts/check.sh
    ```
-   流水线会自动构筑并验证全部 3 个核心镜像与 5 个插件镜像，全部门禁通过后推送 `:v0.1.0` 与 `:latest`。
+3. **预演验证并推送正式发行标签**：
+   - 将审核后的改动提交并推送至 `origin master`；
+   - 建议先在 GitHub Actions 手动触发 `Release Core and Plugin Images`（`workflow_dispatch`：`target=all`，`profile=release`，`push=false`）确认完整构筑与验证全绿（若商业 ODBC 驱动需由默认固定基础镜像替换为独立厂商源，可在仓库 Variables 设置 `MDH_<VENDOR>_ODBC_URL` 与 `MDH_<VENDOR>_ODBC_SHA256`）；
+   - 验证无误后推送新发行标签触发正式发布至 `ghcr.io/muidea`：
+     ```sh
+     git tag vX.Y.Z
+     git push origin vX.Y.Z
+     ```
+     流水线会自动构筑并验证全部 3 个核心镜像与 5 个插件镜像，全部门禁通过后推送 `:vX.Y.Z` 与 `:latest`。随后可在 GitHub Releases 页面为该标签补充发行说明。
 
-## 5. 可选：本地开发实例迁移说明
+## 3. 本地开发实例迁移说明
 
 当前运行于 `var/deployment` 的开发实例保留原有端口、数据卷与 `mdh-clean/*:dev` 镜像，不会在未确认的情况下被脚本修改。如需切换为模块化 bridge 容器形态，可先按停机手册优雅排空后使用 [deploy/docker-compose.yml](../deploy/docker-compose.yml) 启动。

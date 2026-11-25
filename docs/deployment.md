@@ -1,10 +1,10 @@
 # 本地镜像与运行
 
-当前验收平台为 Linux x86_64，开发构建 profile 为 dev。三个服务镜像均由本仓库生成；FedEngine 仓库只交付库。业务库暂以同级 path 接入，镜像记录真实 Git HEAD、dirty、Cargo.lock/Feature/源码与二进制指纹。当前本地镜像不等于干净 Git 或远端可复现发布。
+当前验收平台为 Linux x86_64，开发构建 profile 为 dev。三个核心服务镜像与按需插件镜像均由本仓库生成；FedEngine 仓库只交付库。`modorch-mqtt` 与 `modorch-fedengine` 均已在 `Cargo.toml` 中固定正式 Git revision，本地与线上镜像均记录真实 Git HEAD、dirty、Cargo.lock/Feature/源码与二进制指纹；本地未提交改动或 dev profile 构建不等于远端发行版本。
 
 ## 构建与验收
 
-需要 Rust1.94、Python3.11+、Docker/Compose、curl、strip，以及同级两业务库与 locked Cargo 缓存。DuckDB v2.0.0 动态库来自 locked duckdb crate 的 download-lib 构建；镜像脚本强制比对 [runtime.lock.json](../docker/runtime.lock.json) 中的 SHA256。基础镜像固定 digest；只复制两个固定校验和扩展及生成的 manifest，不在服务启动时下载。
+需要 Rust1.94、Python3.11+、Docker/Compose、curl、strip，以及 locked Cargo 缓存（两业务库已固定 Git revision，仅本地临时改库调试才需同级目录）。DuckDB v2.0.0 动态库来自 locked duckdb crate 的 download-lib 构建；镜像脚本强制比对 [runtime.lock.json](../docker/runtime.lock.json) 中的 SHA256。核心镜像只预装 `postgres`/`mysql` 两个固定校验和扩展及生成的 manifest，其余扩展由按需 OCI 插件镜像分发，不在服务启动时下载。
 
 ```sh
 export CARGO_TARGET_DIR=/absolute/path/to/target
@@ -100,4 +100,4 @@ FailFast 运行故障返回非零；外部进程管理器可在进程实际退�
 
 [verify.yml](../.github/workflows/verify.yml) 在 push/PR 自动执行不依赖外部 checkout 的源码格式、Python 语法、YAML 与工作流校验、证据门禁与 Compose 配置检查；[release-images.yml](../.github/workflows/release-images.yml) 在手动触发或 `v*` 标签推送时在线下载已固定的定制扩展发布包、编译 Rust 二进制、打包核心与插件 OCI 镜像并完成全套验证后推送至 `ghcr.io/muidea`。
 
-当前开发期两库暂保留同级 `path` 依赖；正式 Git 集成与线上发版执行步骤见[线上构建与发布交接清单](release-checklist.md)与[定制 DuckDB 扩展发布与锁定](extension-release.md)。
+框架与两业务库均已固定正式 Git revision，首个线上发行版 `v0.1.0` 已发布至 `ghcr.io/muidea`；版本基线与后续发版执行步骤见[线上构建与发布运行手册](release-checklist.md)与[定制 DuckDB 扩展发布与锁定](extension-release.md)。
