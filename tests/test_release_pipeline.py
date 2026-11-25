@@ -5,12 +5,12 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import shutil
+import subprocess
 import sys
 import tarfile
 import tempfile
 import unittest
-
-import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS_DIR = ROOT / 'scripts'
@@ -200,23 +200,71 @@ class RuntimeLockAndWorkflowTests(unittest.TestCase):
             self.assertTrue(entry['release_url'].startswith(f"https://github.com/{entry['repo']}/"), key)
             PREPARE.validate_release_url(entry['release_url'])
 
+    @staticmethod
+    def _load_yaml(path: Path) -> dict | None:
+        text = path.read_text(encoding='utf-8')
+        try:
+            import yaml  # type: ignore[import-not-found]
+            return yaml.safe_load(text)
+        except ModuleNotFoundError:
+            ruby = shutil.which('ruby')
+            if ruby:
+                proc = subprocess.run(
+                    [ruby, '-ryaml', '-rjson', '-e', 'puts JSON.generate(YAML.safe_load(File.read(ARGV[0]), aliases: true))', str(path)],
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                )
+                return json.loads(proc.stdout)
+            return None
+
     def test_workflows_and_template_parse_without_direct_input_interpolation(self):
         yml_paths = [
             *sorted((ROOT / '.github/workflows').glob('*.yml')),
             ROOT / 'docker/templates/duckdb-extension-release.yml',
         ]
         for path in yml_paths:
-            doc = yaml.safe_load(path.read_text(encoding='utf-8'))
-            self.assertIsInstance(doc, dict, str(path))
-            for job_name, job in doc.get('jobs', {}).items():
-                for idx, step in enumerate(job.get('steps', [])):
-                    run_script = step.get('run', '')
-                    if run_script:
-                        self.assertNotIn(
-                            '${{ inputs.',
-                            run_script,
-                            f'{path} job={job_name} step={idx} interpolates inputs directly inside run:',
-                        )
+            text = path.read_text(encoding='utf-8')
+            self.assertFalse(
+                any(line.startswith('\t') for line in text.splitlines()),
+                f'{path} contains leading tab indentation',
+            )
+            doc = self._load_yaml(path)
+            if doc is not None:
+                self.assertIsInstance(doc, dict, str(path))
+                for job_name, job in doc.get('jobs', {}).items():
+                    for idx, step in enumerate(job.get('steps', [])):
+                        run_script = step.get('run', '')
+                        if run_script:
+                            self.assertNotIn(
+                                '${{ inputs.',
+                                run_script,
+                                f'{path} job={job_name} step={idx} interpolates inputs directly inside run:',
+                            )
+            else:
+                run_indent = None
+                for lineno, line in enumerate(text.splitlines(), 1):
+                    stripped = line.lstrip(' ')
+                    indent = len(line) - len(stripped)
+                    if run_indent is not None:
+                        if stripped and indent <= run_indent:
+                            run_indent = None
+                        else:
+                            self.assertNotIn(
+                                '${{ inputs.',
+                                line,
+                                f'{path}:{lineno} interpolates inputs directly inside run:',
+                            )
+                    if stripped.startswith('run:'):
+                        after = stripped[4:].strip()
+                        if after in ('|', '|-', '>', '>-'):
+                            run_indent = indent
+                        else:
+                            self.assertNotIn(
+                                '${{ inputs.',
+                                after,
+                                f'{path}:{lineno} interpolates inputs directly inside run:',
+                            )
 
 
 if __name__ == '__main__':

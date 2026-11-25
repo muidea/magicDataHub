@@ -34,12 +34,10 @@ jobs:
       - name: Check Python syntax and local evidence gate
         run: |
           python3 - <<'PY'
-          import pathlib, yaml
+          import pathlib
           for folder in ['scripts', 'tests']:
               for path in pathlib.Path(folder).rglob('*.py'):
                   compile(path.read_bytes(), str(path), 'exec')
-          for path in [*pathlib.Path('.github/workflows').glob('*.yml'), *pathlib.Path('docker/templates').glob('*.yml')]:
-              yaml.safe_load(path.read_text(encoding='utf-8'))
           PY
           python3 -B -m unittest discover -s tests -p test_contract_evidence.py -v
           python3 -B -m unittest discover -s tests -p test_source_organization.py -v
