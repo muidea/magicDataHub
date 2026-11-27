@@ -498,6 +498,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "chrono-tz"
+version = "0.10.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a6139a8597ed92cf816dfb33f5dd6cf0bb93a6adc938f11039f371bc5bcd26c3"
+dependencies = [
+ "chrono",
+ "phf",
+]
+
+[[package]]
 name = "cmake"
 version = "0.1.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1466,7 +1476,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "axum",
  "modorch",
@@ -1489,7 +1499,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-catalog"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "modorch",
  "modorch-fedengine-contract",
@@ -1502,7 +1512,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-contract"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "async-trait",
  "modorch-fedengine-core",
@@ -1514,7 +1524,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-core"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "chrono",
  "serde",
@@ -1526,7 +1536,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-datasource"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "modorch",
  "modorch-fedengine-contract",
@@ -1537,17 +1547,18 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-ddl"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "modorch-fedengine-contract",
  "modorch-fedengine-core",
+ "modorch-fedengine-pg-compat",
  "sqlparser",
 ]
 
 [[package]]
 name = "modorch-fedengine-duckdb"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "chrono",
  "duckdb",
@@ -1569,7 +1580,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-management"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "axum",
  "chrono",
@@ -1595,10 +1606,11 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-pg-compat"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "bytes",
  "chrono",
+ "chrono-tz",
  "modorch-fedengine-contract",
  "modorch-fedengine-core",
  "pgwire",
@@ -1611,7 +1623,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-pgwire"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "bytes",
  "futures",
@@ -1633,7 +1645,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-policy"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "modorch",
  "modorch-fedengine-contract",
@@ -1645,7 +1657,7 @@ dependencies = [
 [[package]]
 name = "modorch-fedengine-query"
 version = "0.1.0"
-source = "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5"
+source = "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d"
 dependencies = [
  "modorch",
  "modorch-fedengine-catalog",
@@ -1917,6 +1929,24 @@ dependencies = [
  "tokio-rustls",
  "tokio-util",
  "x509-certificate",
+]
+
+[[package]]
+name = "phf"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "913273894cec178f401a31ec4b656318d95473527be05c0752cc41cdc32be8b7"
+dependencies = [
+ "phf_shared",
+]
+
+[[package]]
+name = "phf_shared"
+version = "0.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "06005508882fb681fd97892ecff4b7fd0fee13ef1aa569f8695dae7ab9099981"
+dependencies = [
+ "siphasher",
 ]
 
 [[package]]
@@ -2421,6 +2451,12 @@ name = "simd-adler32"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3a219298ac11a56ea9a6d2120044824d6f01aeb034955e7af7bc16858527deea"
+
+[[package]]
+name = "siphasher"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "33f4fe9184a62d842c9ef383018f3306d8ba224fd9d836f56d7288308847c256"
 
 [[package]]
 name = "slab"

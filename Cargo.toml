@@ -13,7 +13,7 @@ repository = "https://github.com/muidea/magicDataHub"
 [workspace.dependencies]
 modorch = { version = "=0.0.3", git = "https://github.com/muidea/modorch-rs", rev = "336ba20196044e1b81fb2ca297a18b5e258a5800" }
 modorch-mqtt = { version = "=0.1.0-alpha.1", git = "https://github.com/muidea/modorch-mqtt", rev = "ebc502edb12324f563bc06c4bee20c297f84fb0d", features = ["toml", "mqtt5"] }
-modorch-fedengine = { version = "=0.1.0", git = "https://github.com/muidea/modorch-fedengine", rev = "f858bb5a77d90231499823ca543f623489e725a5" }
+modorch-fedengine = { version = "=0.1.0", git = "https://github.com/muidea/modorch-fedengine", rev = "e924bb966e8013aa7b69c8270733e23149b0960d" }
 datahub-config = { path = "crates/datahub-config", version = "=0.1.0" }
 datahub-app = { path = "crates/datahub-app", version = "=0.1.0" }
 datahub-web = { path = "crates/datahub-web", version = "=0.1.0" }

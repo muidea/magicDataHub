@@ -1,8 +1,23 @@
 # 线上构建与发布运行手册
 
-本文档记录 `magicDataHub` 的 `v0.1.0` 已发布线上基线，以及后续版本（`vX.Y.Z`）通过 [release-images.yml](../.github/workflows/release-images.yml) 在线编译并发布核心与按需插件 OCI 镜像至 `ghcr.io/muidea` 的标准流程。
+本文档记录 `magicDataHub` 的线上发行版本锁定基线，以及通过 [release-images.yml](../.github/workflows/release-images.yml) 在线编译并发布核心与按需插件 OCI 镜像至 `ghcr.io/muidea` 的标准流程。
 
-## 1. 已发布的 `v0.1.0` 线上基线
+## 1. 线上发行基线档案
+
+### `v0.2.0` 锁定基线（9-DB DDL/DML 补齐与跨库时间/会话时区统一）
+
+- **固定上游 Git revision**（见 [Cargo.toml](../Cargo.toml#L13-L16)）：
+  - `modorch`：`https://github.com/muidea/modorch-rs` @ `336ba20196044e1b81fb2ca297a18b5e258a5800`
+  - `modorch-mqtt`：`https://github.com/muidea/modorch-mqtt` @ `ebc502edb12324f563bc06c4bee20c297f84fb0d`
+  - `modorch-fedengine`：`https://github.com/muidea/modorch-fedengine` @ `e924bb966e8013aa7b69c8270733e23149b0960d`
+- **已锁定的 5 个定制 DuckDB v2.0.0 扩展**（全部公开于 GitHub Releases 并锁定于 [sources.json](../scripts/acceptance/sources.json)）：
+  - `postgres`（`muidea/duckdb-postgres`）：`v2.0.0-b0e0dca61e`
+  - `mysql`（`muidea/duckdb-mysql`）：`v2.0.0-eb4f93233f`
+  - `oracle`（`muidea/oracle_scanner`）：`v2.0.0-8d68b62aad`
+  - `sqlserver`（`muidea/sqlserver_scanner`）：`v2.0.0-0be5f0416c`
+  - `odbc_catalog`（`muidea/odbc_catalog_scanner`）：`v2.0.0-d7b5e18e55`
+
+### 已发布的 `v0.1.0` 历史基线
 
 - **发行标签与流水线**：Git 标签 `v0.1.0`（commit `f81742ea20bbaa5afa8eb427f86ed2b57de9dbe7`）已由 GitHub Actions `Release Core and Plugin Images`（Run `45567971698`）全绿完成，通过 `MDH-IDENTITY-001`、`MDH-IMAGES-001` 与 `MDH-PLUGINS-001` 全部在线门禁。
 - **已公开推送的 `ghcr.io/muidea` 镜像**（均带 `:v0.1.0` 与 `:latest` 标签）：

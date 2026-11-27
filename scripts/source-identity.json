@@ -1,5 +1,5 @@
 {
-  "lock_sha256": "34c5d7117cfa7ec0aee31cbdc6dfa176f46cea1eb2d266f0c5e89f8caba293ba",
+  "lock_sha256": "1d0cb8cad96baf853cecc707cf899a23d5727194e6f753581c2dbb447d54b0f9",
   "packages": {
     "modorch": {
       "version": "0.0.3",
@@ -26,74 +26,74 @@
     },
     "modorch-fedengine": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
       "sha256": "c63076abe011cabd2e964da27bde09509e043850ebbc7706bba2ebc644835f9a",
       "features": []
     },
     "modorch-fedengine-catalog": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
       "sha256": "033021597349b6efaf3bbf790e81f5cb7cd253e35e92b001594db96fd65a5759",
       "features": []
     },
     "modorch-fedengine-contract": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "2c43cdf93f4d7cea034ca8d32c78472a02eb1a776fa8485b87f7388f3750bd5c",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "b0758b46be9ec7252c370423830dc73d7de0fcee644bf9fd33c8c7eb0a0aa637",
       "features": []
     },
     "modorch-fedengine-core": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
       "sha256": "a4761b80eeefa1f00930a9c29b70d0e16a7be0f739d7a8fca315394a8868ec8f",
       "features": []
     },
     "modorch-fedengine-datasource": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
       "sha256": "53bfcee2add2f5475cf3d5a892921ae4d02af38a18209e06d401bd1d4508c27c",
       "features": []
     },
     "modorch-fedengine-ddl": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "e2caece824fc50a3e7cbe045ea2840dc9239594a904eda3f4f974bf76fe8c54f",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "a3860d631841a100c45c032221f26d461ca1d96f46cedae4ec666f48789f9085",
       "features": []
     },
     "modorch-fedengine-duckdb": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "65fb58300e80d4bf7e992461e27ec4340f2860c9ce26bb13c6263a4b9fedf3d1",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "5d0b0c11b1373d1cb196e68dc28b1b1c4f22012dd764482d1183cda368c818b0",
       "features": []
     },
     "modorch-fedengine-management": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "3de65b636433da80c36d23f58cd835c249510ec9d8237f5f58f1004b496e59f8",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "b053ac9425be3878fdde7c33da7e116f9a5e1bbdb2603ab1fd9ddbe6847216e4",
       "features": []
     },
     "modorch-fedengine-pg-compat": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "7f0925ff13d623a709bd5997d04e94b998567bb78a8b17425bf64f742395c999",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "cbc46168a53abb8bc43a3ecb74afe69f3d4fc44dbf8cbc4faa952708691b90a9",
       "features": []
     },
     "modorch-fedengine-pgwire": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "131d72b399ff59ca9a9ccdd001696c4cf16c5c8b3d9a4ece83f37966936c2646",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "3b753b09430c8daa75c94b2b10fb613168938193f73390be0424b232c9824bde",
       "features": []
     },
     "modorch-fedengine-policy": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
       "sha256": "3fe82a1d987961af496fe2ce7be2a014583c00e50d27f3c894f2b40c8ed5a7fc",
       "features": []
     },
     "modorch-fedengine-query": {
       "version": "0.1.0",
-      "source": "git+https://github.com/muidea/modorch-fedengine?rev=f858bb5a77d90231499823ca543f623489e725a5#f858bb5a77d90231499823ca543f623489e725a5",
-      "sha256": "ca1066da37830f00b10cd0f2090a9c3131e6d55da38bb401fdb41cf12e84fa38",
+      "source": "git+https://github.com/muidea/modorch-fedengine?rev=e924bb966e8013aa7b69c8270733e23149b0960d#e924bb966e8013aa7b69c8270733e23149b0960d",
+      "sha256": "ff69bdd85f8664785296cfb92e33b6acc79e624cdc7d6c366c970aeba574d5c5",
       "features": []
     },
     "modorch-mqtt": {
